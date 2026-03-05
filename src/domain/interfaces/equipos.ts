@@ -30,3 +30,12 @@ export interface PuntoVenta {
     serial_code: string;
     tag: string | null;
 }
+
+export interface InventarioGeneral {
+    id: bigint;
+    name_farmacia: string | null;
+    id_farmacia: number | null;
+    hardware: string;
+    nota: string | null;
+    cantidad: number;
+}
