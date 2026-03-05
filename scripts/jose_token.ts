@@ -5,8 +5,10 @@ import { fileURLToPath } from 'url';
 
 const PATH_KEYS = path.resolve(
     dirname(fileURLToPath(import.meta.url)),
-    '../confs/keysForTokens/'
+    '../confs/keysForTokens'
 );
+
+console.log(PATH_KEYS);
 
 const {
     privateKey: priva_acces_token,
@@ -32,22 +34,22 @@ const pem_public_refresh_token = await jose.exportSPKI(public_refresh_token);
 
 
 const pemWritePrivateAccessToken = fs.createWriteStream(
-    `${PATH_KEYS}private_access_token.key`,
+    `${PATH_KEYS}/private_access_token.key`,
     { encoding:'utf-8' }
 );
 
 const pemWritePublicAccessToken = fs.createWriteStream(
-    `${PATH_KEYS}public_access_token.pem`,
+    `${PATH_KEYS}/public_access_token.pem`,
     { encoding:'utf-8' }
 );
 
 const pemWritePrivateRefreshToken = fs.createWriteStream(
-    `${PATH_KEYS}private_refresh_token.key`,
+    `${PATH_KEYS}/private_refresh_token.key`,
     { encoding:'utf-8' }
 );
 
 const pemWritePublicRefreshToken = fs.createWriteStream(
-    `${PATH_KEYS}public_refresh_token.pem`,
+    `${PATH_KEYS}/public_refresh_token.pem`,
     { encoding:'utf-8' }
 );
 
