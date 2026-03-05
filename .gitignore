@@ -35,4 +35,4 @@ report.[0-9]_.[0-9]_.[0-9]_.[0-9]_.json
 /confs/keysForTokens/**.pem
 /confs/keysForTokens/**.key
 
-/src/generated/prisma
+/src/infrastructure/drivers/out/persistence/prisma_pg/models/
