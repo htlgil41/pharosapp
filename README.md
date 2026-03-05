@@ -1,4 +1,4 @@
-# itstock
+# pharosapp
 
 To install dependencies:
 
