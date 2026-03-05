@@ -1,4 +1,4 @@
--- CREATE DATABASE itstock;
+
 
 CREATE TABLE IF NOT EXISTS farmacias (
     id BIGSERIAL PRIMARY KEY,
@@ -66,29 +66,37 @@ CREATE INDEX ix_equipo_impresora_marca ON equipo_impresora (marca);
 
 CREATE TABLE IF NOT EXISTS cajas_asigne_equipo (
     id BIGSERIAL PRIMARY KEY,
-	name_farmacia TEXT DEFAULT NULL,
+    name_farmacia TEXT DEFAULT NULL,
     id_farmacia BIGINT,
-	equipo_resum TEXT DEFAULT NULL,
-    id_equipo BIGINT NOT NULL,
     resum_equipo TEXT DEFAULT NULL,
+    id_equipo BIGINT NOT NULL,
+    observacion_asignacion TEXT DEFAULT NULL,
+
     CONSTRAINT fk_asigne_equipo_farmacia FOREIGN KEY (id_farmacia) 
         REFERENCES farmacias (id) ON DELETE SET NULL ON UPDATE CASCADE,
     CONSTRAINT fk_asigne_equipo_pc FOREIGN KEY (id_equipo) 
         REFERENCES equipo_pc (id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
+CREATE INDEX ix_cajas_asigne_equipo_id_farmacia ON cajas_asigne_equipo (id_farmacia);
+CREATE INDEX ix_cajas_asigne_equipo_id_equipo ON cajas_asigne_equipo (id_equipo);
+CREATE UNIQUE INDEX ux_cajas_equipo_unico ON cajas_asigne_equipo (id_equipo);
+
 CREATE TABLE IF NOT EXISTS cajas_asigne_punto_venta (
     id BIGSERIAL PRIMARY KEY,
-	name_farmacia TEXT DEFAULT NULL,
+    name_farmacia TEXT DEFAULT NULL,
     id_farmacia BIGINT,
     id_punto_venta BIGINT NOT NULL,
-    resum_punto_venta TEXT DEFAULT NULL,
+    observacion_pos TEXT DEFAULT NULL,
+
     CONSTRAINT fk_asigne_pv_farmacia FOREIGN KEY (id_farmacia) 
         REFERENCES farmacias (id) ON DELETE SET NULL ON UPDATE CASCADE,
     CONSTRAINT fk_asigne_pv_punto FOREIGN KEY (id_punto_venta) 
         REFERENCES punto_venta (id) ON DELETE CASCADE ON UPDATE CASCADE
 );
-
+CREATE INDEX ix_asigne_pv_id_farmacia ON cajas_asigne_punto_venta (id_farmacia);
+CREATE UNIQUE INDEX ux_asigne_pv_equipo_unico ON cajas_asigne_punto_venta (id_punto_venta);
+CREATE INDEX ix_asigne_pv_id_punto_venta ON cajas_asigne_punto_venta (id_punto_venta);
 
 CREATE TABLE IF NOT EXISTS requerimientos_solicitudes (
     id BIGSERIAL PRIMARY KEY,
@@ -104,11 +112,10 @@ CREATE TABLE IF NOT EXISTS requerimientos_solicitudes (
         REFERENCES farmacias (id) ON DELETE SET NULL ON UPDATE CASCADE
 );
 
-
-CREATE INDEX ix_requerimientos_id_farmacia ON requerimientos (id_farmacia);
-CREATE INDEX ix_requerimientos_fix ON requerimientos (fix) WHERE fix = false;
-CREATE INDEX ix_requerimientos_fecha_req ON requerimientos (fecha_req);
-CREATE INDEX ix_requerimientos_name_req ON requerimientos (name_req);
+CREATE INDEX ix_requerimientos_id_farmacia ON requerimientos_solicitudes (id_farmacia);
+CREATE INDEX ix_requerimientos_fix ON requerimientos_solicitudes (fix) WHERE fix = false;
+CREATE INDEX ix_requerimientos_fecha_req ON requerimientos_solicitudes (fecha_req);
+CREATE INDEX ix_requerimientos_name_req ON requerimientos_solicitudes (name_req);
 
 CREATE TABLE IF NOT EXISTS incidencias_pc (
     id BIGSERIAL PRIMARY KEY,
@@ -124,7 +131,6 @@ CREATE TABLE IF NOT EXISTS incidencias_pc (
     CONSTRAINT fk_incidencias_id_equipo FOREIGN KEY (id_equipo) 
         REFERENCES equipo_pc (id) ON DELETE CASCADE ON UPDATE CASCADE
 );
-
 
 CREATE INDEX ix_incidencias_pc_id_equipo ON incidencias_pc (id_equipo);
 CREATE INDEX ix_incidencias_pc_id_farmacia ON incidencias_pc (id_farmacia);
@@ -146,13 +152,6 @@ CREATE TABLE IF NOT EXISTS incidencias_generales (
 CREATE INDEX ix_incidencias_gen_id_farmacia ON incidencias_generales (id_farmacia);
 CREATE INDEX ix_incidencias_gen_nombre ON incidencias_generales (nombre_inci);
 CREATE INDEX ix_incidencias_gen_fecha ON incidencias_generales (fecha_registro);
-
-
-
-
-
-
-
 
 CREATE TABLE IF NOT EXISTS usuario_role (
 	id BIGSERIAL PRIMARY KEY,
