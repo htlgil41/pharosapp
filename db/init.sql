@@ -1,4 +1,4 @@
-
+-- CREATE DATABASE NAME OWNER USER;
 
 CREATE TABLE IF NOT EXISTS farmacias (
     id BIGSERIAL PRIMARY KEY,
@@ -152,6 +152,21 @@ CREATE TABLE IF NOT EXISTS incidencias_generales (
 CREATE INDEX ix_incidencias_gen_id_farmacia ON incidencias_generales (id_farmacia);
 CREATE INDEX ix_incidencias_gen_nombre ON incidencias_generales (nombre_inci);
 CREATE INDEX ix_incidencias_gen_fecha ON incidencias_generales (fecha_registro);
+
+CREATE TABLE IF NOT EXISTS inventario_general (
+    id BIGSERIAL PRIMARY KEY,
+	name_farmacia TEXT DEFAULT NULL,
+    id_farmacia BIGINT,
+    hardware TEXT NOT NULL,
+    nota TEXT DEFAULT NULL,
+    cantidad INTEGER DEFAULT 0,
+
+    CONSTRAINT fk_inventario_general_id_farmacia FOREIGN KEY (id_farmacia) 
+        REFERENCES farmacias (id) ON DELETE SET NULL ON UPDATE CASCADE
+);
+CREATE INDEX ix_inventario_gen_id_farmacia ON inventario_general (id_farmacia);
+CREATE INDEX ix_inventario_gen_hardware ON inventario_general (hardware);
+CREATE INDEX ix_inventario_farmacia_hardware ON inventario_general (id_farmacia, hardware);
 
 CREATE TABLE IF NOT EXISTS usuario_role (
 	id BIGSERIAL PRIMARY KEY,
