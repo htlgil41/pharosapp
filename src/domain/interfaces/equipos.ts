@@ -1,7 +1,7 @@
 export interface EquipoPC {
     id: bigint;
     name_farmacia: string | null;
-    id_famacia: number | null;
+    id_farmacia: number | null;
     ip: string;
     anydesk: string | null;
     sa_anydesk: string | null;
