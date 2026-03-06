@@ -1,5 +1,8 @@
 import express, { type Application } from 'express';
 import http from 'http';
+import cors from 'cors';
+import helmet from 'helmet';
+import compression from 'compression';
 import { LoadEnvWithExceptions } from '../../../shareds/loadEnvWithExceptions.ts';
 
 export class ExperssApp {
@@ -10,10 +13,13 @@ export class ExperssApp {
     constructor(){}
 
     initConfExpress(): void{
-        
-        this.app.use(express.json());
-        this.app.use(express.urlencoded({ extended: true }));
-        // Middlewaress
+        this.app.use(
+            express.json(),
+            express.urlencoded({ extended: true }),
+            cors(),
+            helmet(),
+            compression()
+        );
     }
     
     addRoutes(): this {
