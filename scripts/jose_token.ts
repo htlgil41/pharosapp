@@ -64,3 +64,17 @@ pemWritePublicAccessToken.close();
 
 pemWritePrivateRefreshToken.close();
 pemWritePublicRefreshToken.close();
+
+const rs = await jose.generateSecret(
+    'A256GCM',
+    { extractable: true },
+);
+
+const secretForN = await jose.exportJWK(rs);
+const secreStream = fs.createWriteStream(
+    `${PATH_KEYS}/secrettoken`,
+    { encoding: 'utf-8' }
+);
+
+secreStream.write(Buffer.from(JSON.stringify(secretForN), 'utf-8').toString('base64'));
+secreStream.close()
