@@ -33,5 +33,6 @@ report.[0-9]_.[0-9]_.[0-9]_.[0-9]_.json
 .DS_Store
 /confs/keysForTokens/**.pem
 /confs/keysForTokens/**.key
+/confs/keysForTokens/secrettoken
 
 /src/infrastructure/adapters/out/persistence/prisma_pg/models/client/**
