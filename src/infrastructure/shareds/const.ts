@@ -25,7 +25,7 @@ export const PEMACCESSTOKEN = await jose.importSPKI(
     'RS256',
     { extractable: true }
 );
-export const PEMAREFRESHTOKEN = await jose.importPKCS8(
+export const KEYREFRESHTOKEN = await jose.importPKCS8(
     loadKeyRefreshToken,
     'RS256',
     { extractable: true }

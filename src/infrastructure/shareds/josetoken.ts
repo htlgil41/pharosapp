@@ -1,15 +1,16 @@
 import * as jose from 'jose';
 import type { TokenJWTJOSEPort } from '../../applicactions/ports/token.ts';
+import { KEYACCESSTOKEN, PEMACCESSTOKEN, KEYREFRESHTOKEN, PEMREFRESHTOKEN } from './const.ts';
 
 export class TokenManajerJOSE implements TokenJWTJOSEPort {
 
     private secreToN: jose.JWK | undefined;
 
-    private keyAccess: jose.CryptoKey | undefined;
-    private pemAccess: jose.CryptoKey | undefined;
+    private keyAccess: jose.CryptoKey = KEYACCESSTOKEN;
+    private pemAccess: jose.CryptoKey = PEMACCESSTOKEN;
 
-    private keyRefresh: jose.CryptoKey | undefined;
-    private pemRefresh: jose.CryptoKey | undefined;
+    private keyRefresh: jose.CryptoKey = KEYREFRESHTOKEN;
+    private pemRefresh: jose.CryptoKey = PEMREFRESHTOKEN;
 
   async generateAccessToken(
     data: string,
