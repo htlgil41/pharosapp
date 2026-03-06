@@ -11,13 +11,15 @@ export interface InfoUser {
 
 export interface UsuarioByFarmacia {
     id: bigint;
-    name_farmacia: string;
-    id_farmacia: bigint;
+    farmacias_asigne: {
+        name_farmacia: string;
+        id_farmacia: bigint;
+    }[],
     usuario: {
         role: string | null;
         id_role: bigint | null;
         name: string;
-        ape: string;
+        ape: string | null;
         username: string;
         password: string;
     }

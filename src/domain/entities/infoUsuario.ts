@@ -28,6 +28,12 @@ export class InfoUsuarioEntity implements EntityPrimitive<InfoUser>{
         return new InfoUsuarioEntity(infoUsuario);
     }
 
+    setId(id: bigint): void{
+
+        if (id <= 0) return;
+        this.infoUsuario.id = id;
+    }
+
     toValue(): InfoUser {
         
         return this.infoUsuario;
