@@ -4,15 +4,12 @@ import { defineConfig } from "prisma/config";
 import { fileURLToPath } from "url";
 import { LoadEnvWithExceptions } from "../../../../shareds/loadEnvWithExceptions.ts";
 
-const PATHGENERATEMODEL = path.resolve(
-  dirname(fileURLToPath(import.meta.url)),
-  '../models'
-);
+const PATHGENERATEMODEL =  dirname(fileURLToPath(import.meta.url));
 
 export default defineConfig({
-  schema: "schema.prisma",
+  schema: `${path.resolve(PATHGENERATEMODEL, 'schema/schema.prisma')}`,
   migrations: {
-    path: `${PATHGENERATEMODEL}`,
+    path: `${path.resolve(PATHGENERATEMODEL, 'migrations')}`,
   },
   datasource: {
     url: LoadEnvWithExceptions('DATABASE_PHAROSPP'),
