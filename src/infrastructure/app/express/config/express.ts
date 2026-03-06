@@ -3,7 +3,7 @@ import http from 'http';
 import cors from 'cors';
 import helmet from 'helmet';
 import compression from 'compression';
-import { LoadEnvWithExceptions } from '../../../shareds/loadEnvWithExceptions.ts';
+import { LoadEnvWithExceptions } from '../../../shareds/loadEnvWith.ts';
 
 export class ExperssApp {
     
