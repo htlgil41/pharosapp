@@ -1,8 +1,212 @@
 generator client {
-  provider = "prisma-client"
-  output   = "../src/generated/prisma"
+  provider        = "prisma-client"
+  output          = "../models/client"
+  previewFeatures = ["partialIndexes"]
 }
 
 datasource db {
   provider = "postgresql"
+}
+
+model caja_farmacia {
+  id            BigInt    @id @default(autoincrement())
+  name_farmacia String?
+  id_farmacia   BigInt
+  nm_caja       Int
+  area          String    @db.VarChar(255)
+  farmacias     farmacias @relation(fields: [id_farmacia], references: [id], onDelete: Cascade, map: "fk_cajas_farmacia_id_farmacia")
+
+  @@index([id_farmacia], map: "ix_caja_farmacia_id_farmacia")
+}
+
+model cajas_asigne_equipo {
+  id                     BigInt     @id @default(autoincrement())
+  name_farmacia          String?
+  id_farmacia            BigInt?
+  resum_equipo           String?
+  id_equipo              BigInt     @unique(map: "ux_cajas_equipo_unico")
+  observacion_asignacion String?
+  farmacias              farmacias? @relation(fields: [id_farmacia], references: [id], map: "fk_asigne_equipo_farmacia")
+  equipo_pc              equipo_pc  @relation(fields: [id_equipo], references: [id], onDelete: Cascade, map: "fk_asigne_equipo_pc")
+
+  @@index([id_equipo], map: "ix_cajas_asigne_equipo_id_equipo")
+  @@index([id_farmacia], map: "ix_cajas_asigne_equipo_id_farmacia")
+}
+
+model cajas_asigne_punto_venta {
+  id              BigInt      @id @default(autoincrement())
+  name_farmacia   String?
+  id_farmacia     BigInt?
+  id_punto_venta  BigInt      @unique(map: "ux_asigne_pv_equipo_unico")
+  observacion_pos String?
+  farmacias       farmacias?  @relation(fields: [id_farmacia], references: [id], map: "fk_asigne_pv_farmacia")
+  punto_venta     punto_venta @relation(fields: [id_punto_venta], references: [id], onDelete: Cascade, map: "fk_asigne_pv_punto")
+
+  @@index([id_farmacia], map: "ix_asigne_pv_id_farmacia")
+  @@index([id_punto_venta], map: "ix_asigne_pv_id_punto_venta")
+}
+
+model equipo_impresora {
+  id            BigInt     @id @default(autoincrement())
+  name_farmacia String?
+  id_farmacia   BigInt?
+  modelo_print  String
+  marca         String
+  area          String     @db.VarChar(255)
+  count_toners  Int        @default(0)
+  farmacias     farmacias? @relation(fields: [id_farmacia], references: [id], map: "fk_equipo_impresora_id_farmacia")
+
+  @@index([marca], map: "ix_equipo_impresora_marca")
+}
+
+model equipo_pc {
+  id                  BigInt               @id @default(autoincrement())
+  name_farmacia       String?
+  id_farmacia         BigInt?
+  ip                  String               @db.VarChar(255)
+  anydesk             String?              @default("") @db.VarChar(255)
+  sa_anydesk          String?              @db.VarChar(255)
+  so                  String               @db.VarChar(255)
+  ram                 Float
+  disk                String               @default("HDD") @db.VarChar(255)
+  rom_size            Float                @default(0)
+  cajas_asigne_equipo cajas_asigne_equipo?
+  farmacias           farmacias?           @relation(fields: [id_farmacia], references: [id], map: "fk_equipo_pc_id_farmacia")
+  incidencias_pc      incidencias_pc[]
+
+  @@index([id_farmacia], map: "ix_equipo_pc_id_farmacia")
+  @@index([ip], map: "ix_equipo_pc_ip")
+}
+
+model farmacias {
+  id                         BigInt                       @id @default(autoincrement())
+  some_code                  String                       @unique @db.VarChar(10)
+  name_farmacia              String
+  rif                        String                       @unique @db.VarChar(255)
+  direccion                  String?                      @db.VarChar(255)
+  caja_farmacia              caja_farmacia[]
+  cajas_asigne_equipo        cajas_asigne_equipo[]
+  cajas_asigne_punto_venta   cajas_asigne_punto_venta[]
+  equipo_impresora           equipo_impresora[]
+  equipo_pc                  equipo_pc[]
+  incidencias_generales      incidencias_generales[]
+  incidencias_pc             incidencias_pc[]
+  inventario_general         inventario_general[]
+  punto_venta                punto_venta[]
+  requerimientos_solicitudes requerimientos_solicitudes[]
+  usuario_by_farmacia        usuario_by_farmacia[]
+
+  @@index([name_farmacia], map: "ix_farmacias_name")
+}
+
+model incidencias_generales {
+  id             BigInt     @id @default(autoincrement())
+  name_farmacia  String?
+  id_farmacia    BigInt?
+  nombre_inci    String     @db.VarChar(255)
+  descripcion    String?    @default("sin novedades")
+  fecha_registro DateTime?  @default(now()) @db.Timestamp(6)
+  farmacias      farmacias? @relation(fields: [id_farmacia], references: [id], map: "fk_incidencias_gen_id_farmacia")
+
+  @@index([fecha_registro], map: "ix_incidencias_gen_fecha")
+  @@index([id_farmacia], map: "ix_incidencias_gen_id_farmacia")
+  @@index([nombre_inci], map: "ix_incidencias_gen_nombre")
+}
+
+model incidencias_pc {
+  id               BigInt     @id @default(autoincrement())
+  id_farmacia      BigInt?
+  equipo_resum     String?
+  id_equipo        BigInt
+  nombre_inci      String     @db.VarChar(255)
+  descripcion      String?    @default("sin novedades")
+  fecha_incidencia DateTime?  @default(now()) @db.Timestamp(6)
+  equipo_pc        equipo_pc  @relation(fields: [id_equipo], references: [id], onDelete: Cascade, map: "fk_incidencias_id_equipo")
+  farmacias        farmacias? @relation(fields: [id_farmacia], references: [id], map: "fk_incidencias_pc_id_farmacia")
+
+  @@index([fecha_incidencia], map: "ix_incidencias_pc_fecha")
+  @@index([id_equipo], map: "ix_incidencias_pc_id_equipo")
+  @@index([id_farmacia], map: "ix_incidencias_pc_id_farmacia")
+  @@index([nombre_inci], map: "ix_incidencias_pc_nombre")
+}
+
+model inventario_general {
+  id            BigInt     @id @default(autoincrement())
+  name_farmacia String?
+  id_farmacia   BigInt?
+  hardware      String
+  nota          String?
+  cantidad      Int?       @default(0)
+  farmacias     farmacias? @relation(fields: [id_farmacia], references: [id], map: "fk_inventario_general_id_farmacia")
+
+  @@index([id_farmacia, hardware], map: "ix_inventario_farmacia_hardware")
+  @@index([hardware], map: "ix_inventario_gen_hardware")
+  @@index([id_farmacia], map: "ix_inventario_gen_id_farmacia")
+}
+
+model punto_venta {
+  id                       BigInt                    @id @default(autoincrement())
+  name_farmacia            String?
+  id_farmacia              BigInt
+  modelo                   String                    @db.VarChar(255)
+  banco                    String
+  serial_code              String                    @unique @db.VarChar(255)
+  tag                      String?                   @default("Punto de venta")
+  cajas_asigne_punto_venta cajas_asigne_punto_venta?
+  farmacias                farmacias                 @relation(fields: [id_farmacia], references: [id], onDelete: SetNull, map: "fk_punto_venta_id_farmacia")
+
+  @@index([banco], map: "ix_punto_venta_banco")
+  @@index([serial_code], map: "ix_punto_venta_serial")
+}
+
+model requerimientos_solicitudes {
+  id            BigInt     @id @default(autoincrement())
+  name_farmacia String?
+  id_farmacia   BigInt?
+  name_req      String     @db.VarChar(255)
+  descripcion   String?    @default("sin Requerimiento")
+  fix           Boolean?   @default(false)
+  fecha_req     DateTime?  @default(dbgenerated("CURRENT_DATE")) @db.Date
+  fecha_fix     DateTime?  @db.Date
+  farmacias     farmacias? @relation(fields: [id_farmacia], references: [id], map: "fk_asigne_pv_farmacia")
+
+  @@index([fecha_req], map: "ix_requerimientos_fecha_req")
+  @@index([fix], map: "ix_requerimientos_fix", where: raw("(fix = false)"))
+  @@index([id_farmacia], map: "ix_requerimientos_id_farmacia")
+  @@index([name_req], map: "ix_requerimientos_name_req")
+}
+
+model usuario {
+  id                  BigInt                @id @default(autoincrement())
+  id_role             BigInt?
+  name_user           String                @db.VarChar(255)
+  ape                 String?               @db.VarChar(255)
+  username            String                @unique @db.VarChar(255)
+  pass                String                @db.VarChar(255)
+  contact             String?               @db.VarChar(255)
+  usuario_role        usuario_role?         @relation(fields: [id_role], references: [id], map: "fk_usuario_id_role")
+  usuario_by_farmacia usuario_by_farmacia[]
+
+  @@index([id_role], map: "ix_usuario_id_role")
+  @@index([name_user, ape], map: "ix_usuario_nombre_completo")
+  @@index([username], map: "ix_usuario_username")
+}
+
+model usuario_by_farmacia {
+  id            BigInt     @id @default(autoincrement())
+  name_farmacia String?
+  id_farmacia   BigInt?
+  id_usuario    BigInt
+  farmacias     farmacias? @relation(fields: [id_farmacia], references: [id], map: "fk_usuario_by_farmacia_id_farmacia")
+  usuario       usuario    @relation(fields: [id_usuario], references: [id], onDelete: Cascade, map: "fk_usuario_by_farmacia_id_usuario")
+
+  @@unique([id_usuario, id_farmacia], map: "ux_usuario_farmacia_duplicado")
+  @@index([id_farmacia], map: "ix_usuario_by_farmacia_id_farmacia")
+  @@index([id_usuario], map: "ix_usuario_by_farmacia_id_usuario")
+}
+
+model usuario_role {
+  id      BigInt    @id @default(autoincrement())
+  rolee   String    @db.VarChar(255)
+  usuario usuario[]
 }
