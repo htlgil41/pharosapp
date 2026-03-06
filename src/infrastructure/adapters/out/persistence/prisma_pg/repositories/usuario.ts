@@ -36,7 +36,7 @@ export class UsuarioRepositoryPrismaPg implements UsuarioRepository {
         }
     }
 
-    async GetUsuarioByUsername(username: string): Promise<UsuarioByFarmaciaEntity | null> {
+    async getUsuarioByUsername(username: string): Promise<UsuarioByFarmaciaEntity | null> {
         try {
             
             const user = await this.conn.usuario.findUnique({

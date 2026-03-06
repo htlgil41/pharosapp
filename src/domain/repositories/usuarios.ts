@@ -5,7 +5,7 @@ export interface UsuarioRepository {
     createUsuario(
         usuario: InfoUsuarioEntity
     ): Promise<InfoUsuarioEntity>;
-    GetUsuarioByUsername(
+    getUsuarioByUsername(
         username: string
     ): Promise<UsuarioByFarmaciaEntity | null>;
 }
