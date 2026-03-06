@@ -53,4 +53,21 @@ export class TokenManajerJOSE implements TokenJWTJOSEPort {
 
     return cripte;
   }
+
+  async validateAccessToken(
+    jwt: string
+  ): Promise<void> {
+    
+    const validateToken = await jose.jwtDecrypt(
+      jwt,
+      this.secreToN!,
+      { contentEncryptionAlgorithms: ['A256GCM'], keyManagementAlgorithms: ['dir'] }
+    );
+
+    //TODO: TOKEN FIRMA
+  }
+
+  async validateRefreshToken(): Promise<void> {
+    
+  }
 }

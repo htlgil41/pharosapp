@@ -11,4 +11,11 @@ export interface TokenJWTJOSEPort {
         token: string,
         expirateMinute: number
     ): Promise<string>;
+
+    validateAccessToken(
+
+    ): Promise<void>;
+    validateRefreshToken(
+
+    ): Promise<void>;
 }
