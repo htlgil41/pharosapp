@@ -57,14 +57,16 @@ export class TokenManajerJOSE implements TokenJWTJOSEPort {
       this.secreToN!,
       { contentEncryptionAlgorithms: ['A256GCM'], keyManagementAlgorithms: ['dir'] }
     );
+    const tokenRealAfterCrypte = decryptToken.payload['pay'] as string;
+    if (!tokenRealAfterCrypte) throw new Error('Error al codificar el token');
+
     const validateToken = await jose.jwtVerify(
-      jwt,
+      tokenRealAfterCrypte,
       this.pemAccess,
       { algorithms: ['RS256'] }
     );
-    
-    // VALIDATCUERPO DEL JTW EN DECRYPT Y VALIDATE
-    console.log(validateToken);
+
+    console.log(validateToken.payload['pay']);
   }
 
   async validateRefreshToken(
@@ -75,13 +77,14 @@ export class TokenManajerJOSE implements TokenJWTJOSEPort {
       this.secreToN!,
       { contentEncryptionAlgorithms: ['A256GCM'], keyManagementAlgorithms: ['dir'] }
     );
+    const tokenRealAfterCrypte = decryptToken.payload['pay'] as string;
+    if (!tokenRealAfterCrypte) throw new Error('Error al codificar el token');
     const validateToken = await jose.jwtVerify(
-      jwt,
+      tokenRealAfterCrypte,
       this.pemAccess,
       { algorithms: ['RS256'] }
     );
-    
-    // VALIDATCUERPO DEL JTW EN DECRYPT Y VALIDATE
-    console.log(validateToken);
+
+    console.log(validateToken.payload['pay']);
   }
 }
