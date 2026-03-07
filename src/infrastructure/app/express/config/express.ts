@@ -1,6 +1,7 @@
 import express, { Router, type Application } from 'express';
 import http from 'http';
 import cors from 'cors';
+import morgan from 'morgan';
 import helmet from 'helmet';
 import compression from 'compression';
 import { LoadEnvWithExceptions } from '../../../shareds/loadEnvWith.ts';
@@ -14,6 +15,7 @@ export class ExperssApp {
         this.app.use(
             express.json(),
             express.urlencoded({ extended: true }),
+            morgan('combined'),
             cors(),
             helmet(),
             compression()
@@ -22,7 +24,7 @@ export class ExperssApp {
 
     addRoutes(name: string, route: Router): this {
 
-        this.app.use(`${name}`, route);
+        this.app.use(`/${name}`, route);
         return this;
     }
 

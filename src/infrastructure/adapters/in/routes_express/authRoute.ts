@@ -6,6 +6,8 @@ export class AuthRoute {
         
         try {
             
+            console.log(req.body);
+            res.json("si");
         } catch (error) {
             
             throw new Error('new usuario');
@@ -16,9 +18,11 @@ export class AuthRoute {
 
         try {
             
+            console.log(req.body);
+            res.json("si");
         } catch (error) {
             
-            throw new Error('Login');
+            throw new Error('new usuario');
         }
     }
 }

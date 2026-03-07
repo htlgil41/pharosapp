@@ -3,6 +3,9 @@ import { PassWordJoi, UsernameJoi } from './validates.ts';
 
 
 export const AutLobinValidateJoi = joi.object({
-    username: UsernameJoi,
+    username: UsernameJoi
+        .required(),
     password: PassWordJoi
-});
+        .required()
+})
+.required();
