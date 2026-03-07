@@ -7,19 +7,22 @@ export class ServiceHashData{
     ){}
 
     hashData(data: string): string {
-        
-        const hash =  this.hashFunc.hashData(data);
-        if (!hash) throw new Error("Ha ocurrido un error al generar el hash del dato");
-        return hash
+        try {
+            return this.hashFunc.hashData(data);
+        } catch (error) {
+            throw new Error("Ha ocurrido un error al generar el hash del dato");
+        }
     }
 
     validateHash(hash: string, data: string): boolean {
-        
-        const validate = this.hashFunc.validateHash(
-            hash,
-            data
-        );
-        if (!validate) throw new Error("Ha ocurrido un error al generar el hash del dato");
-        return validate;
+        try {
+            return this.hashFunc.validateHash(
+                hash,
+                data
+            );
+        } catch (error) {
+            
+            throw new Error("Ha ocurrido un error al generar el hash del dato");
+        }
     }
 }
