@@ -12,21 +12,22 @@ export class AuthRoute {
             new UsuarioRepositoryPrismaPg(ConnectionPharosApp)
         );
         const body =  req.body as NewUserInterface;
-        
         try {
 
-            const created = await createUsuarioUseCase.execute({
-                id_role: null,
-                role: null,
-                name: 'aaron',
-                ape: 'gil',
-                contact: null,
-                password: '2278123',
-                username: 'htlgil'
+            const createdUser = await createUsuarioUseCase.execute({
+                id_role: body.id_role ?? null,
+                name: body.name_user,
+                ape: body.ape,
+                contact: body.contact ?? null,
+                password: body.pass,
+                username: body.username
             });
-            console.log(created.toValue());
             
-            res.json("ok - 200");
+            res.json({
+                data: createdUser,
+                op: new Date(),
+            });
+            return
         } catch (error) {
             
             console.log(error);

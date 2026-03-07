@@ -1,12 +1,13 @@
 import { InfoUsuarioEntity } from "../../domain/entities/infoUsuario.ts";
 import type { CreateUsuarioDTO } from "../dtosInterfaces/param/createUsuario.ts";
+import type { CreatedUserResponse } from "../dtosInterfaces/response/createdUser.ts";
 import { UsuarioRepoUsesCases } from "../usuarioRepoUsesCases.ts";
 
 export class CreateNewUsuarioUseCase extends UsuarioRepoUsesCases {
 
     async execute(
         params: CreateUsuarioDTO
-    ): Promise<InfoUsuarioEntity> {
+    ): Promise<CreatedUserResponse> {
         const validateUsuarioExist = await this.repo.getUsuarioByUsername(params.username);
         if (validateUsuarioExist) throw new Error('Usuario existente');
 
@@ -16,13 +17,21 @@ export class CreateNewUsuarioUseCase extends UsuarioRepoUsesCases {
                 id: 1,
                 ape: params.ape,
                 contact: params.contact,
-                role: params.role,
+                role: '',
                 id_role: params.id_role,
                 name: params.name,
                 password: passwordHash,
                 username: params.username
             })
         );
-        return createUsuario;
+        const userPrimitive = createUsuario.toValue();
+        return {
+            fullname: `${userPrimitive.name} ${userPrimitive.ape}`,
+            resum: userPrimitive.contact !== null 
+                ? `Usuario contactado por ${userPrimitive.contact}` 
+                : 'El usuario no posee una referencia de contacto',
+            username: userPrimitive.username,
+            add: new Date(),
+        };
     }  
 }
