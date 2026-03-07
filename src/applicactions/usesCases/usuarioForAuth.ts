@@ -1,21 +1,28 @@
+import type { AuthLoginDTO } from "../dtosInterfaces/param/authLogin.ts";
 import type { AuthLoginResponse } from "../dtosInterfaces/response/authLogin.ts";
 import { UsuarioRepoUsesCases } from "../usuarioRepoUsesCases.ts";
 
 export class UsuarioForAuthUseCase extends UsuarioRepoUsesCases {
 
-    async execute(
-        username: string,
-        password: string
-    ): Promise<AuthLoginResponse>{
+    async execute(params: AuthLoginDTO): Promise<AuthLoginResponse>{
         const validateExisteUsuario = await this.repo.getUsuarioByUsername(
-            username
+            params.username
         );
         if (!validateExisteUsuario) throw new Error('No existe el usuario');
 
-        const valuesUsuarioPrimitive = validateExisteUsuario.toValue();
-        const validatePassHash = this.serviceHashData.validateHash(
-            valuesUsuarioPrimitive.usuario.password,
-            password
+        const {
+            id: idUsuario,
+            farmacias_asigne,
+            usuario: usuarioInfo
+        } = validateExisteUsuario.toValue();
+
+        const farmciaauth = farmacias_asigne.find(f => f.id_farmacia === params.farmacia_auth.id_farmacia);
+        if (!farmciaauth)
+            throw new Error('Farmacia no asignada');
+      
+            const validatePassHash = this.serviceHashData.validateHash(
+            usuarioInfo.password,
+            params.password
         );
 
         if (!validatePassHash) throw new Error('Username o Password incorrectos');
@@ -25,19 +32,19 @@ export class UsuarioForAuthUseCase extends UsuarioRepoUsesCases {
         ] = await Promise.all([
             this.serviceJoseToken.firmTokenAccess(
                 {
-                    id: 1,
-                    id_role: 1,
-                    role: '',
-                    id_farmacia: 1,
-                    farmacia: '',
-                    username: '',
+                    id: idUsuario,
+                    id_role: usuarioInfo.id_role,
+                    role: usuarioInfo.role,
+                    id_farmacia: farmciaauth.id_farmacia,
+                    farmacia: farmciaauth.name_farmacia,
+                    username: usuarioInfo.username,
                 },
                 8
             ),
             this.serviceJoseToken.firmTokenRefresh(
-                {
-                    id: 1,
-                    username: '',
+                {   
+                    id: idUsuario,
+                    username: usuarioInfo.username,
                     date: new Date()
                 },
                 43800
