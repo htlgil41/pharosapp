@@ -1,7 +1,7 @@
 export interface InfoUser {
-    id: bigint;
+    id: number;
     role: string | null;
-    id_role: bigint | null;
+    id_role: number | null;
     name: string;
     ape: string;
     username: string;
@@ -10,14 +10,14 @@ export interface InfoUser {
 }
 
 export interface UsuarioByFarmacia {
-    id: bigint;
+    id: number;
     farmacias_asigne: {
         name_farmacia: string;
-        id_farmacia: bigint;
+        id_farmacia: number;
     }[],
     usuario: {
         role: string | null;
-        id_role: bigint | null;
+        id_role: number | null;
         name: string;
         ape: string | null;
         username: string;

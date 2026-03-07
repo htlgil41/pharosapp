@@ -1,5 +1,5 @@
 export interface EquipoPC {
-    id: bigint;
+    id: number;
     name_farmacia: string | null;
     id_farmacia: number | null;
     ip: string;
@@ -12,7 +12,7 @@ export interface EquipoPC {
 }
 
 export interface EquipoImpresora {
-    id: bigint;
+    id: number;
     name_farmacia: string | null;
     id_farmacia: number | null;
     modelo_print: string;
@@ -22,9 +22,9 @@ export interface EquipoImpresora {
 }
 
 export interface PuntoVenta {
-    id: bigint;
+    id: number;
     name_farmacia: string | null;
-    id_farmacia: bigint | null;
+    id_farmacia: number | null;
     modelo: string;
     banco: string;
     serial_code: string;
@@ -32,7 +32,7 @@ export interface PuntoVenta {
 }
 
 export interface InventarioGeneral {
-    id: bigint;
+    id: number;
     name_farmacia: string | null;
     id_farmacia: number | null;
     hardware: string;

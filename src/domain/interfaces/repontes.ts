@@ -1,5 +1,5 @@
 export interface IncidenciasGenerales {
-    id: bigint;
+    id: number;
     name_farmacia: string | null;
     id_farmacia: number | null;
     nombre_inci: string;
@@ -8,18 +8,18 @@ export interface IncidenciasGenerales {
 }
 
 export interface IncidenciasPc {
-    id: bigint;
+    id: number;
     name_farmacia: string | null;
     id_farmacia: number | null;
     equipo_resum: string;
-    id_equipo: bigint;
+    id_equipo: number;
     nombre_inci: string;
     descripcion: string | null;
     fecha_incidencia: string | Date;
 }
 
 export interface Requerimientos {
-    id: bigint;
+    id: number;
     name_farmacia: string | null;
     id_farmacia: number | null;
     name_req: string | null;

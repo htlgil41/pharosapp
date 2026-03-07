@@ -1,5 +1,5 @@
 export interface Farmacia {
-    id: bigint;
+    id: number;
     some_code: string;
     name_farmcia: string;
     rif: string;
@@ -7,26 +7,26 @@ export interface Farmacia {
 }
 
 export interface CajaFarmacia {
-    id: bigint;
+    id: number;
     name_farmacia: string;
-    id_farmacia: bigint;
+    id_farmacia: number;
     nm_caja: number;
     area: string;
 }
 
 export interface CajaAsigneEquipo {
-    id: bigint;
+    id: number;
     name_farmacia: string | null;
-    id_farmacia: bigint | null;
+    id_farmacia: number | null;
     resum_equipo: string | null;
-    id_equipo: bigint;
+    id_equipo: number;
     observacion_asignacion: string | null;
 }
 
 export interface CajasAsignePuntoVenta {
-    id: bigint;
+    id: number;
     name_farmacia: string | null;
-    id_farmacia: bigint | null;
-    id_punto_venta: bigint;
+    id_farmacia: number | null;
+    id_punto_venta: number;
     observacion_pos: string | null;
 }
