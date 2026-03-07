@@ -31,7 +31,6 @@ export class UsuarioRepositoryPrismaPg implements UsuarioRepository {
             usuario.setId(createdUsuario.id);
             return usuario;
         } catch (error) {
-            
             throw new Error("Error DB");
         }
     }
@@ -80,7 +79,6 @@ export class UsuarioRepositoryPrismaPg implements UsuarioRepository {
                 },
             });
         } catch (error) {
-            
             throw new Error("Error DB");
         }
     }
