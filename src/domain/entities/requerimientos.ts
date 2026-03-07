@@ -21,6 +21,12 @@ export class RequerimientosEntity implements EntityPrimitive<Requerimientos>{
         return new RequerimientosEntity(req);
     }
 
+    setId(id: number): void{
+     
+        if (id <= 0) throw new InvalidIdExceptionDomain();
+        this.req.id = id;
+    }
+
     toValue(): Requerimientos {
         return this.req;
     }

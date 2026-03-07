@@ -20,6 +20,12 @@ export class CajaFarmaciaEntity implements EntityPrimitive<CajaFarmacia>{
         return new CajaFarmaciaEntity(caja);
     }
 
+    setId(id: number): void{
+     
+        if (id <= 0) throw new InvalidIdExceptionDomain();
+        this.caja.id = id;
+    }
+
     toValue(): CajaFarmacia {
         return this.caja;
     }

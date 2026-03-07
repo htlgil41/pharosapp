@@ -21,6 +21,12 @@ export class IncidenciasPcEntityt implements EntityPrimitive<IncidenciasPc>{
         return  new IncidenciasPcEntityt(incidencia);
     }
 
+    setId(id: number): void{
+     
+        if (id <= 0) throw new InvalidIdExceptionDomain();
+        this.incidencia.id = id;
+    }
+
     toValue(): IncidenciasPc {
         return this.incidencia;
     }

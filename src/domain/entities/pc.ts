@@ -21,6 +21,12 @@ export class PcEntity implements EntityPrimitive<EquipoPC>{
         return new PcEntity(pc);
     }
 
+    setId(id: number): void{
+     
+        if (id <= 0) throw new InvalidIdExceptionDomain();
+        this.pc.id = id;
+    }
+
     toValue(): EquipoPC {
         return this.pc;
     }

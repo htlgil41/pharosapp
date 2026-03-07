@@ -22,6 +22,12 @@ export class CajaAsigneEquipoEntity implements EntityPrimitive<CajaAsigneEquipo>
         return new CajaAsigneEquipoEntity(asigne);
     }
 
+    setId(id: number): void{
+     
+        if (id <= 0) throw new InvalidIdExceptionDomain();
+        this.cajaAsigne.id = id;
+    }
+
     toValue(): CajaAsigneEquipo {
         return this.cajaAsigne;    
     }

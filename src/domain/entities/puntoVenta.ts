@@ -21,6 +21,12 @@ export class PuntoVentaEntity implements EntityPrimitive<PuntoVenta>{
         return new PuntoVentaEntity(punto);
     }
 
+    setId(id: number): void{
+     
+        if (id <= 0) throw new InvalidIdExceptionDomain();
+        this.punto.id = id;
+    }
+
     toValue(): PuntoVenta {
         return this.punto;
     }

@@ -21,6 +21,12 @@ export class InventarioGeneralEntity implements EntityPrimitive<InventarioGenera
         return new InventarioGeneralEntity(inventario);
     }
 
+    setId(id: number): void{
+     
+        if (id <= 0) throw new InvalidIdExceptionDomain();
+        this.inventario.id = id;
+    }
+
     toValue(): InventarioGeneral {
         
         return this.inventario;

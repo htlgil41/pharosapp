@@ -21,6 +21,12 @@ export class ImpresoraEntity implements EntityPrimitive<EquipoImpresora>{
         return new ImpresoraEntity(impresora);
     }
 
+    setId(id: number): void{
+     
+        if (id <= 0) throw new InvalidIdExceptionDomain();
+        this.impresora.id = id;
+    }
+
     toValue(): EquipoImpresora {
         return this.impresora;
     }

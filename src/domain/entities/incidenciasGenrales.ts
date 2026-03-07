@@ -21,6 +21,12 @@ export class IncidenciasGeneralesEntityt implements EntityPrimitive<IncidenciasG
         return  new IncidenciasGeneralesEntityt(incidencia);
     }
 
+    setId(id: number): void{
+     
+        if (id <= 0) throw new InvalidIdExceptionDomain();
+        this.incidencia.id = id;
+    }
+
     toValue(): IncidenciasGenerales {
         return this.incidencia;
     }
