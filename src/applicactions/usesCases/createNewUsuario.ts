@@ -1,6 +1,7 @@
 import { InfoUsuarioEntity } from "../../domain/entities/infoUsuario.ts";
 import type { CreateUsuarioDTO } from "../dtosInterfaces/param/createUsuario.ts";
 import type { CreatedUserResponse } from "../dtosInterfaces/response/createdUser.ts";
+import { UserAlredyExistsExceptionCase } from "../exceptions/userAlredyExists.ts";
 import { UsuarioRepoUsesCases } from "../usuarioRepoUsesCases.ts";
 
 export class CreateNewUsuarioUseCase extends UsuarioRepoUsesCases {
@@ -9,7 +10,7 @@ export class CreateNewUsuarioUseCase extends UsuarioRepoUsesCases {
         params: CreateUsuarioDTO
     ): Promise<CreatedUserResponse> {
         const validateUsuarioExist = await this.repo.getUsuarioByUsername(params.username);
-        if (validateUsuarioExist) throw new Error('Usuario existente');
+        if (validateUsuarioExist) throw new UserAlredyExistsExceptionCase();
 
         const passwordHash = this.serviceHashData.hashData(params.password);
         const createUsuario = await this.repo.createUsuario(

@@ -1,3 +1,4 @@
+import { GlobalErrorExceptionCase } from "../exceptions/globalError.ts";
 import type { DataAccessToken, DataRefreshToken, TokenJWTJOSEPort } from "../ports/token.ts";
 
 export class ServiceTokenJose {
@@ -20,7 +21,7 @@ export class ServiceTokenJose {
             return crypteToken;
         } catch (error) {
             
-            throw new Error("Mal token generate en crypted");
+            throw new GlobalErrorExceptionCase("Mal token generate en crypted");
         }
     }
 
@@ -38,7 +39,7 @@ export class ServiceTokenJose {
             return crypteToken;
         } catch (error) {
             
-            throw new Error("Mal token generate en crypted");
+            throw new GlobalErrorExceptionCase("Mal token generate en crypted");
         }
     }
 
@@ -51,7 +52,7 @@ export class ServiceTokenJose {
             return true;
         } catch (error) {
             
-            throw new Error("Error al validar");
+            throw new GlobalErrorExceptionCase("Error al validar la informacion de la session");
         }
     }
 }
