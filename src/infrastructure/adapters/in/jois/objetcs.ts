@@ -1,13 +1,22 @@
 import joi from 'joi';
-import { NameApeJoi, NumbrePositive, ParamEmptyString, PassWordJoi, UsernameJoi } from './validates.ts';
-import type { NewUserInterface } from './interfaces/newuser.ts';
+import { NameApeJoi, NumbrePositive, ParamEmptyString, ParamNotEmptyString, PassWordJoi, UsernameJoi } from './validates.ts';
+import type { AuthLoginIUnterface, NewUserInterface } from './interfaces/newuser.ts';
 
 
-export const AutLobinValidateJoi = joi.object({
+export const AutLobinValidateJoi = joi.object<AuthLoginIUnterface>({
     username: UsernameJoi
         .required(),
     password: PassWordJoi
+        .required(),
+    farmacia_auth: joi.object<{
+        id_farmacia: number;
+        farmacia: string;
+    }>({
+        farmacia: ParamNotEmptyString
+            .max(100),
+        id_farmacia: NumbrePositive
         .required()
+    }).required()
 })
 .required();
 
