@@ -34,13 +34,12 @@ model cajas_asigne_equipo {
 }
 
 model cajas_asigne_punto_venta {
-  id              Int         @id @default(autoincrement())
+  id              Int        @id @default(autoincrement())
   name_farmacia   String?
   id_farmacia     Int?
-  id_punto_venta  Int         @unique(map: "ux_asigne_pv_equipo_unico")
+  id_punto_venta  Int        @unique(map: "ux_asigne_pv_equipo_unico")
   observacion_pos String?
-  farmacias       farmacias?  @relation(fields: [id_farmacia], references: [id], map: "fk_asigne_pv_farmacia")
-  punto_venta     punto_venta @relation(fields: [id_punto_venta], references: [id], onDelete: Cascade, map: "fk_asigne_pv_punto")
+  farmacias       farmacias? @relation(fields: [id_farmacia], references: [id], map: "fk_asigne_pv_farmacia")
 
   @@index([id_farmacia], map: "ix_asigne_pv_id_farmacia")
   @@index([id_punto_venta], map: "ix_asigne_pv_id_punto_venta")
@@ -145,15 +144,14 @@ model inventario_general {
 }
 
 model punto_venta {
-  id                       Int                       @id @default(autoincrement())
-  name_farmacia            String?
-  id_farmacia              Int
-  modelo                   String                    @db.VarChar(255)
-  banco                    String
-  serial_code              String                    @unique @db.VarChar(255)
-  tag                      String?                   @default("Punto de venta")
-  cajas_asigne_punto_venta cajas_asigne_punto_venta?
-  farmacias                farmacias                 @relation(fields: [id_farmacia], references: [id], onDelete: SetNull, map: "fk_punto_venta_id_farmacia")
+  id            Int        @id @default(autoincrement())
+  name_farmacia String?
+  id_farmacia   Int?
+  modelo        String     @db.VarChar(255)
+  banco         String
+  serial_code   String     @unique @db.VarChar(255)
+  tag           String?    @default("Punto de venta")
+  farmacias     farmacias? @relation(fields: [id_farmacia], references: [id], map: "fk_punto_venta_id_farmacia")
 
   @@index([banco], map: "ix_punto_venta_banco")
   @@index([serial_code], map: "ix_punto_venta_serial")
