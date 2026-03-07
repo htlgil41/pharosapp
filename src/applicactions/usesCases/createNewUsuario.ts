@@ -13,7 +13,7 @@ export class CreateNewUsuarioUseCase extends UsuarioRepoUsesCases {
         const passwordHash = this.serviceHashData.hashData(params.password);
         const createUsuario = await this.repo.createUsuario(
             InfoUsuarioEntity.build({
-                id: 1n,
+                id: 1,
                 ape: params.ape,
                 contact: params.contact,
                 role: params.role,

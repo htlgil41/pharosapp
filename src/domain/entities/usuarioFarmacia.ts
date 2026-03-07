@@ -33,7 +33,7 @@ export class UsuarioByFarmaciaEntity implements EntityPrimitive<UsuarioByFarmaci
         return new UsuarioByFarmaciaEntity(usuairoFarmacia);
     }
 
-    setId(id: bigint): void{
+    setId(id: number): void{
 
         if (id <= 0) return;
         this.usuairoFarmacia.id = id;
