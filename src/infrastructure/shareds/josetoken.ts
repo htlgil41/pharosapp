@@ -1,13 +1,13 @@
 import * as jose from 'jose';
 import type { DataAccessToken, DataRefreshToken, TokenJWTJOSEPort } from '../../applicactions/ports/token.ts';
-import { KEYACCESSTOKEN, PEMACCESSTOKEN, KEYREFRESHTOKEN, PEMREFRESHTOKEN } from './const.ts';
+import { KEYACCESSTOKEN, PEMACCESSTOKEN, KEYREFRESHTOKEN, PEMREFRESHTOKEN, SECRETCRYPTETOKEN } from './const.ts';
 
 export class TokenManajerJOSE implements TokenJWTJOSEPort<
   DataAccessToken,
   DataRefreshToken
 >{
 
-    private secreToN: jose.JWK | undefined;
+    private secreToN: jose.JWK = SECRETCRYPTETOKEN;
 
     private keyAccess: jose.CryptoKey = KEYACCESSTOKEN;
     private pemAccess: jose.CryptoKey = PEMACCESSTOKEN;

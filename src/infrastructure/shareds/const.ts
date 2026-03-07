@@ -5,6 +5,9 @@ import { fileURLToPath } from 'url';
 
 export const PATH = path.resolve(dirname(fileURLToPath(import.meta.url)));
 
+const loadSecretForCrypted = fs.readFileSync(
+    path.resolve(PATH, '../../../confs/keysForTokens/secrettoken'), { encoding: 'utf-8' });
+
 const loadKeyAccessToken = fs.readFileSync(
     path.resolve(PATH, '../../../confs/keysForTokens/private_access_token.key'), { encoding: 'utf-8' });
 const loadPemAccessToken = fs.readFileSync(
@@ -15,6 +18,7 @@ const loadKeyRefreshToken = fs.readFileSync(
 const loadPemRefreshToken = fs.readFileSync(
     path.resolve(PATH, '../../../confs/keysForTokens/public_refresh_token.pem'), { encoding: 'utf-8' });
 
+export const SECRETCRYPTETOKEN = JSON.parse(Buffer.from(loadSecretForCrypted, 'base64').toString('utf-8')) as jose.JWK;
 export const KEYACCESSTOKEN = await jose.importPKCS8(
     loadKeyAccessToken,
     'RS256',
