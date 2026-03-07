@@ -1,7 +1,8 @@
 import type { InfoUsuarioEntity } from "../../../../../../domain/entities/infoUsuario.ts";
 import { UsuarioByFarmaciaEntity } from "../../../../../../domain/entities/usuarioFarmacia.ts";
 import type { UsuarioRepository } from "../../../../../../domain/repositories/usuarios.ts";
-import type { PrismaClient } from "../models/client/client.ts";
+import { ErrorPrismaExceptions } from "../exceptions/errosManager.ts";
+import { Prisma, type PrismaClient } from "../models/client/client.ts";
 
 export class UsuarioRepositoryPrismaPg implements UsuarioRepository {
 
@@ -31,7 +32,7 @@ export class UsuarioRepositoryPrismaPg implements UsuarioRepository {
             usuario.setId(createdUsuario.id);
             return usuario;
         } catch (error) {
-            throw new Error("Error DB");
+            throw ErrorPrismaExceptions(error);
         }
     }
 
@@ -79,7 +80,7 @@ export class UsuarioRepositoryPrismaPg implements UsuarioRepository {
                 },
             });
         } catch (error) {
-            throw new Error("Error DB");
+            throw ErrorPrismaExceptions(error);
         }
     }
 }
