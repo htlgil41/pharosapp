@@ -1,5 +1,6 @@
 import joi from 'joi';
 import { NameApeJoi, NumbrePositive, ParamEmptyString, PassWordJoi, UsernameJoi } from './validates.ts';
+import type { NewUserInterface } from './interfaces/newuser.ts';
 
 
 export const AutLobinValidateJoi = joi.object({
@@ -10,7 +11,7 @@ export const AutLobinValidateJoi = joi.object({
 })
 .required();
 
-export const NewUserValidateJoi = joi.object({
+export const NewUserValidateJoi = joi.object<NewUserInterface>({
     id_role: NumbrePositive
         .optional(),
     name_user: NameApeJoi
