@@ -1,16 +1,23 @@
 import { InfoUsuarioEntity } from "../../domain/entities/infoUsuario.ts";
 import type { CreateUsuarioDTO } from "../dtosInterfaces/param/createUsuario.ts";
 import type { CreatedUserResponse } from "../dtosInterfaces/response/createdUser.ts";
-import { UserAlredyExistsExceptionCase } from "../exceptions/userAlredyExists.ts";
+import { ErrorResponseException } from "../exceptions/responseError.ts";
 import { UsuarioRepoUsesCases } from "../usuarioRepoUsesCases.ts";
 
 export class CreateNewUsuarioUseCase extends UsuarioRepoUsesCases {
 
     async execute(
         params: CreateUsuarioDTO
-    ): Promise<CreatedUserResponse> {
+    ): Promise<[CreatedUserResponse | null, ErrorResponseException | null]> {
         const validateUsuarioExist = await this.repo.getUsuarioByUsername(params.username);
-        if (validateUsuarioExist) throw new UserAlredyExistsExceptionCase();
+        if (validateUsuarioExist) return [
+            null,
+            new ErrorResponseException(
+                'El usuario ya se encuentra registrado',
+                'Tu estas dentro ve e inicia!',
+                ''
+            )
+        ];
 
         const passwordHash = this.serviceHashData.hashData(params.password);
         const createUsuario = await this.repo.createUsuario(
@@ -26,13 +33,16 @@ export class CreateNewUsuarioUseCase extends UsuarioRepoUsesCases {
             })
         );
         const userPrimitive = createUsuario.toValue();
-        return {
-            fullname: `${userPrimitive.name} ${userPrimitive.ape}`,
-            resum: userPrimitive.contact !== null 
-                ? `Usuario contactado por ${userPrimitive.contact}` 
-                : 'El usuario no posee una referencia de contacto',
-            username: userPrimitive.username,
-            add: new Date(),
-        };
+        return [
+            {
+                fullname: `${userPrimitive.name} ${userPrimitive.ape}`,
+                resum: userPrimitive.contact !== null 
+                    ? `Usuario contactado por ${userPrimitive.contact}` 
+                    : 'El usuario no posee una referencia de contacto',
+                username: userPrimitive.username,
+                add: new Date(),
+            },
+            null
+        ];
     }  
 }

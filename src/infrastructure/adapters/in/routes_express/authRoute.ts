@@ -15,7 +15,10 @@ export class AuthRoute {
         const body =  req.body as NewUserInterface;
         try {
 
-            const createdUser = await createUsuarioUseCase.execute({
+            const [
+                createdUser,
+                error
+            ] = await createUsuarioUseCase.execute({
                 id_role: body.id_role ?? null,
                 name: body.name_user,
                 ape: body.ape,
@@ -23,6 +26,26 @@ export class AuthRoute {
                 password: body.pass,
                 username: body.username
             });
+
+            if (error !== null){
+
+                res.json({
+                    error: {
+                        error: error.error,
+                        fix: error.fix
+                    },
+                });
+                return;
+            }
+            if (createdUser === null) {
+                res.json({
+                    error: {
+                        error: 'No se ha podido construir la informcaion correctamente',
+                        fix: 'Error muy inesperado',
+                    },
+                });
+                return;
+            }
             
             res.json({
                 data: createdUser,
