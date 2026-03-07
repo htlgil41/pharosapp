@@ -23,7 +23,7 @@ CREATE INDEX ix_caja_farmacia_id_farmacia ON caja_farmacia (id_farmacia);
 CREATE TABLE IF NOT EXISTS punto_venta (
     id SERIAL PRIMARY KEY,
 	name_farmacia TEXT DEFAULT NULL,
-    id_farmacia INTEGER NOT NULL,
+    id_farmacia INTEGER,
     modelo VARCHAR(255) NOT NULL,
     banco TEXT NOT NULL,
     serial_code VARCHAR(255) NOT NULL UNIQUE,
