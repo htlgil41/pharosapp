@@ -2,12 +2,12 @@ import type { Request, Response } from 'express';
 import { UsuarioRepositoryPrismaPg } from '../../out/persistence/prisma_pg/repositories/usuario.ts';
 import { ConnectionPharosApp } from '../../out/persistence/prisma_pg/connection.ts';
 import { CreateNewUsuarioUseCase } from '../../../../applicactions/usesCases/createNewUsuario.ts';
-import type { NewUserInterface } from '../jois/interfaces/newuser.ts';
+import type { AuthLoginIUnterface, NewUserInterface } from '../jois/interfaces/newuser.ts';
+import { UsuarioForAuthUseCase } from '../../../../applicactions/usesCases/usuarioForAuth.ts';
 
 export class AuthRoute {
 
     async newUsuario(req: Request, res: Response): Promise<void>{
-
         const createUsuarioUseCase = new CreateNewUsuarioUseCase(
             new UsuarioRepositoryPrismaPg(ConnectionPharosApp)
         );
@@ -36,13 +36,32 @@ export class AuthRoute {
     }
 
     async login(req: Request, res: Response): Promise<void>{
-
+        const authLoginUseCase = new UsuarioForAuthUseCase(
+            new UsuarioRepositoryPrismaPg(ConnectionPharosApp)
+        );
+        const body = req.body as AuthLoginIUnterface;
         try {
+
+            const [userForAuthToken, error] = await authLoginUseCase.execute({
+                username: body.username,
+                password: body.password,
+                farmacia_auth: body.farmacia_auth,
+            });
+
+            if (error !== null) {
+                res.json({
+                    error: {
+                        error: error.error,
+                        fix: error.fix,
+                    },
+                });
+                return;
+            }
             
-            console.log(req.body);
-            res.json("si");
+            res.json(userForAuthToken);
         } catch (error) {
             
+            console.log(error);
             throw new Error('new usuario');
         }
     }
