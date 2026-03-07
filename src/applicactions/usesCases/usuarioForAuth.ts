@@ -1,14 +1,25 @@
 import type { AuthLoginDTO } from "../dtosInterfaces/param/authLogin.ts";
 import type { AuthLoginResponse } from "../dtosInterfaces/response/authLogin.ts";
+import { ErrorResponseException } from "../exceptions/responseError.ts";
 import { UsuarioRepoUsesCases } from "../usuarioRepoUsesCases.ts";
 
 export class UsuarioForAuthUseCase extends UsuarioRepoUsesCases {
 
-    async execute(params: AuthLoginDTO): Promise<AuthLoginResponse>{
+    async execute(params: AuthLoginDTO): Promise<[
+        AuthLoginResponse | null, 
+        ErrorResponseException | null
+    ]>{
         const validateExisteUsuario = await this.repo.getUsuarioByUsername(
             params.username
         );
-        if (!validateExisteUsuario) throw new Error('No existe el usuario');
+        if (validateExisteUsuario === null) return [
+            null,
+            new ErrorResponseException(
+                'No existe el usuario',
+                'Puedes crear un usuario con estos mismos datos, vamos!!',
+                ''
+            )
+        ];
 
         const {
             id: idUsuario,
@@ -17,15 +28,28 @@ export class UsuarioForAuthUseCase extends UsuarioRepoUsesCases {
         } = validateExisteUsuario.toValue();
 
         const farmciaauth = farmacias_asigne.find(f => f.id_farmacia === params.farmacia_auth.id_farmacia);
-        if (!farmciaauth)
-            throw new Error('Farmacia no asignada');
+        if (!farmciaauth) return [
+            null,
+            new ErrorResponseException(
+                'Farmacia no asignada',
+                'No tienes una farmacia asignada pide a tus superiores que lo hagan pronto',
+                ''
+            )
+        ];
       
             const validatePassHash = this.serviceHashData.validateHash(
             usuarioInfo.password,
             params.password
         );
 
-        if (!validatePassHash) throw new Error('Username o Password incorrectos');
+        if (!validatePassHash) return [
+            null,
+            new ErrorResponseException(
+                'Username o Password incorrectos',
+                'Verifica tus datos para poder ingresar',
+                ''
+            )
+        ]
         const [
             token_access,
             token_refresh
@@ -50,9 +74,12 @@ export class UsuarioForAuthUseCase extends UsuarioRepoUsesCases {
                 43800
             )
         ]);
-        return {
-            token_access,
-            token_refresh,
-        };
+        return [
+            {
+                token_access,
+                token_refresh,
+            },
+            null
+        ];
     }
 }
