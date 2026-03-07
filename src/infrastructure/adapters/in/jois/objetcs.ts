@@ -1,5 +1,5 @@
 import joi from 'joi';
-import { PassWordJoi, UsernameJoi } from './validates.ts';
+import { NameApeJoi, NumbrePositive, ParamEmptyString, PassWordJoi, UsernameJoi } from './validates.ts';
 
 
 export const AutLobinValidateJoi = joi.object({
@@ -9,3 +9,17 @@ export const AutLobinValidateJoi = joi.object({
         .required()
 })
 .required();
+
+export const NewUserValidateJoi = joi.object({
+    id_role: NumbrePositive
+        .optional(),
+    name_user: NameApeJoi
+        .required(),
+    ape: NameApeJoi
+        .required(),
+    username: UsernameJoi
+        .required(),
+    pass: PassWordJoi
+        .required(),
+    contact: ParamEmptyString,
+}).required();

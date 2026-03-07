@@ -7,7 +7,6 @@ export class UsuarioForAuthUseCase extends UsuarioRepoUsesCases {
         username: string,
         password: string
     ): Promise<AuthLoginResponse>{
-        
         const validateExisteUsuario = await this.repo.getUsuarioByUsername(
             username
         );

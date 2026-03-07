@@ -7,8 +7,6 @@ export class CreateNewUsuarioUseCase extends UsuarioRepoUsesCases {
     async execute(
         params: CreateUsuarioDTO
     ): Promise<InfoUsuarioEntity> {
-
-        // Service validateExists usuario
         const validateUsuarioExist = await this.repo.getUsuarioByUsername(params.username);
         if (validateUsuarioExist) throw new Error('Usuario existente');
 

@@ -5,8 +5,7 @@
   "private": true,
   "scripts": {
     "script:jose": "bun run ./scripts/jose_token.ts",
-    "start:start": "bun run ./src/index.ts",
-    "start:dev": "bun run --watch ./src/index.ts"
+    "start:start": "bun run ./src/index.ts"
   },
   "devDependencies": {
     "@types/bcrypt": "^6.0.0",
