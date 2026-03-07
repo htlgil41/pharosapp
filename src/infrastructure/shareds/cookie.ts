@@ -1,8 +1,8 @@
 import cookie from 'cookie';
 import { LoadEnvWithExceptions, LoadEnvWithVoid } from './loadEnvWith.ts';
 
-const CookiSetHeaders = (
-    timeSecondCookie: number,
+export const CookiSetHeaders = (
+    timeMinuteCookie: number,
     nameCookie: string,
     valueCookie: string
 ): string => {
@@ -11,17 +11,19 @@ const CookiSetHeaders = (
         nameCookie,
         valueCookie,
         {
-            domain: LoadEnvWithVoid('MODE_DEV') ? undefined : LoadEnvWithExceptions('DOMAIN_COOKIE'),
+            domain: LoadEnvWithVoid<string>('MODE_DEV').length === 0
+                ? undefined 
+                : LoadEnvWithExceptions<string>('DOMAIN_COOKIE'),
             httpOnly: true,
             path: '/',
             sameSite: 'lax',
             secure: false,
-            maxAge: 60000 * timeSecondCookie
+            maxAge:  60000 * timeMinuteCookie
         }
     )
 }
 
-const CookieParse = (
+export const CookieParse = (
     cookieReq: string,
     nameCookie: string
 ) => {

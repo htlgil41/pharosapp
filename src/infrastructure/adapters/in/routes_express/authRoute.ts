@@ -4,6 +4,7 @@ import { ConnectionPharosApp } from '../../out/persistence/prisma_pg/connection.
 import { CreateNewUsuarioUseCase } from '../../../../applicactions/usesCases/createNewUsuario.ts';
 import type { AuthLoginIUnterface, NewUserInterface } from '../jois/interfaces/newuser.ts';
 import { UsuarioForAuthUseCase } from '../../../../applicactions/usesCases/usuarioForAuth.ts';
+import { CookiSetHeaders } from '../../../shareds/cookie.ts';
 
 export class AuthRoute {
 
@@ -57,8 +58,36 @@ export class AuthRoute {
                 });
                 return;
             }
-            
-            res.json(userForAuthToken);
+            if (userForAuthToken === null) {
+
+                res.json({
+                    error: {
+                        error: 'No se ha podido construir la informcaion correctamente',
+                        fix: 'Error muy inesperado',
+                    },
+                });
+                return
+            }
+
+            const [
+                ac_cookies,
+                rt_cookie
+            ] = [
+                CookiSetHeaders(
+                    60,
+                    'at',
+                    userForAuthToken.token_access
+                ),
+                CookiSetHeaders(
+                    60,
+                    'rt',
+                    userForAuthToken.token_refresh
+                ),
+            ];
+
+            res.setHeader('Set-Cookie', [ac_cookies, rt_cookie])
+            res.json("oberva las cookies!!!");
+            return
         } catch (error) {
             
             console.log(error);

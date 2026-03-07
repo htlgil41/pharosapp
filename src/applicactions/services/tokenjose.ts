@@ -21,7 +21,8 @@ export class ServiceTokenJose {
             return crypteToken;
         } catch (error) {
             
-            throw new GlobalErrorExceptionCase("Mal token generate en crypted");
+            console.log(error)
+            throw new GlobalErrorExceptionCase("Mal accesstoken generate en crypted");
         }
     }
 
@@ -39,7 +40,8 @@ export class ServiceTokenJose {
             return crypteToken;
         } catch (error) {
             
-            throw new GlobalErrorExceptionCase("Mal token generate en crypted");
+            console.log(error)
+            throw new GlobalErrorExceptionCase("Mal refreshtoken generate en crypted");
         }
     }
 
