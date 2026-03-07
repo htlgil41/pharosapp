@@ -1,11 +1,11 @@
 import { InfoUsuarioEntity } from "../../domain/entities/infoUsuario.ts";
-import type { CreateUsuarioParams } from "../dtosInterfaces/param/createUsuario.ts";
+import type { CreateUsuarioDTO } from "../dtosInterfaces/param/createUsuario.ts";
 import { UsuarioRepoUsesCases } from "../usuarioRepoUsesCases.ts";
 
 export class CreateNewUsuarioUseCase extends UsuarioRepoUsesCases {
 
     async execute(
-        params: CreateUsuarioParams
+        params: CreateUsuarioDTO
     ): Promise<InfoUsuarioEntity> {
 
         // Service validateExists usuario

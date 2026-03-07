@@ -1,6 +1,6 @@
 import type { TokenJWTJOSEPort } from "../ports/token.ts";
 
-export class TokenJoseService {
+export class ServiceTokenJose {
 
     constructor(
         private jose: TokenJWTJOSEPort

@@ -1,4 +1,4 @@
-export interface CreateUsuarioParams {
+export interface CreateUsuarioDTO {
     ape: string;
     contact: string;
     role: string | null;
