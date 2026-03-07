@@ -16,7 +16,6 @@ export class TokenManajerJOSE implements TokenJWTJOSEPort {
     data: string,
     expirateMinute: number
   ): Promise<string> {
-
     const token = await new jose.SignJWT({ pay: data })
         .setProtectedHeader({ alg: 'RS256' })
         .setIssuedAt()
@@ -30,13 +29,11 @@ export class TokenManajerJOSE implements TokenJWTJOSEPort {
     data: string,
     expirateMinute: number
   ): Promise<string> {
-    
     const token = await new jose.SignJWT({ pay: data })
         .setProtectedHeader({ alg: 'RS256' })
         .setIssuedAt()
         .setExpirationTime(expirateMinute * 6000)
         .sign(this.keyRefresh!);
-
     return token;
   }
 
@@ -44,30 +41,47 @@ export class TokenManajerJOSE implements TokenJWTJOSEPort {
     token: string,
     expirateMinute: number
   ): Promise<string> {
-      
     const cripte = new jose.EncryptJWT({ pay: token })
         .setProtectedHeader({ enc: 'A256GCM', alg: 'dir' })
         .setIssuedAt()
         .setExpirationTime(expirateMinute * 6000)
         .encrypt(this.secreToN!);
-
     return cripte;
   }
 
   async validateAccessToken(
     jwt: string
   ): Promise<void> {
-    
-    const validateToken = await jose.jwtDecrypt(
+    const decryptToken = await jose.jwtDecrypt(
       jwt,
       this.secreToN!,
       { contentEncryptionAlgorithms: ['A256GCM'], keyManagementAlgorithms: ['dir'] }
     );
-
-    //TODO: TOKEN FIRMA
+    const validateToken = await jose.jwtVerify(
+      jwt,
+      this.pemAccess,
+      { algorithms: ['RS256'] }
+    );
+    
+    // VALIDATCUERPO DEL JTW EN DECRYPT Y VALIDATE
+    console.log(validateToken);
   }
 
-  async validateRefreshToken(): Promise<void> {
+  async validateRefreshToken(
+    jwt: string
+  ): Promise<void> {
+    const decryptToken = await jose.jwtDecrypt(
+      jwt,
+      this.secreToN!,
+      { contentEncryptionAlgorithms: ['A256GCM'], keyManagementAlgorithms: ['dir'] }
+    );
+    const validateToken = await jose.jwtVerify(
+      jwt,
+      this.pemAccess,
+      { algorithms: ['RS256'] }
+    );
     
+    // VALIDATCUERPO DEL JTW EN DECRYPT Y VALIDATE
+    console.log(validateToken);
   }
 }

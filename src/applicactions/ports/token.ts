@@ -13,9 +13,9 @@ export interface TokenJWTJOSEPort {
     ): Promise<string>;
 
     validateAccessToken(
-
+        jwt: string
     ): Promise<void>;
     validateRefreshToken(
-
+        jwt: string
     ): Promise<void>;
 }
