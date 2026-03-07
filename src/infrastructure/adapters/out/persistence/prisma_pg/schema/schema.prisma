@@ -9,9 +9,9 @@ datasource db {
 }
 
 model caja_farmacia {
-  id            BigInt    @id @default(autoincrement())
+  id            Int       @id @default(autoincrement())
   name_farmacia String?
-  id_farmacia   BigInt
+  id_farmacia   Int
   nm_caja       Int
   area          String    @db.VarChar(255)
   farmacias     farmacias @relation(fields: [id_farmacia], references: [id], onDelete: Cascade, map: "fk_cajas_farmacia_id_farmacia")
@@ -20,11 +20,11 @@ model caja_farmacia {
 }
 
 model cajas_asigne_equipo {
-  id                     BigInt     @id @default(autoincrement())
+  id                     Int        @id @default(autoincrement())
   name_farmacia          String?
-  id_farmacia            BigInt?
+  id_farmacia            Int?
   resum_equipo           String?
-  id_equipo              BigInt     @unique(map: "ux_cajas_equipo_unico")
+  id_equipo              Int        @unique(map: "ux_cajas_equipo_unico")
   observacion_asignacion String?
   farmacias              farmacias? @relation(fields: [id_farmacia], references: [id], map: "fk_asigne_equipo_farmacia")
   equipo_pc              equipo_pc  @relation(fields: [id_equipo], references: [id], onDelete: Cascade, map: "fk_asigne_equipo_pc")
@@ -34,10 +34,10 @@ model cajas_asigne_equipo {
 }
 
 model cajas_asigne_punto_venta {
-  id              BigInt      @id @default(autoincrement())
+  id              Int         @id @default(autoincrement())
   name_farmacia   String?
-  id_farmacia     BigInt?
-  id_punto_venta  BigInt      @unique(map: "ux_asigne_pv_equipo_unico")
+  id_farmacia     Int?
+  id_punto_venta  Int         @unique(map: "ux_asigne_pv_equipo_unico")
   observacion_pos String?
   farmacias       farmacias?  @relation(fields: [id_farmacia], references: [id], map: "fk_asigne_pv_farmacia")
   punto_venta     punto_venta @relation(fields: [id_punto_venta], references: [id], onDelete: Cascade, map: "fk_asigne_pv_punto")
@@ -47,9 +47,9 @@ model cajas_asigne_punto_venta {
 }
 
 model equipo_impresora {
-  id            BigInt     @id @default(autoincrement())
+  id            Int        @id @default(autoincrement())
   name_farmacia String?
-  id_farmacia   BigInt?
+  id_farmacia   Int?
   modelo_print  String
   marca         String
   area          String     @db.VarChar(255)
@@ -60,9 +60,9 @@ model equipo_impresora {
 }
 
 model equipo_pc {
-  id                  BigInt               @id @default(autoincrement())
+  id                  Int                  @id @default(autoincrement())
   name_farmacia       String?
-  id_farmacia         BigInt?
+  id_farmacia         Int?
   ip                  String               @db.VarChar(255)
   anydesk             String?              @default("") @db.VarChar(255)
   sa_anydesk          String?              @db.VarChar(255)
@@ -79,7 +79,7 @@ model equipo_pc {
 }
 
 model farmacias {
-  id                         BigInt                       @id @default(autoincrement())
+  id                         Int                          @id @default(autoincrement())
   some_code                  String                       @unique @db.VarChar(10)
   name_farmacia              String
   rif                        String                       @unique @db.VarChar(255)
@@ -100,9 +100,9 @@ model farmacias {
 }
 
 model incidencias_generales {
-  id             BigInt     @id @default(autoincrement())
+  id             Int        @id @default(autoincrement())
   name_farmacia  String?
-  id_farmacia    BigInt?
+  id_farmacia    Int?
   nombre_inci    String     @db.VarChar(255)
   descripcion    String?    @default("sin novedades")
   fecha_registro DateTime?  @default(now()) @db.Timestamp(6)
@@ -114,10 +114,10 @@ model incidencias_generales {
 }
 
 model incidencias_pc {
-  id               BigInt     @id @default(autoincrement())
-  id_farmacia      BigInt?
+  id               Int        @id @default(autoincrement())
+  id_farmacia      Int?
   equipo_resum     String?
-  id_equipo        BigInt
+  id_equipo        Int
   nombre_inci      String     @db.VarChar(255)
   descripcion      String?    @default("sin novedades")
   fecha_incidencia DateTime?  @default(now()) @db.Timestamp(6)
@@ -131,9 +131,9 @@ model incidencias_pc {
 }
 
 model inventario_general {
-  id            BigInt     @id @default(autoincrement())
+  id            Int        @id @default(autoincrement())
   name_farmacia String?
-  id_farmacia   BigInt?
+  id_farmacia   Int?
   hardware      String
   nota          String?
   cantidad      Int?       @default(0)
@@ -145,9 +145,9 @@ model inventario_general {
 }
 
 model punto_venta {
-  id                       BigInt                    @id @default(autoincrement())
+  id                       Int                       @id @default(autoincrement())
   name_farmacia            String?
-  id_farmacia              BigInt
+  id_farmacia              Int
   modelo                   String                    @db.VarChar(255)
   banco                    String
   serial_code              String                    @unique @db.VarChar(255)
@@ -160,9 +160,9 @@ model punto_venta {
 }
 
 model requerimientos_solicitudes {
-  id            BigInt     @id @default(autoincrement())
+  id            Int        @id @default(autoincrement())
   name_farmacia String?
-  id_farmacia   BigInt?
+  id_farmacia   Int?
   name_req      String     @db.VarChar(255)
   descripcion   String?    @default("sin Requerimiento")
   fix           Boolean?   @default(false)
@@ -177,8 +177,8 @@ model requerimientos_solicitudes {
 }
 
 model usuario {
-  id                  BigInt                @id @default(autoincrement())
-  id_role             BigInt?
+  id                  Int                   @id @default(autoincrement())
+  id_role             Int?
   name_user           String                @db.VarChar(255)
   ape                 String?               @db.VarChar(255)
   username            String                @unique @db.VarChar(255)
@@ -193,10 +193,10 @@ model usuario {
 }
 
 model usuario_by_farmacia {
-  id            BigInt     @id @default(autoincrement())
+  id            Int        @id @default(autoincrement())
   name_farmacia String?
-  id_farmacia   BigInt?
-  id_usuario    BigInt
+  id_farmacia   Int?
+  id_usuario    Int
   farmacias     farmacias? @relation(fields: [id_farmacia], references: [id], map: "fk_usuario_by_farmacia_id_farmacia")
   usuario       usuario    @relation(fields: [id_usuario], references: [id], onDelete: Cascade, map: "fk_usuario_by_farmacia_id_usuario")
 
@@ -206,7 +206,7 @@ model usuario_by_farmacia {
 }
 
 model usuario_role {
-  id      BigInt    @id @default(autoincrement())
+  id      Int       @id @default(autoincrement())
   rolee   String    @db.VarChar(255)
   usuario usuario[]
 }
