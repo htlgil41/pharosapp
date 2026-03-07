@@ -1,8 +1,8 @@
 import * as jose from 'jose';
-import type { TokenJWTJOSEPort } from '../../applicactions/ports/token.ts';
+import type { AccessToken, TokenJWTJOSEPort } from '../../applicactions/ports/token.ts';
 import { KEYACCESSTOKEN, PEMACCESSTOKEN, KEYREFRESHTOKEN, PEMREFRESHTOKEN } from './const.ts';
 
-export class TokenManajerJOSE implements TokenJWTJOSEPort {
+export class TokenManajerJOSE implements TokenJWTJOSEPort <AccessToken>{
 
     private secreToN: jose.JWK | undefined;
 
@@ -12,7 +12,7 @@ export class TokenManajerJOSE implements TokenJWTJOSEPort {
     private keyRefresh: jose.CryptoKey = KEYREFRESHTOKEN;
     private pemRefresh: jose.CryptoKey = PEMREFRESHTOKEN;
 
-  async generateAccessToken(
+    async generateAccessToken(
     data: string,
     expirateMinute: number
   ): Promise<string> {
@@ -51,7 +51,7 @@ export class TokenManajerJOSE implements TokenJWTJOSEPort {
 
   async validateAccessToken(
     jwt: string
-  ): Promise<void> {
+  ): Promise<AccessToken> {
     const decryptToken = await jose.jwtDecrypt(
       jwt,
       this.secreToN!,
@@ -67,11 +67,19 @@ export class TokenManajerJOSE implements TokenJWTJOSEPort {
     );
 
     console.log(validateToken.payload['pay']);
+    return {
+      id: 1,
+      id_role: 1,
+      role: '',
+      id_farmacia: 1,
+      farmacia: '',
+      username: ''
+    };
   }
 
   async validateRefreshToken(
     jwt: string
-  ): Promise<void> {
+  ): Promise<AccessToken> {
     const decryptToken = await jose.jwtDecrypt(
       jwt,
       this.secreToN!,
@@ -86,5 +94,13 @@ export class TokenManajerJOSE implements TokenJWTJOSEPort {
     );
 
     console.log(validateToken.payload['pay']);
+    return {
+      id: 1,
+      id_role: 1,
+      role: '',
+      id_farmacia: 1,
+      farmacia: '',
+      username: ''
+    };
   }
 }

@@ -1,9 +1,9 @@
-import type { TokenJWTJOSEPort } from "../ports/token.ts";
+import type { AccessToken, TokenJWTJOSEPort } from "../ports/token.ts";
 
 export class ServiceTokenJose {
 
     constructor(
-        private jose: TokenJWTJOSEPort
+        private jose: TokenJWTJOSEPort<AccessToken>
     ){}
 
     async firmTokenAccess(data: string, expirateMinute: number): Promise<string> {

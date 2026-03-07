@@ -1,4 +1,13 @@
-export interface TokenJWTJOSEPort {
+export interface AccessToken {
+  id: number;
+  id_role: number | null;
+  role: string | null;
+  farmacia: string | null;
+  id_farmacia: number | null;
+  username: string
+}
+
+export interface TokenJWTJOSEPort<T>{
     generateAccessToken(
         data: string,
         expirateMinute: number
@@ -14,8 +23,8 @@ export interface TokenJWTJOSEPort {
 
     validateAccessToken(
         jwt: string
-    ): Promise<void>;
+    ): Promise<T>;
     validateRefreshToken(
         jwt: string
-    ): Promise<void>;
+    ): Promise<T>;
 }
