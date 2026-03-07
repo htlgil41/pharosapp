@@ -12,7 +12,7 @@ export interface InfoUser {
 export interface UsuarioByFarmacia {
     id: number;
     farmacias_asigne: {
-        name_farmacia: string;
+        name_farmacia: string | null;
         id_farmacia: number;
     }[],
     usuario: {

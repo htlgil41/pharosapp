@@ -193,11 +193,11 @@ CREATE INDEX ix_usuario_nombre_completo ON usuario (name_user, ape);
 CREATE TABLE IF NOT EXISTS usuario_by_farmacia (
     id SERIAL PRIMARY KEY,
 	name_farmacia TEXT DEFAULT NULL,
-    id_farmacia INTEGER,
+    id_farmacia INTEGER NOT NULL,
     id_usuario INTEGER NOT NULL,
 
     CONSTRAINT fk_usuario_by_farmacia_id_farmacia FOREIGN KEY (id_farmacia) 
-        REFERENCES farmacias (id) ON DELETE SET NULL ON UPDATE CASCADE,
+        REFERENCES farmacias (id) ON DELETE CASCADE ON UPDATE CASCADE,
     CONSTRAINT fk_usuario_by_farmacia_id_usuario FOREIGN KEY (id_usuario) 
         REFERENCES usuario (id) ON DELETE CASCADE ON UPDATE CASCADE
 );

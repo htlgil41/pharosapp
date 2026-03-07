@@ -69,7 +69,7 @@ export class UsuarioRepositoryPrismaPg implements UsuarioRepository {
             if (user === null) return null;
             return UsuarioByFarmaciaEntity.build({
                 id: user.id,
-                farmacias_asigne: [],
+                farmacias_asigne: user.usuario_by_farmacia,
                 usuario: {
                     role: user.usuario_role ? user.usuario_role.rolee : null,
                     id_role: user.usuario_role ? user.usuario_role.id : null,

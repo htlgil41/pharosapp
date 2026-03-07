@@ -191,12 +191,12 @@ model usuario {
 }
 
 model usuario_by_farmacia {
-  id            Int        @id @default(autoincrement())
+  id            Int       @id @default(autoincrement())
   name_farmacia String?
-  id_farmacia   Int?
+  id_farmacia   Int
   id_usuario    Int
-  farmacias     farmacias? @relation(fields: [id_farmacia], references: [id], map: "fk_usuario_by_farmacia_id_farmacia")
-  usuario       usuario    @relation(fields: [id_usuario], references: [id], onDelete: Cascade, map: "fk_usuario_by_farmacia_id_usuario")
+  farmacias     farmacias @relation(fields: [id_farmacia], references: [id], onDelete: Cascade, map: "fk_usuario_by_farmacia_id_farmacia")
+  usuario       usuario   @relation(fields: [id_usuario], references: [id], onDelete: Cascade, map: "fk_usuario_by_farmacia_id_usuario")
 
   @@unique([id_usuario, id_farmacia], map: "ux_usuario_farmacia_duplicado")
   @@index([id_farmacia], map: "ix_usuario_by_farmacia_id_farmacia")
