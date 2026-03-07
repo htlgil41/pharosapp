@@ -9,10 +9,10 @@ export class CreateNewUsuarioUseCase extends UsuarioRepoUsesCases {
     ): Promise<InfoUsuarioEntity> {
 
         // Service validateExists usuario
-        const validateUsuarioExist = await this.repo.getUsuarioByUsername('');
+        const validateUsuarioExist = await this.repo.getUsuarioByUsername(params.username);
         if (validateUsuarioExist) throw new Error('Usuario existente');
 
-        // ServicewHashPassword
+        const passwordHash = this.serviceHashData.hashData(params.password);
         const createUsuario = await this.repo.createUsuario(
             InfoUsuarioEntity.build({
                 id: 1n,
@@ -21,11 +21,10 @@ export class CreateNewUsuarioUseCase extends UsuarioRepoUsesCases {
                 role: params.role,
                 id_role: params.id_role,
                 name: params.name,
-                password: params.password,
+                password: passwordHash,
                 username: params.username
             })
         );
-
         return createUsuario;
     }  
 }
