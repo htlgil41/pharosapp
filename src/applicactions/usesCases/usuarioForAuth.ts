@@ -24,11 +24,22 @@ export class UsuarioForAuthUseCase extends UsuarioRepoUsesCases {
             token_refresh
         ] = await Promise.all([
             this.serviceJoseToken.firmTokenAccess(
-                '',
+                {
+                    id: 1,
+                    id_role: 1,
+                    role: '',
+                    id_farmacia: 1,
+                    farmacia: '',
+                    username: '',
+                },
                 8
             ),
             this.serviceJoseToken.firmTokenRefresh(
-                '',
+                {
+                    id: 1,
+                    username: '',
+                    date: new Date()
+                },
                 43800
             )
         ]);

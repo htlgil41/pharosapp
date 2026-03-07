@@ -1,8 +1,11 @@
 import * as jose from 'jose';
-import type { AccessToken, TokenJWTJOSEPort } from '../../applicactions/ports/token.ts';
+import type { DataAccessToken, DataRefreshToken, TokenJWTJOSEPort } from '../../applicactions/ports/token.ts';
 import { KEYACCESSTOKEN, PEMACCESSTOKEN, KEYREFRESHTOKEN, PEMREFRESHTOKEN } from './const.ts';
 
-export class TokenManajerJOSE implements TokenJWTJOSEPort <AccessToken>{
+export class TokenManajerJOSE implements TokenJWTJOSEPort<
+  DataAccessToken,
+  DataRefreshToken
+>{
 
     private secreToN: jose.JWK | undefined;
 
@@ -13,7 +16,7 @@ export class TokenManajerJOSE implements TokenJWTJOSEPort <AccessToken>{
     private pemRefresh: jose.CryptoKey = PEMREFRESHTOKEN;
 
     async generateAccessToken(
-    data: string,
+    data: DataAccessToken,
     expirateMinute: number
   ): Promise<string> {
     const token = await new jose.SignJWT({ pay: data })
@@ -21,12 +24,11 @@ export class TokenManajerJOSE implements TokenJWTJOSEPort <AccessToken>{
         .setIssuedAt()
         .setExpirationTime(expirateMinute * 6000)
         .sign(this.keyAccess!);
-
     return token;
   }
   
   async generateRefresToken(
-    data: string,
+    data: DataRefreshToken,
     expirateMinute: number
   ): Promise<string> {
     const token = await new jose.SignJWT({ pay: data })
@@ -51,7 +53,7 @@ export class TokenManajerJOSE implements TokenJWTJOSEPort <AccessToken>{
 
   async validateAccessToken(
     jwt: string
-  ): Promise<AccessToken> {
+  ): Promise<DataAccessToken> {
     const decryptToken = await jose.jwtDecrypt(
       jwt,
       this.secreToN!,
@@ -79,7 +81,7 @@ export class TokenManajerJOSE implements TokenJWTJOSEPort <AccessToken>{
 
   async validateRefreshToken(
     jwt: string
-  ): Promise<AccessToken> {
+  ): Promise<DataRefreshToken> {
     const decryptToken = await jose.jwtDecrypt(
       jwt,
       this.secreToN!,
@@ -96,11 +98,8 @@ export class TokenManajerJOSE implements TokenJWTJOSEPort <AccessToken>{
     console.log(validateToken.payload['pay']);
     return {
       id: 1,
-      id_role: 1,
-      role: '',
-      id_farmacia: 1,
-      farmacia: '',
-      username: ''
+      username: '',
+      date: new Date(),
     };
   }
 }

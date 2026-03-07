@@ -1,12 +1,12 @@
-import type { AccessToken, TokenJWTJOSEPort } from "../ports/token.ts";
+import type { DataAccessToken, DataRefreshToken, TokenJWTJOSEPort } from "../ports/token.ts";
 
 export class ServiceTokenJose {
 
     constructor(
-        private jose: TokenJWTJOSEPort<AccessToken>
+        private jose: TokenJWTJOSEPort<DataAccessToken, DataRefreshToken>
     ){}
 
-    async firmTokenAccess(data: string, expirateMinute: number): Promise<string> {
+    async firmTokenAccess(data: DataAccessToken, expirateMinute: number): Promise<string> {
         try {
             
             const tokenAccess = await this.jose.generateAccessToken(
@@ -24,7 +24,7 @@ export class ServiceTokenJose {
         }
     }
 
-    async firmTokenRefresh(data: string, expirateMinute: number): Promise<string> {
+    async firmTokenRefresh(data: DataRefreshToken, expirateMinute: number): Promise<string> {
         try {
             
             const tokenAccess = await this.jose.generateRefresToken(

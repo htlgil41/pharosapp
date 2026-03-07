@@ -1,4 +1,4 @@
-export interface AccessToken {
+export interface DataAccessToken {
   id: number;
   id_role: number | null;
   role: string | null;
@@ -7,13 +7,19 @@ export interface AccessToken {
   username: string
 }
 
-export interface TokenJWTJOSEPort<T>{
+export interface DataRefreshToken {
+  id: number;
+  username: string;
+  date: Date;
+}
+
+export interface TokenJWTJOSEPort<DAT, DRT>{
     generateAccessToken(
-        data: string,
+        data: DAT,
         expirateMinute: number
     ): Promise<string>;
     generateRefresToken(
-        data: string,
+        data: DRT,
         expirateMinute: number
     ): Promise<string>
     criptedToken(
@@ -23,8 +29,8 @@ export interface TokenJWTJOSEPort<T>{
 
     validateAccessToken(
         jwt: string
-    ): Promise<T>;
+    ): Promise<DAT>;
     validateRefreshToken(
         jwt: string
-    ): Promise<T>;
+    ): Promise<DRT>;
 }
