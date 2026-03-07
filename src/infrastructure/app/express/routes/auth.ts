@@ -6,8 +6,8 @@ const authRouteIn = new AuthRoute();
 const middlewareValidate = new ValidateAuthRouteMiddleware();
 
 export const AuthRouter = Router()
-    .post('login',
+    .post('/login',
         middlewareValidate.validateLoginMiddleware,
         authRouteIn.login
     )
-    .post('usuario', authRouteIn.newUsuario);
+    .post('/usuario', authRouteIn.newUsuario);

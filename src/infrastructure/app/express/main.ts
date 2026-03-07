@@ -1,6 +1,7 @@
 import cluster from 'cluster';
 import { ClusterModule } from "./config/cluster.ts";
 import { ExperssApp } from './config/express.ts';
+import { AuthRouter } from './routes/auth.ts';
 
 export function InitAppExpress() {
     
@@ -11,7 +12,8 @@ export function InitAppExpress() {
     }else{
 
         const appExpress = new ExperssApp();
-        appExpress.initConfExpress();
-        appExpress.serverUp();
+        appExpress
+            .addRoutes('auth', AuthRouter)
+            .serverUp();
     }
 }

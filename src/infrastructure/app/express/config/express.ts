@@ -1,4 +1,4 @@
-import express, { type Application } from 'express';
+import express, { Router, type Application } from 'express';
 import http from 'http';
 import cors from 'cors';
 import helmet from 'helmet';
@@ -10,9 +10,7 @@ export class ExperssApp {
     private app: Application = express();
     private httpServer = http;
 
-    constructor(){}
-
-    initConfExpress(): void{
+    constructor(){
         this.app.use(
             express.json(),
             express.urlencoded({ extended: true }),
@@ -21,8 +19,10 @@ export class ExperssApp {
             compression()
         );
     }
-    
-    addRoutes(): this {
+
+    addRoutes(name: string, route: Router): this {
+
+        this.app.use(`${name}`, route);
         return this;
     }
 
