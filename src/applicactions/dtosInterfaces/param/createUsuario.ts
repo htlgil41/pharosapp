@@ -1,6 +1,6 @@
 export interface CreateUsuarioDTO {
     ape: string;
-    contact: string;
+    contact: string | null;
     role: string | null;
     id_role: bigint | null;
     name: string;
