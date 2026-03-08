@@ -1,8 +1,9 @@
 import type { InfoUsuarioEntity } from "../../../../../../domain/entities/infoUsuario.ts";
+import { RoleUserEntity } from "../../../../../../domain/entities/roleUser.ts";
 import { UsuarioByFarmaciaEntity } from "../../../../../../domain/entities/usuarioFarmacia.ts";
 import type { UsuarioRepository } from "../../../../../../domain/repositories/usuarios.ts";
 import { ErrorPrismaExceptions } from "../exceptions/errosManager.ts";
-import { Prisma, type PrismaClient } from "../models/client/client.ts";
+import { type PrismaClient } from "../models/client/client.ts";
 
 export class UsuarioRepositoryPrismaPg implements UsuarioRepository {
 
@@ -10,14 +11,18 @@ export class UsuarioRepositoryPrismaPg implements UsuarioRepository {
         private conn: PrismaClient
     ){}
 
-    async createUsuario(usuario: InfoUsuarioEntity): Promise<InfoUsuarioEntity> {
+    async createUsuario(
+        usuario: InfoUsuarioEntity,
+        role: RoleUserEntity,
+    ): Promise<InfoUsuarioEntity> {
         
+        const rolePrimitive = role.toValue();
         const usuarioForCreate = usuario.toValue();
         try {
             
             const createdUsuario = await this.conn.usuario.create({
                 data: {
-                    id_role: usuarioForCreate.id_role,
+                    id_role: rolePrimitive.id,
                     name_user: usuarioForCreate.name,
                     ape: usuarioForCreate.ape,
                     username: usuarioForCreate.username,
@@ -31,6 +36,48 @@ export class UsuarioRepositoryPrismaPg implements UsuarioRepository {
 
             usuario.setId(createdUsuario.id);
             return usuario;
+        } catch (error) {
+            throw ErrorPrismaExceptions(error);
+        }
+    }
+
+    async getRoles(): Promise<RoleUserEntity[]> {
+        try {
+            
+            const roleBy = await this.conn.usuario_role.findMany({
+                select: {
+                    id: true,
+                    rolee: true,
+                },
+            });
+   
+            return roleBy.map(r => RoleUserEntity.build({
+                id: r.id,
+                role: r.rolee
+            }));
+        } catch (error) {
+            throw ErrorPrismaExceptions(error);
+        }
+    }
+
+    async getRoleById(id_role: number): Promise<RoleUserEntity | null> {
+        try {
+            
+            const roleBy = await this.conn.usuario_role.findUnique({
+                where: {
+                    id: id_role,
+                },
+                select: {
+                    id: true,
+                    rolee: true,
+                },
+            });
+            
+            if (roleBy === null) return null;
+            return RoleUserEntity.build({
+                id: roleBy.id,
+                role: roleBy.rolee
+            });
         } catch (error) {
             throw ErrorPrismaExceptions(error);
         }
