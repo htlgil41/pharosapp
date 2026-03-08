@@ -1,3 +1,8 @@
+export interface RoleUser {
+    id: number;
+    role: string;
+}
+
 export interface InfoUser {
     id: number;
     role: string | null;
