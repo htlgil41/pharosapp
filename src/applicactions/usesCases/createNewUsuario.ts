@@ -7,7 +7,8 @@ import { UsuarioRepoUsesCases } from "../usuarioRepoUsesCases.ts";
 export class CreateNewUsuarioUseCase extends UsuarioRepoUsesCases {
 
     async execute(
-        params: CreateUsuarioDTO
+        params: CreateUsuarioDTO,
+        at: string,
     ): Promise<[CreatedUserResponse | null, ErrorResponseException | null]> {
         const role = await this.repo.getRoleById(params.id_role);
         if (role === null) return [

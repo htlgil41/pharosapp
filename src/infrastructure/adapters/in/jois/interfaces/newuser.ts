@@ -8,7 +8,7 @@ export interface AuthLoginIUnterface {
 }
 
 export interface NewUserInterface {
-    id_role: number | undefined;
+    id_role: number;
     name_user: string;
     ape: string;
     username: string;

@@ -18,14 +18,17 @@ export class AuthRoute {
             const [
                 createdUser,
                 error
-            ] = await createUsuarioUseCase.execute({
-                id_role: body.id_role ?? null,
-                name: body.name_user,
-                ape: body.ape,
-                contact: body.contact ?? null,
-                password: body.pass,
-                username: body.username
-            });
+            ] = await createUsuarioUseCase.execute(
+                {
+                    id_role: body.id_role ?? null,
+                    name: body.name_user,
+                    ape: body.ape,
+                    contact: body.contact ?? null,
+                    password: body.pass,
+                    username: body.username
+                },
+                req.headers.cookie ?? ''
+            );
 
             if (error !== null){
 
