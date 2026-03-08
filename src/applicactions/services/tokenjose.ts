@@ -1,11 +1,3 @@
-import { AlgInvalidTokenExceptionDomain } from "../../domain/exceptions/algNoValid.ts";
-import { ClaimTokenExceptionDomain } from "../../domain/exceptions/claimToken.ts";
-import { DesencriptedTokenExceptionDomain } from "../../domain/exceptions/desencripteToken.ts";
-import { FirmInvalidTokenExceptionDomain } from "../../domain/exceptions/firmInvalidToken.ts";
-import { FormatedTokenInvalidTokenExceptionDomain } from "../../domain/exceptions/formatedToken.ts";
-import { ProTokenExceptionDomain } from "../../domain/exceptions/secretInvalid.ts";
-import { TokenExpireExceptionDomain } from "../../domain/exceptions/tokenExpired.ts";
-import { ErrorResponseException } from "../exceptions/responseError.ts";
 import type { DataAccessToken, DataRefreshToken, TokenJWTJOSEPort } from "../ports/token.ts";
 
 export class ServiceTokenJose {
