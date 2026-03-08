@@ -1,7 +1,8 @@
 export class DesencriptedTokenExceptionDomain extends Error {
 
-    constructor(msg: string = 'Error al tratar de obenter la informcion segura'){
+    constructor(){
         super();
-        this.message = msg;
+        this.message = 'Error al desencriptar el token (JWEDecryptionFailed)'
+        this.cause = 'Error al tratar de obtener la informacion del token';
     }
 }

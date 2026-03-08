@@ -1,7 +1,7 @@
 export class ClaimTokenExceptionDomain extends Error {
 
-    constructor(msg: string = 'Token invalido'){
+    constructor(){
         super();
-        this.message = msg;
+        this.message = 'Validación de claims (payload)';
     }
 }

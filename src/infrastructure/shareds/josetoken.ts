@@ -124,19 +124,19 @@ export class TokenManajerJOSE implements TokenJWTJOSEPort<
   private ErrorHandlerToken(error: unknown){
     switch (true) {
       case error instanceof jose.errors.JWTExpired:
-        return new TokenExpireExceptionDomain('El token ha expirado');
+        return new TokenExpireExceptionDomain();
 
       case error instanceof jose.errors.JWSSignatureVerificationFailed:
-        return new FirmInvalidTokenExceptionDomain('La firma del token no es válida (JWSSignatureVerificationFailed)');
+        return new FirmInvalidTokenExceptionDomain();
 
       case error instanceof jose.errors.JWEDecryptionFailed:
-        return new DesencriptedTokenExceptionDomain('Error al desencriptar el token (JWEDecryptionFailed)');
+        return new DesencriptedTokenExceptionDomain();
 
       case error instanceof jose.errors.JWTClaimValidationFailed:
-        return new ClaimTokenExceptionDomain('Validación de claims (payload) fallida (JWTClaimValidationFailed)');
+        return new ClaimTokenExceptionDomain();
 
       case error instanceof jose.errors.JOSEAlgNotAllowed:
-        return new AlgInvalidTokenExceptionDomain('Algoritmo no permitido (JOSEAlgNotAllowed)');
+        return new AlgInvalidTokenExceptionDomain();
 
       case error instanceof jose.errors.JWSInvalid:
       case error instanceof jose.errors.JWEInvalid:

@@ -27,7 +27,7 @@ export class ServiceTokenJose {
             );
             return crypteToken;
         } catch (error) {
-            throw this.handeErrorService(error);
+            throw error;
         }
     }
 
@@ -44,7 +44,7 @@ export class ServiceTokenJose {
             );
             return crypteToken;
         } catch (error) {
-            throw this.handeErrorService(error);
+            throw error;
         }
     }
 
@@ -56,7 +56,7 @@ export class ServiceTokenJose {
             const descripted = await this.jose.validateAccessToken(jwt);
             return true;
         } catch (error) {
-            throw this.handeErrorService(error);
+            throw error;
         }
     }
 
@@ -68,61 +68,7 @@ export class ServiceTokenJose {
             const descripted = await this.jose.validateRefreshToken(jwt);
             return true;
         } catch (error) {
-            throw this.handeErrorService(error);
-        }
-    }
-
-    private handeErrorService(error: unknown){
-        switch(true){
-
-            case error instanceof TokenExpireExceptionDomain:
-                return new ErrorResponseException(
-                    error.message,
-                    'Vuelva a iniciar para estar activo',
-                    ''
-                );
-            case error instanceof FirmInvalidTokenExceptionDomain: 
-                return new ErrorResponseException(
-                    error.message,
-                    'Alguna norma de seguridad de disparo por causa de un intento de vulnerabilidad',
-                    ''
-                );
-            case error instanceof DesencriptedTokenExceptionDomain: 
-                return new ErrorResponseException(
-                    error.message,
-                    'Error al tratar de obtener la informacion del token',
-                    ''
-                );
-            case error instanceof ClaimTokenExceptionDomain: 
-                return new ErrorResponseException(
-                    error.message,
-                    '',
-                    ''
-                );
-            case error instanceof AlgInvalidTokenExceptionDomain: 
-                return new ErrorResponseException(
-                    error.message,
-                    'Error interno al blindar la informacion',
-                    ''
-                );
-            case error instanceof FormatedTokenInvalidTokenExceptionDomain: 
-                return new ErrorResponseException(
-                    error.message,
-                    'La informacion de autenticacion se ha deformado',
-                    ''
-                );
-            case error instanceof ProTokenExceptionDomain: 
-                return new ErrorResponseException(
-                    error.message,
-                    'Error inesperado',
-                    ''
-                );
-            default: 
-                return new ErrorResponseException(
-                    'Error totalmente desconocido en los token',
-                    'Vuelva a intentar la operacion o inicie nuevamente',
-                    ''
-                );
+            throw error;
         }
     }
 }

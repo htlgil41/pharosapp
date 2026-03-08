@@ -1,7 +1,8 @@
 export class TokenExpireExceptionDomain extends Error {
 
-    constructor(msg: string = 'Token expirado'){
+    constructor(){
         super();
-        this.message = msg;
+        this.message = 'El token ha expirado';
+        this.cause = 'Vuelva a iniciar para estar activo'
     }
 }

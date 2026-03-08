@@ -1,7 +1,8 @@
 export class AlgInvalidTokenExceptionDomain extends Error {
 
-    constructor(msg: string = 'Error al tratar de obenter la informcion segura'){
+    constructor(){
         super();
-        this.message = msg;
+        this.message = 'Algoritmo no permitido (JOSEAlNotAllowed)';
+        this.cause = 'El token no se puede generar por falta de parametros';
     }
 }
