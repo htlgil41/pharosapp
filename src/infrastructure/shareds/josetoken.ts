@@ -144,7 +144,7 @@ export class TokenManajerJOSE implements TokenJWTJOSEPort<
         return new FormatedTokenInvalidTokenExceptionDomain('El formato del token es inválido');
 
       case error instanceof jose.errors.JWKInvalid:
-        return new Error('La llave proporcionada es inválida (JWKInvalid)');
+        return new ProTokenExceptionDomain('La llave proporcionada es inválida (JWKInvalid)');
 
       case error instanceof jose.errors.JWKSNoMatchingKey:
         return new ProTokenExceptionDomain('No se encontró una llave que coincida (JWKSNoMatchingKey)');

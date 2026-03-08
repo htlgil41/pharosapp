@@ -9,10 +9,7 @@ export class ErrorExpetionPrisma {
 }
 
 export const ErrorPrismaExceptions = (error: unknown): ErrorExpetionPrisma => {
-    
-
     if (error instanceof Prisma.PrismaClientKnownRequestError){
-
         const code = error.code;
         let message = '';
         let action = '';
