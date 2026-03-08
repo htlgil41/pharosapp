@@ -9,6 +9,16 @@ export class CreateNewUsuarioUseCase extends UsuarioRepoUsesCases {
     async execute(
         params: CreateUsuarioDTO
     ): Promise<[CreatedUserResponse | null, ErrorResponseException | null]> {
+        const role = await this.repo.getRoleById(params.id_role);
+        if (role === null) return [
+            null,
+            new ErrorResponseException(
+                'No existe el role',
+                'El usuario no puede pertenecer al rolo deseado ya que no especifica ninguna regla',
+                ''
+            )
+        ];
+
         const validateUsuarioExist = await this.repo.getUsuarioByUsername(params.username);
         if (validateUsuarioExist) return [
             null,
@@ -30,7 +40,8 @@ export class CreateNewUsuarioUseCase extends UsuarioRepoUsesCases {
                 name: params.name,
                 password: passwordHash,
                 username: params.username
-            })
+            }),
+            role
         );
         const userPrimitive = createUsuario.toValue();
         return [

@@ -22,7 +22,7 @@ export const AutLobinValidateJoi = joi.object<AuthLoginIUnterface>({
 
 export const NewUserValidateJoi = joi.object<NewUserInterface>({
     id_role: NumbrePositive
-        .optional(),
+        .required(),
     name_user: NameApeJoi
         .required(),
     ape: NameApeJoi
