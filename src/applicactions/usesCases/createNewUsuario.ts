@@ -10,6 +10,9 @@ export class CreateNewUsuarioUseCase extends UsuarioRepoUsesCases {
         params: CreateUsuarioDTO,
         at: string,
     ): Promise<[CreatedUserResponse | null, ErrorResponseException | null]> {
+
+        await this.serviceJoseToken.validateAccessToken(at);
+
         const role = await this.repo.getRoleById(params.id_role);
         if (role === null) return [
             null,
@@ -31,13 +34,15 @@ export class CreateNewUsuarioUseCase extends UsuarioRepoUsesCases {
         ];
 
         const passwordHash = this.serviceHashData.hashData(params.password);
+
+        const rolePrimitive = role.toValue();
         const createUsuario = await this.repo.createUsuario(
             InfoUsuarioEntity.build({
                 id: 1,
                 ape: params.ape,
                 contact: params.contact,
-                role: '',
-                id_role: params.id_role,
+                role: rolePrimitive.role,
+                id_role: rolePrimitive.id,
                 name: params.name,
                 password: passwordHash,
                 username: params.username
