@@ -4,7 +4,7 @@ import { ConnectionPharosApp } from '../../out/persistence/prisma_pg/connection.
 import { CreateNewUsuarioUseCase } from '../../../../applicactions/usesCases/createNewUsuario.ts';
 import type { AuthLoginIUnterface, NewUserInterface } from '../jois/interfaces/newuser.ts';
 import { UsuarioForAuthUseCase } from '../../../../applicactions/usesCases/usuarioForAuth.ts';
-import { CookiSetHeaders } from '../../../shareds/cookie.ts';
+import { CookieParse, CookiSetHeaders } from '../../../shareds/cookie.ts';
 
 export class AuthRoute {
 
@@ -13,6 +13,22 @@ export class AuthRoute {
             new UsuarioRepositoryPrismaPg(ConnectionPharosApp)
         );
         const body =  req.body as NewUserInterface;
+
+        const tokenAccessCookie = CookieParse(
+            req.headers.cookie ?? '',
+            'at'
+        );
+        if (!tokenAccessCookie) {
+
+            res.json({
+                error: {
+                    error: 'No se econtro la identificaion',
+                    fix: 'No se ha encontrado los datos para continuar. Ingrese nuevamente'
+                }
+            });
+            return;
+        }
+
         try {
 
             const [
@@ -27,7 +43,7 @@ export class AuthRoute {
                     password: body.pass,
                     username: body.username
                 },
-                req.headers.cookie ?? ''
+                tokenAccessCookie
             );
 
             if (error !== null){
@@ -56,9 +72,7 @@ export class AuthRoute {
             });
             return
         } catch (error) {
-            
-            console.log(error);
-            res.json("error");
+            res.json(error);
         }
     }
 
@@ -115,9 +129,7 @@ export class AuthRoute {
             res.json("oberva las cookies!!!");
             return
         } catch (error) {
-            
-            console.log(error);
-            throw new Error('new usuario');
+            res.json(error);
         }
     }
 }
