@@ -13,13 +13,11 @@ export class AuthRoute {
             new UsuarioRepositoryPrismaPg(ConnectionPharosApp)
         );
         const body =  req.body as NewUserInterface;
-
         const tokenAccessCookie = CookieParse(
             req.headers.cookie ?? '',
             'at'
         );
         if (!tokenAccessCookie) {
-
             res.json({
                 error: {
                     error: 'No se econtro la identificaion',
@@ -30,7 +28,6 @@ export class AuthRoute {
         }
 
         try {
-
             const [
                 createdUser,
                 error
@@ -47,7 +44,6 @@ export class AuthRoute {
             );
 
             if (error !== null){
-
                 res.json({
                     error: error,
                 });
@@ -79,7 +75,6 @@ export class AuthRoute {
         );
         const body = req.body as AuthLoginIUnterface;
         try {
-
             const [userForAuthToken, error] = await authLoginUseCase.execute({
                 username: body.username,
                 password: body.password,
@@ -93,7 +88,6 @@ export class AuthRoute {
                 return;
             }
             if (userForAuthToken === null) {
-
                 res.json({
                     error: {
                         error: 'No se ha podido construir la informcaion correctamente',
