@@ -26,114 +26,134 @@ export class TokenManajerJOSE implements TokenJWTJOSEPort<
     data: DataAccessToken,
     expirateMinute: number
   ): Promise<string> {
-    const token = await new jose.SignJWT({ pay: data })
+    try {
+      const token = await new jose.SignJWT({ pay: data })
         .setProtectedHeader({ alg: 'RS256' })
         .setIssuedAt()
         .setExpirationTime(`${expirateMinute}${expirateMinute <= 1 ? 'minute' : 'minutes'}`)
         .sign(this.keyAccess!);
-    return token;
+      return token;
+    } catch (error) {
+      throw this.ErrorHandlerToken(error); 
+    }
   }
   
   async generateRefresToken(
     data: DataRefreshToken,
     expirateMinute: number
   ): Promise<string> {
-    const token = await new jose.SignJWT({ pay: data })
+    try {
+      const token = await new jose.SignJWT({ pay: data })
         .setProtectedHeader({ alg: 'RS256' })
         .setIssuedAt()
         .setExpirationTime(`${expirateMinute}${expirateMinute <= 1 ? 'minute' : 'minutes'}`)
         .sign(this.keyRefresh!);
-    return token;
+      return token;
+    } catch (error) {
+      throw this.ErrorHandlerToken(error);
+    }
   }
 
   async criptedToken(
     token: string,
     expirateMinute: number
   ): Promise<string> {
-    const cripte = new jose.EncryptJWT({ pay: token })
+    try {
+      const cripte = new jose.EncryptJWT({ pay: token })
         .setProtectedHeader({ enc: 'A256GCM', alg: 'dir' })
         .setIssuedAt()
         .setExpirationTime(`${expirateMinute}${expirateMinute <= 1 ? 'minute' : 'minutes'}`)
         .encrypt(this.secreToN!);
-    return cripte;
+      return cripte;
+    } catch (error) {
+      throw this.ErrorHandlerToken(error);
+    }
   }
 
   async validateAccessToken(
     jwt: string
   ): Promise<DataAccessToken> {
-    const decryptToken = await jose.jwtDecrypt(
-      jwt,
-      this.secreToN!,
-      { contentEncryptionAlgorithms: ['A256GCM'], keyManagementAlgorithms: ['dir'] }
-    );
-    const tokenRealAfterCrypte = decryptToken.payload['pay'] as string;
-    if (!tokenRealAfterCrypte) throw new Error('Error al codificar el token');
+    try {
+      const decryptToken = await jose.jwtDecrypt(
+        jwt,
+        this.secreToN!,
+        { contentEncryptionAlgorithms: ['A256GCM'], keyManagementAlgorithms: ['dir'] }
+      );
+      const tokenRealAfterCrypte = decryptToken.payload['pay'] as string;
+      if (!tokenRealAfterCrypte) throw new Error('Error al codificar el token');
 
-    const validateToken = await jose.jwtVerify(
-      tokenRealAfterCrypte,
-      this.pemAccess,
-      { algorithms: ['RS256'] }
-    );
+      const validateToken = await jose.jwtVerify(
+        tokenRealAfterCrypte,
+        this.pemAccess,
+        { algorithms: ['RS256'] }
+      );
 
-    if (!validateToken.payload['pay']) throw new Error('Mal formateo del token');
-    const payload = validateToken.payload['pay'] as DataAccessToken;
-    return payload;
+      if (!validateToken.payload['pay']) throw new Error('Mal formateo del token');
+      const payload = validateToken.payload['pay'] as DataAccessToken;
+      return payload;
+    } catch (error) {
+      throw this.ErrorHandlerToken(error);
+    }
   }
 
   async validateRefreshToken(
     jwt: string
   ): Promise<DataRefreshToken> {
-    const decryptToken = await jose.jwtDecrypt(
-      jwt,
-      this.secreToN!,
-      { contentEncryptionAlgorithms: ['A256GCM'], keyManagementAlgorithms: ['dir'] }
-    );
-    const tokenRealAfterCrypte = decryptToken.payload['pay'] as string;
-    if (!tokenRealAfterCrypte) throw new Error('Error al codificar el token');
-    const validateToken = await jose.jwtVerify(
-      tokenRealAfterCrypte,
-      this.pemAccess,
-      { algorithms: ['RS256'] }
-    );
+    try {
+      const decryptToken = await jose.jwtDecrypt(
+        jwt,
+        this.secreToN!,
+        { contentEncryptionAlgorithms: ['A256GCM'], keyManagementAlgorithms: ['dir'] }
+      );
+      const tokenRealAfterCrypte = decryptToken.payload['pay'] as string;
+      if (!tokenRealAfterCrypte) throw new Error('Error al codificar el token');
+      const validateToken = await jose.jwtVerify(
+        tokenRealAfterCrypte,
+        this.pemAccess,
+        { algorithms: ['RS256'] }
+      );
 
-    if (!validateToken.payload['pay']) throw new Error('Mal formateo del token');
-    const payload = validateToken.payload['pay'] as DataRefreshToken;
-    return payload;
+      if (!validateToken.payload['pay']) throw new Error('Mal formateo del token');
+      const payload = validateToken.payload['pay'] as DataRefreshToken;
+      return payload;
+    } catch (error) {
+      throw this.ErrorHandlerToken(error);
+    }
   }
 
   private ErrorHandlerToken(error: unknown){
     switch (true) {
       case error instanceof jose.errors.JWTExpired:
-        throw new TokenExpireExceptionDomain('El token ha expirado');
+        return new TokenExpireExceptionDomain('El token ha expirado');
 
       case error instanceof jose.errors.JWSSignatureVerificationFailed:
-        throw new FirmInvalidTokenExceptionDomain('La firma del token no es válida (JWSSignatureVerificationFailed)');
+        return new FirmInvalidTokenExceptionDomain('La firma del token no es válida (JWSSignatureVerificationFailed)');
 
       case error instanceof jose.errors.JWEDecryptionFailed:
-        throw new DesencriptedTokenExceptionDomain('Error al desencriptar el token (JWEDecryptionFailed)');
+        return new DesencriptedTokenExceptionDomain('Error al desencriptar el token (JWEDecryptionFailed)');
 
       case error instanceof jose.errors.JWTClaimValidationFailed:
-        throw new ClaimTokenExceptionDomain('Validación de claims (payload) fallida (JWTClaimValidationFailed)');
+        return new ClaimTokenExceptionDomain('Validación de claims (payload) fallida (JWTClaimValidationFailed)');
 
       case error instanceof jose.errors.JOSEAlgNotAllowed:
-        throw new AlgInvalidTokenExceptionDomain('Algoritmo no permitido (JOSEAlgNotAllowed)');
+        return new AlgInvalidTokenExceptionDomain('Algoritmo no permitido (JOSEAlgNotAllowed)');
 
       case error instanceof jose.errors.JWSInvalid:
       case error instanceof jose.errors.JWEInvalid:
       case error instanceof jose.errors.JWTInvalid:
-        throw new FormatedTokenInvalidTokenExceptionDomain('El formato del token es inválido');
+        return new FormatedTokenInvalidTokenExceptionDomain('El formato del token es inválido');
 
       case error instanceof jose.errors.JWKInvalid:
-        throw new Error('La llave proporcionada es inválida (JWKInvalid)');
+        return new Error('La llave proporcionada es inválida (JWKInvalid)');
 
       case error instanceof jose.errors.JWKSNoMatchingKey:
-        throw new ProTokenExceptionDomain('No se encontró una llave que coincida (JWKSNoMatchingKey)');
+        return new ProTokenExceptionDomain('No se encontró una llave que coincida (JWKSNoMatchingKey)');
 
       case error instanceof jose.errors.JOSEError:
-        throw new ProTokenExceptionDomain(`Error interno de la librería jose: ${error.message}`);
+        return new ProTokenExceptionDomain(`Error interno de la librería jose: ${error.message}`);
 
       default:
-        throw new ProTokenExceptionDomain('Error inesperado token');
+        return new ProTokenExceptionDomain('Error inesperado token');
     }
   }
 }
