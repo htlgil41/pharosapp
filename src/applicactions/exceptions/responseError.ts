@@ -1,8 +1,13 @@
-export class ErrorResponseException {
+export class ErrorResponseException extends Error {
 
     constructor(
-        public readonly error: string,
-        public readonly fix: string,
-        public readonly code: string,
-    ){}
+        error: string,
+        fix: string,
+        code: string,
+    ){
+        super();
+        this.message = error;
+        this.cause = fix,
+        this.name = code;
+    }
 }

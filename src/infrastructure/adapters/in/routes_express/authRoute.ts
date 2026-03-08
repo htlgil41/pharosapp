@@ -49,10 +49,7 @@ export class AuthRoute {
             if (error !== null){
 
                 res.json({
-                    error: {
-                        error: error.error,
-                        fix: error.fix
-                    },
+                    error: error,
                 });
                 return;
             }
@@ -91,10 +88,7 @@ export class AuthRoute {
 
             if (error !== null) {
                 res.json({
-                    error: {
-                        error: error.error,
-                        fix: error.fix,
-                    },
+                    error: error
                 });
                 return;
             }
