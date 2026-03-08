@@ -42,11 +42,10 @@ export class ServiceTokenJose {
 
     async validateAccessToken(
         jwt: string
-    ): Promise<boolean> {
+    ): Promise<DataAccessToken> {
         try {
            
-            const descripted = await this.jose.validateAccessToken(jwt);
-            return true;
+            return await this.jose.validateAccessToken(jwt);
         } catch (error) {
             throw error;
         }
@@ -54,11 +53,10 @@ export class ServiceTokenJose {
 
     async validateRefreshToken(
         jwt: string
-    ): Promise<boolean> {
+    ): Promise<DataRefreshToken> {
         try {
            
-            const descripted = await this.jose.validateRefreshToken(jwt);
-            return true;
+            return await this.jose.validateRefreshToken(jwt);
         } catch (error) {
             throw error;
         }

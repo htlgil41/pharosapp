@@ -3,9 +3,9 @@ export type Role =
     'administrador' | 
     'soportista';
 
-export class Authorization {
+export class ServiceAuthorization {
 
-    static accessOnly(auth: Role, rol: Role): boolean{ 
+    static accessOnly(auth: Role, rol: string): boolean{ 
         return auth === rol;
     }
 }
