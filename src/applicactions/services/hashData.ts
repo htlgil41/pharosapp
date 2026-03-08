@@ -1,4 +1,4 @@
-import { GlobalErrorExceptionCase } from "../exceptions/globalError.ts";
+import { HashErrorDataExceptionUseCase } from "../exceptions/hashData.ts";
 import type { HashDataPort } from "../ports/hashData.ts";
 
 export class ServiceHashData{
@@ -11,7 +11,7 @@ export class ServiceHashData{
         try {
             return this.hashFunc.hashData(data);
         } catch (error) {
-            throw new GlobalErrorExceptionCase("Ha ocurrido un error al generar el hash del dato");
+            throw new HashErrorDataExceptionUseCase("Ha ocurrido un error al generar el hash del dato");
         }
     }
 
@@ -23,7 +23,7 @@ export class ServiceHashData{
             );
         } catch (error) {
             
-            throw new GlobalErrorExceptionCase("Ha ocurrido un error al generar el hash del dato");
+            throw new HashErrorDataExceptionUseCase("Ha ocurrido un error al generar el hash del dato");
         }
     }
 }
