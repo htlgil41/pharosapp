@@ -37,11 +37,10 @@ export class UsuarioForAuthUseCase extends UsuarioRepoUsesCases {
             )
         ];
       
-            const validatePassHash = this.serviceHashData.validateHash(
+        const validatePassHash = this.serviceHashData.validateHash(
             usuarioInfo.password,
             params.password
         );
-
         if (!validatePassHash) return [
             null,
             new ErrorResponseException(
