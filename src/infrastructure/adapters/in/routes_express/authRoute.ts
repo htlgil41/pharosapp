@@ -7,18 +7,22 @@ import { UsuarioForAuthUseCase } from '../../../../applicactions/usesCases/usuar
 import { CookieParse, CookiSetHeaders } from '../../../shareds/cookie.ts';
 import { RefreshTokenUseCase } from '../../../../applicactions/usesCases/refreshToken.ts';
 import { SwitchMpUseCase } from '../../../../applicactions/usesCases/switchMp.ts';
+import { TokenManajerJOSE } from '../../../shareds/josetoken.ts';
 
 export class AuthRoute {
 
     async newUsuario(req: Request, res: Response): Promise<void>{
+        const tokenMamanget = new TokenManajerJOSE();
         const createUsuarioUseCase = new CreateNewUsuarioUseCase(
             new UsuarioRepositoryPrismaPg(ConnectionPharosApp)
         );
         const body =  req.body as NewUserInterface;
+
         const tokenAccessCookie = CookieParse(
             req.headers.cookie ?? ''
         );
-        if (!tokenAccessCookie['at']) {
+        const cookieAt = tokenAccessCookie['at'];
+        if (!cookieAt) {
             res.json({
                 error: {
                     error: 'No se econtro la identificaion',
@@ -27,17 +31,11 @@ export class AuthRoute {
             });
             return;
         }
-
         try {
+
+            const dataPayloadToken = await tokenMamanget.validateAccessToken(cookieAt);
             const createdUser = await createUsuarioUseCase.execute(
-                {
-                    id: 0,
-                    farmacia: '',
-                    id_farmacia: 1,
-                    id_role: 1,
-                    role: '',
-                    username: '',
-                },
+                dataPayloadToken,
                 {
                     id_role: body.id_role ?? null,
                     name: body.name_user,
@@ -59,16 +57,28 @@ export class AuthRoute {
     }
 
     async login(req: Request, res: Response): Promise<void>{
+        const tokenMamanget = new TokenManajerJOSE();
         const authLoginUseCase = new UsuarioForAuthUseCase(
             new UsuarioRepositoryPrismaPg(ConnectionPharosApp)
         );
         const body = req.body as AuthLoginIUnterface;
         try {
-            const userForAuthToken = await authLoginUseCase.execute({
+            const data = await authLoginUseCase.execute({
                 username: body.username,
                 password: body.password,
                 farmacia_auth: body.farmacia_auth,
             });
+
+            const [ at, rt] = await Promise.all([
+                tokenMamanget.generateAccessToken(
+                    data.ac,
+                    8
+                ),
+                tokenMamanget.generateRefresToken(
+                    data.rt,
+                    10080 * 4
+                )
+            ]);
 
             const [
                 ac_cookies,
@@ -77,12 +87,12 @@ export class AuthRoute {
                 CookiSetHeaders(
                     60,
                     'at',
-                    ''
+                    at
                 ),
                 CookiSetHeaders(
                     60,
                     'rt',
-                    ''
+                    rt
                 ),
             ];
 
@@ -95,6 +105,7 @@ export class AuthRoute {
     }
 
     async changeFarmacia(req: Request, res: Response){
+        const tokenMamanget = new TokenManajerJOSE();
         const switchFarmaciaUseCase = new SwitchMpUseCase(
             new UsuarioRepositoryPrismaPg(ConnectionPharosApp)
         );
@@ -102,7 +113,10 @@ export class AuthRoute {
         const tokensCookies = CookieParse(
             req.headers.cookie ?? ''
         );
-        if (!tokensCookies['at']) {
+
+        const cookieAt = tokensCookies['at'];
+        const cookieRt = tokensCookies['rt'];
+        if (!cookieAt || !cookieRt) {
             res.json({
                 error: {
                     error: 'No se econtro la identificaion',
@@ -110,32 +124,29 @@ export class AuthRoute {
                 }
             });
             return;
-        }
-        
+        }        
         try {
             
+            const dataPayloadAcToken = await tokenMamanget.validateAccessToken(cookieAt);
+            const dataPayloadRtToken = await tokenMamanget.validateRefreshToken(cookieRt);
             const data = await switchFarmaciaUseCase.execute(
-                {
-                    id: 0,
-                    farmacia: '',
-                    id_farmacia: 1,
-                    id_role: 1,
-                    role: '',
-                    username: '',
-                },
-                {
-                    id: 0,
-                    farmacia: {
-                        id_farmacia: 1,
-                        farmacia: '',
-                    },
-                    username: '',
-                    date: new Date(),
-                },
+                dataPayloadAcToken,
+                dataPayloadRtToken,
                 body.id_farmacia
             );
 
-            res.setHeader('Set-Cookie', [])
+            const [ at, rt ] = await Promise.all([
+                tokenMamanget.generateAccessToken(
+                    data.ac,
+                    8
+                ),
+                tokenMamanget.generateRefresToken(
+                    data.rt,
+                    10080 * 4
+                )
+            ]);
+
+            res.setHeader('Set-Cookie', [at, rt]);
             res.json("oberva las cookies!!!");
         } catch (error) {
             res.json(error);
@@ -143,17 +154,15 @@ export class AuthRoute {
     }
 
     async refresh(req: Request, res: Response) {
-
+        const tokenMamanget = new TokenManajerJOSE();
         const refreshTokenUseCase = new RefreshTokenUseCase(
             new UsuarioRepositoryPrismaPg(ConnectionPharosApp)
         );
         const tokensCookies = CookieParse(
             req.headers.cookie ?? ''
         );
-        if (
-            !tokensCookies['at'] ||
-            !tokensCookies['rt']
-        ) {
+        const cookieRt = tokensCookies['rt'];
+        if (!cookieRt) {
             res.json({
                 error: {
                     error: 'No se econtro la identificaion',
@@ -161,20 +170,21 @@ export class AuthRoute {
                 }
             });
             return;
-        }
+        }   
         try {
             
-            const data = await refreshTokenUseCase.execute(
-                {
-                    id: 1,
-                    farmacia: {
-                        id_farmacia: 4,
-                        farmacia: '',
-                    },
-                    username: '',
-                    date: new Date(),
-                }
-            );
+            const dataPayloadRtToken = await tokenMamanget.validateRefreshToken(cookieRt);
+            const data = await refreshTokenUseCase.execute(dataPayloadRtToken);
+            const [ at, rt ] = await Promise.all([
+                tokenMamanget.generateAccessToken(
+                    data.ac,
+                    8
+                ),
+                tokenMamanget.generateRefresToken(
+                    data.rt,
+                    10080 * 4
+                )
+            ]);
 
             const [
                 ac_cookies,
@@ -183,12 +193,12 @@ export class AuthRoute {
                 CookiSetHeaders(
                     60,
                     'at',
-                    ''
+                    at
                 ),
                 CookiSetHeaders(
                     60,
                     'rt',
-                    ''
+                    rt
                 ),
             ];
 

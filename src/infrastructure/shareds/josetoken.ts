@@ -7,11 +7,9 @@ import { ClaimTokenExceptionDomain } from '../../domain/exceptions/claimToken.ts
 import { AlgInvalidTokenExceptionDomain } from '../../domain/exceptions/algNoValid.ts';
 import { FormatedTokenInvalidTokenExceptionDomain } from '../../domain/exceptions/formatedToken.ts';
 import { ProTokenExceptionDomain } from '../../domain/exceptions/secretInvalid.ts';
+import type { DataAccessToken, DataRefreshToken } from '../../applicactions/ports/token.ts';
 
-export class TokenManajerJOSE<
-  DataAccessToken,
-  DataRefreshToken
->{
+export class TokenManajerJOSE{
 
   private secreToN: jose.JWK = SECRETCRYPTETOKEN;
 
