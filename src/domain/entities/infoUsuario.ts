@@ -1,5 +1,6 @@
 import { InvalidIdExceptionDomain } from "../exceptions/invalidId.ts";
 import { PasswordNoHashExceptionDomain } from "../exceptions/passwordNoHash.ts";
+import { UserNotRoleExceptionDomain } from "../exceptions/userNotRole.ts";
 import type { InfoUser } from "../interfaces/usuarios.ts";
 import { EntityPrimitive } from "../primitiveEntity.ts";
 
@@ -16,6 +17,10 @@ export class InfoUsuarioEntity implements EntityPrimitive<InfoUser>{
                 this.infoUsuario.id_role <= 0
             )
         ) throw new InvalidIdExceptionDomain();
+
+        if (this.infoUsuario.id_role === null || this.infoUsuario.role === null)
+            throw new UserNotRoleExceptionDomain();
+
         if (
             !/^\$2[ayb]\$[0-9]{2}\$[./A-Za-z0-9]{53}$/.test(
                 this.infoUsuario.password
