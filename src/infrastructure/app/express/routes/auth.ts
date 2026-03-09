@@ -10,6 +10,9 @@ export const AuthRouter = Router({ caseSensitive: true, strict: true })
         middlewareAuhtValidate.validateLoginMiddleware,
         authRouteIn.login
     )
+    .post('/refresh',
+        authRouteIn.refresh,
+    )
     .post('/usuario', 
         middlewareAuhtValidate.validateNewUserMiddleware,
         authRouteIn.newUsuario

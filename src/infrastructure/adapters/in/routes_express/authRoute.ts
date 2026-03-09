@@ -5,6 +5,7 @@ import { CreateNewUsuarioUseCase } from '../../../../applicactions/usesCases/cre
 import type { AuthLoginIUnterface, NewUserInterface } from '../jois/interfaces/newuser.ts';
 import { UsuarioForAuthUseCase } from '../../../../applicactions/usesCases/usuarioForAuth.ts';
 import { CookieParse, CookiSetHeaders } from '../../../shareds/cookie.ts';
+import { RefreshTokenUseCase } from '../../../../applicactions/usesCases/refreshToken.ts';
 
 export class AuthRoute {
 
@@ -14,10 +15,9 @@ export class AuthRoute {
         );
         const body =  req.body as NewUserInterface;
         const tokenAccessCookie = CookieParse(
-            req.headers.cookie ?? '',
-            'at'
+            req.headers.cookie ?? ''
         );
-        if (!tokenAccessCookie) {
+        if (!tokenAccessCookie['at']) {
             res.json({
                 error: {
                     error: 'No se econtro la identificaion',
@@ -40,7 +40,7 @@ export class AuthRoute {
                     password: body.pass,
                     username: body.username
                 },
-                tokenAccessCookie
+                tokenAccessCookie['at']
             );
 
             if (error !== null){
@@ -110,6 +110,59 @@ export class AuthRoute {
                     60,
                     'rt',
                     userForAuthToken.token_refresh
+                ),
+            ];
+
+            res.setHeader('Set-Cookie', [ac_cookies, rt_cookie])
+            res.json("oberva las cookies!!!");
+            return
+        } catch (error) {
+            res.json(error);
+        }
+    }
+
+    async refresh(
+        req: Request,
+        res: Response
+    ) {
+
+        const refreshTokenUseCase = new RefreshTokenUseCase(
+            new UsuarioRepositoryPrismaPg(ConnectionPharosApp)
+        );
+        const tokensCookies = CookieParse(
+            req.headers.cookie ?? ''
+        );
+        if (
+            !tokensCookies['at'] ||
+            !tokensCookies['rt']
+        ) {
+            res.json({
+                error: {
+                    error: 'No se econtro la identificaion',
+                    fix: 'No se ha encontrado los datos para continuar. Ingrese nuevamente'
+                }
+            });
+            return;
+        }
+        try {
+            
+            const { token_access, token_refresh } = await refreshTokenUseCase.execute(
+                tokensCookies['rt'],tokensCookies['at']
+            );
+
+            const [
+                ac_cookies,
+                rt_cookie
+            ] = [
+                CookiSetHeaders(
+                    60,
+                    'at',
+                    token_access
+                ),
+                CookiSetHeaders(
+                    60,
+                    'rt',
+                    token_refresh
                 ),
             ];
 

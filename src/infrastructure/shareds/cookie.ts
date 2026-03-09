@@ -24,9 +24,8 @@ export const CookiSetHeaders = (
 }
 
 export const CookieParse = (
-    cookieReq: string,
-    nameCookie: string
+    cookieReq: string
 ) => {
 
-    return cookie.parse(cookieReq ?? '')[nameCookie];
+    return cookie.parse(cookieReq ?? '');
 }
