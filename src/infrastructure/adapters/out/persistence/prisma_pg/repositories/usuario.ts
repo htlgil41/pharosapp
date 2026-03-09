@@ -1,5 +1,5 @@
 import { FarmaciaEntity } from "../../../../../../domain/entities/farmacia.ts";
-import type { InfoUsuarioEntity } from "../../../../../../domain/entities/infoUsuario.ts";
+import { InfoUsuarioEntity } from "../../../../../../domain/entities/infoUsuario.ts";
 import { RoleUserEntity } from "../../../../../../domain/entities/roleUser.ts";
 import { UsuarioByFarmaciaEntity } from "../../../../../../domain/entities/usuarioFarmacia.ts";
 import type { UsuarioRepository } from "../../../../../../domain/repositories/usuarios.ts";
@@ -132,6 +132,45 @@ export class UsuarioRepositoryPrismaPg implements UsuarioRepository {
         }
     }
 
+    async getUsuarioInfoByUsername(username: string): Promise<InfoUsuarioEntity | null> {
+        try {
+            
+            const user = await this.conn.usuario.findUnique({
+                where: {
+                    username
+                },
+                select: {
+                    id: true,
+                    name_user: true,
+                    ape: true,
+                    username: true,
+                    pass: true,
+                    contact: true,
+                    usuario_role: {
+                        select: {
+                            id: true,
+                            rolee: true,
+                        },
+                    },
+                },
+            });
+
+            if (user === null) return null;
+            return InfoUsuarioEntity.build({
+                id: user.id,
+                name: user.name_user,
+                ape: user.ape,
+                contact: user.contact,
+                id_role: user.usuario_role?.id ?? null,
+                role: user.usuario_role?.rolee ?? null,
+                password: user.pass,
+                username: user.username,
+            });
+        } catch (error) {
+            throw ErrorPrismaExceptions(error);
+        }
+    }
+
     async getFarmciasAsgineByUsuario(id_usuario: number): Promise<FarmaciaEntity[]> {
         try {
             
@@ -194,6 +233,30 @@ export class UsuarioRepositoryPrismaPg implements UsuarioRepository {
                 direccion: farmacia.farmacias.direccion,
                 some_code: farmacia.farmacias.some_code
             });
+        } catch (error) {
+            throw ErrorPrismaExceptions(error);
+        }
+    }
+
+    async upRoleUsuario(role: RoleUserEntity, upUser: InfoUsuarioEntity): Promise<InfoUsuarioEntity> {
+        const rolePrimitive = role.toValue();
+        const userUpdat = upUser.toValue();
+        try {
+            
+            await this.conn.usuario.update({
+                where: {
+                    id: userUpdat.id,
+                    username: userUpdat.username,
+                },
+                data: {
+                    id_role: rolePrimitive.id,
+                    name_user: userUpdat.name,
+                    ape: userUpdat.ape,
+                    contact: userUpdat.contact,
+                }
+            });
+
+            return upUser;
         } catch (error) {
             throw ErrorPrismaExceptions(error);
         }

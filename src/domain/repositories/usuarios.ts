@@ -13,9 +13,17 @@ export interface UsuarioRepository {
     getUsuarioByUsername(
         username: string
     ): Promise<UsuarioByFarmaciaEntity | null>;
+    getUsuarioInfoByUsername(
+        username: string
+    ): Promise<InfoUsuarioEntity | null>;
     getFarmciasAsgineByUsuario(id_usuario: number): Promise<FarmaciaEntity[]>;
     getFarmciaAsgineByUsuario(
         id_usuario: number,
         id_farmacia: number
     ): Promise<FarmaciaEntity | null>;
+
+    upRoleUsuario(
+        role: RoleUserEntity,
+        upUser: InfoUsuarioEntity
+    ): Promise<InfoUsuarioEntity>;
 }

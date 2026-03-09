@@ -8,7 +8,7 @@ export interface InfoUser {
     role: string | null;
     id_role: number | null;
     name: string;
-    ape: string;
+    ape: string | null;
     username: string;
     password: string;
     contact: string | null;
