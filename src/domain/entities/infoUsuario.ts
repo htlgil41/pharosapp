@@ -41,6 +41,23 @@ export class InfoUsuarioEntity implements EntityPrimitive<InfoUser>{
             throw new UserNotRoleExceptionDomain();
     }
 
+    updateInfoUsuario(
+        role: string | null,
+        id_role: number | null,
+        name: string,
+        ape: string,
+        contact: string | null,
+    ) {
+        this.infoUsuario = {
+            ...this.infoUsuario,
+            role,
+            id_role,
+            name,
+            ape,
+            contact
+        };
+    }
+
     toValue(): InfoUser {
         
         return this.infoUsuario;
