@@ -17,7 +17,7 @@ export class UsuarioForAuthUseCase extends UsuarioRepoUsesCases {
             id: idUsuario,
             usuario: usuarioInfo
         } = validateExisteUsuario.toValue();
-
+        
         const farmciaauth = validateExisteUsuario.asigneFarmacia(params.farmacia_auth.id_farmacia);
         const validatePassHash = this.serviceHashData.validateHash(
             usuarioInfo.password,

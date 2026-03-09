@@ -50,11 +50,10 @@ export class UsuarioByFarmaciaEntity implements EntityPrimitive<UsuarioByFarmaci
     asigneFarmacia(id_farmacia: number) {
         
         const cantAsigne = this.usuairoFarmacia.farmacias_asigne.length;
-        if (cantAsigne) throw new FarmaciaNotAsigneUsuarioExceptionDomain(cantAsigne);
+        if (cantAsigne === 0) throw new FarmaciaNotAsigneUsuarioExceptionDomain(cantAsigne);
 
         const farmciaauth = this.usuairoFarmacia.farmacias_asigne.find(f => f.id_farmacia === id_farmacia);
         if (!farmciaauth) throw new FarmaciaNotAsigneUsuarioExceptionDomain(cantAsigne);
-
         return farmciaauth;
     }
 
