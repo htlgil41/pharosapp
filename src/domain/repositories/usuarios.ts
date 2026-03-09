@@ -14,4 +14,8 @@ export interface UsuarioRepository {
         username: string
     ): Promise<UsuarioByFarmaciaEntity | null>;
     getFarmciasAsgineByUsuario(id_usuario: number): Promise<FarmaciaEntity[]>;
+    getFarmciaAsgineByUsuario(
+        id_usuario: number,
+        id_farmacia: number
+    ): Promise<FarmaciaEntity | null>;
 }

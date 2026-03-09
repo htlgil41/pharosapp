@@ -164,4 +164,38 @@ export class UsuarioRepositoryPrismaPg implements UsuarioRepository {
             throw ErrorPrismaExceptions(error);
         }
     }
+    
+    async getFarmciaAsgineByUsuario(id_usuario: number, id_farmacia: number): Promise<FarmaciaEntity | null> {
+        try {
+            
+            const farmacia = await this.conn.usuario_by_farmacia.findFirst({
+                where: {
+                    id_usuario,
+                    id_farmacia,
+                },
+                select: {
+                    farmacias: {
+                        select: {
+                            id: true,
+                            name_farmacia: true,
+                            rif: true,
+                            direccion: true,
+                            some_code: true,
+                        },
+                    },
+                },
+            });
+
+            if (farmacia === null) return null;
+            return FarmaciaEntity.build({
+                id: farmacia.farmacias.id,
+                name_farmcia: farmacia.farmacias.name_farmacia,
+                rif: farmacia.farmacias.rif,
+                direccion: farmacia.farmacias.direccion,
+                some_code: farmacia.farmacias.some_code
+            });
+        } catch (error) {
+            throw ErrorPrismaExceptions(error);
+        }
+    }
 }
