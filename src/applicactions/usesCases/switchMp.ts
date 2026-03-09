@@ -1,9 +1,12 @@
 import { FarmaciaNotAsigneUsuarioExceptionDomain } from "../../domain/exceptions/farmaciaNotAsigneUsuario.ts";
+import type { UsuarioRepository } from "../../domain/repositories/usuarios.ts";
 import type { DataSessionDTO } from "../dtosInterfaces/datatoken.ts";
 import type { DataAccessToken, DataRefreshToken } from "../ports/token.ts";
-import { UsuarioRepoUsesCases } from "../usuarioRepoUsesCases.ts";
 
-export class SwitchMpUseCase extends UsuarioRepoUsesCases {
+export class SwitchMpUseCase {
+    constructor(
+        private repo: UsuarioRepository
+    ){}
 
     async execute(
         dataUsuario: DataAccessToken,

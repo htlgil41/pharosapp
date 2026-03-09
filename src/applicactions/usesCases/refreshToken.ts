@@ -1,9 +1,12 @@
+import type { UsuarioRepository } from "../../domain/repositories/usuarios.ts";
 import type { DataSessionDTO } from "../dtosInterfaces/datatoken.ts";
 import { TokenErrorExceptionUseCase } from "../exceptions/tokenError.ts";
 import type { DataRefreshToken } from "../ports/token.ts";
-import { UsuarioRepoUsesCases } from "../usuarioRepoUsesCases.ts";
 
-export class RefreshTokenUseCase extends UsuarioRepoUsesCases {
+export class RefreshTokenUseCase {
+    constructor(
+        private repo: UsuarioRepository
+    ){}
 
     async execute(dataSession: DataRefreshToken): Promise<DataSessionDTO> {
         const inforUserForCreateToken = await this.repo.getUsuarioByUsername(dataSession.username);

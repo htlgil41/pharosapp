@@ -1,9 +1,12 @@
+import type { UsuarioRepository } from "../../domain/repositories/usuarios.ts";
 import type { AuthLoginDTO } from "../dtosInterfaces/authLogin.ts";
 import type { DataSessionDTO } from "../dtosInterfaces/datatoken.ts";
 import { UserNotFoundExceptionUseCase } from "../exceptions/userNotFound.ts";
-import { UsuarioRepoUsesCases } from "../usuarioRepoUsesCases.ts";
 
-export class UsuarioForAuthUseCase extends UsuarioRepoUsesCases {
+export class UsuarioForAuthUseCase {
+    constructor(
+        private repo: UsuarioRepository
+    ){}
 
     async execute(params: AuthLoginDTO): Promise<DataSessionDTO>{
         const validateExisteUsuario = await this.repo.getUsuarioByUsername(
