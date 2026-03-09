@@ -1,3 +1,4 @@
+import type { FarmaciaEntity } from "../entities/farmacia.ts";
 import type { InfoUsuarioEntity } from "../entities/infoUsuario.ts";
 import type { RoleUserEntity } from "../entities/roleUser.ts";
 import type { UsuarioByFarmaciaEntity } from "../entities/usuarioFarmacia.ts";
@@ -12,4 +13,5 @@ export interface UsuarioRepository {
     getUsuarioByUsername(
         username: string
     ): Promise<UsuarioByFarmaciaEntity | null>;
+    getFarmciasAsgineByUsuario(id_usuario: number): Promise<FarmaciaEntity[]>;
 }

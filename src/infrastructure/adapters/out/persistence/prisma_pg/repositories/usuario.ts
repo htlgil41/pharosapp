@@ -1,3 +1,4 @@
+import { FarmaciaEntity } from "../../../../../../domain/entities/farmacia.ts";
 import type { InfoUsuarioEntity } from "../../../../../../domain/entities/infoUsuario.ts";
 import { RoleUserEntity } from "../../../../../../domain/entities/roleUser.ts";
 import { UsuarioByFarmaciaEntity } from "../../../../../../domain/entities/usuarioFarmacia.ts";
@@ -126,6 +127,39 @@ export class UsuarioRepositoryPrismaPg implements UsuarioRepository {
                     username: user.username
                 },
             });
+        } catch (error) {
+            throw ErrorPrismaExceptions(error);
+        }
+    }
+
+    async getFarmciasAsgineByUsuario(id_usuario: number): Promise<FarmaciaEntity[]> {
+        try {
+            
+            const farmacias = await this.conn.farmacias.findMany({
+                where: {
+                    usuario_by_farmacia: {
+                        some: {
+                            id_usuario
+                        }
+                    }
+                },
+                select: {
+                    id: true,
+                    name_farmacia: true,
+                    direccion: true,
+                    rif: true,
+                    some_code: true,
+                },
+            });
+
+            if (farmacias.length === 0) return [];
+            return farmacias.map(f => FarmaciaEntity.build({
+                id: f.id,
+                name_farmcia: f.name_farmacia,
+                rif: f.rif,
+                direccion: f.direccion,
+                some_code: f.some_code
+            }));
         } catch (error) {
             throw ErrorPrismaExceptions(error);
         }
