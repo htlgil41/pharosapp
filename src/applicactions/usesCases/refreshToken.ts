@@ -28,6 +28,7 @@ export class RefreshTokenUseCase extends UsuarioRepoUsesCases {
                     ''
                 )
 
+            void inforUserForCreateToken.validateUsuarioWithRole();
             const {
                 id: idUsuario,
                 usuario: usuarioInfo

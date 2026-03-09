@@ -21,6 +21,7 @@ export class UsuarioForAuthUseCase extends UsuarioRepoUsesCases {
             )
         ];
 
+        void validateExisteUsuario.validateUsuarioWithRole();
         const {
             id: idUsuario,
             farmacias_asigne,
