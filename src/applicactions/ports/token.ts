@@ -1,9 +1,9 @@
 export interface DataAccessToken {
   id: number;
-  id_role: number | null;
-  role: string | null;
+  id_role: number;
+  role: string;
   farmacia: string | null;
-  id_farmacia: number | null;
+  id_farmacia: number;
   username: string
 }
 

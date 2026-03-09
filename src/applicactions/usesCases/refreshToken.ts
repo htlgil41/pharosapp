@@ -33,6 +33,12 @@ export class RefreshTokenUseCase extends UsuarioRepoUsesCases {
                 usuario: usuarioInfo
             } = inforUserForCreateToken.toValue();
 
+            if (usuarioInfo.id_role === null || usuarioInfo.role === null)
+                throw new ErrorResponseException(
+                    'No tienes un rol asinado comunicalo a tu coordinador si consideras que es un error',
+                    'No tienes permisos por lo que es imposible darte acceso',
+                    ''
+                );
             const [
                 token_access,
                 token_refresh

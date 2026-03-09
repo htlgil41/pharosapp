@@ -27,6 +27,12 @@ export class UsuarioForAuthUseCase extends UsuarioRepoUsesCases {
             usuario: usuarioInfo
         } = validateExisteUsuario.toValue();
 
+        if (usuarioInfo.id_role === null || usuarioInfo.role === null)
+            throw new ErrorResponseException(
+                'No tienes un rol asinado comunicalo a tu coordinador si consideras que es un error',
+                'No tienes permisos por lo que es imposible darte acceso',
+                ''
+            );
         const farmciaauth = farmacias_asigne.find(f => f.id_farmacia === params.farmacia_auth.id_farmacia);
         if (!farmciaauth) return [
             null,
