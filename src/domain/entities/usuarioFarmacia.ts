@@ -1,5 +1,6 @@
 import { InvalidIdExceptionDomain } from "../exceptions/invalidId.ts";
 import { PasswordNoHashExceptionDomain } from "../exceptions/passwordNoHash.ts";
+import { UserNotRoleExceptionDomain } from "../exceptions/userNotRole.ts";
 import type { UsuarioByFarmacia } from "../interfaces/usuarios.ts";
 import { EntityPrimitive } from "../primitiveEntity.ts";
 
@@ -16,6 +17,9 @@ export class UsuarioByFarmaciaEntity implements EntityPrimitive<UsuarioByFarmaci
                 this.usuairoFarmacia.usuario.id_role <= 0
             )
         ) throw new InvalidIdExceptionDomain();
+        if (this.usuairoFarmacia.usuario.id_role === null || this.usuairoFarmacia.usuario.role === null)
+            throw new UserNotRoleExceptionDomain();
+
         if (this.usuairoFarmacia.farmacias_asigne.length > 0){
             for (let val of this.usuairoFarmacia.farmacias_asigne){
                 if ( val.id_farmacia <= 0) throw new InvalidIdExceptionDomain();
