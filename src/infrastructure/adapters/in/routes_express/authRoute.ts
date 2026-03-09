@@ -8,6 +8,7 @@ import { CookieParse, CookiSetHeaders } from '../../../shareds/cookie.ts';
 import { RefreshTokenUseCase } from '../../../../applicactions/usesCases/refreshToken.ts';
 import { SwitchMpUseCase } from '../../../../applicactions/usesCases/switchMp.ts';
 import { TokenManajerJOSE } from '../../../shareds/josetoken.ts';
+import { BcryptJHash } from '../../../shareds/bcrypt.ts';
 
 export class AuthRoute {
 
@@ -41,7 +42,7 @@ export class AuthRoute {
                     name: body.name_user,
                     ape: body.ape,
                     contact: body.contact ?? null,
-                    password: body.pass,
+                    password: BcryptJHash.hashData(body.pass),
                     username: body.username
                 },
             );
@@ -68,7 +69,7 @@ export class AuthRoute {
                 password: body.password,
                 farmacia_auth: body.farmacia_auth,
             });
-
+            
             const [ at, rt] = await Promise.all([
                 tokenMamanget.generateAccessToken(
                     data.ac,
