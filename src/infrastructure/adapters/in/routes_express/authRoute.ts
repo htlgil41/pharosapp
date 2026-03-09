@@ -69,7 +69,10 @@ export class AuthRoute {
                 password: body.password,
                 farmacia_auth: body.farmacia_auth,
             });
-            
+            if (!BcryptJHash.validateHash(dataUsuario.password, body.password)) {
+                res.json("Pass invalida");
+                return;
+            }
             const [ at, rt] = await Promise.all([
                 tokenMamanget.generateAccessToken(
                     {
