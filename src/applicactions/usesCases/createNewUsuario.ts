@@ -13,7 +13,7 @@ export class CreateNewUsuarioUseCase extends UsuarioRepoUsesCases {
         at: string,
     ): Promise<[CreatedUserResponse | null, ErrorResponseException | null]> {
         const dataToken = await this.serviceJoseToken.validateAccessToken(at);
-        if (ServiceAuthorization.accessOnly('coordinador', dataToken.role ?? ''))
+        if (!ServiceAuthorization.accessOnly('coordinador', dataToken.role))
             throw new AuthorizationExceptionUseCase();
 
         const role = await this.repo.getRoleById(params.id_role);
