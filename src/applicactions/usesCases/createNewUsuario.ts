@@ -1,6 +1,6 @@
 import { InfoUsuarioEntity } from "../../domain/entities/infoUsuario.ts";
-import type { CreateUsuarioDTO } from "../dtosInterfaces/param/createUsuario.ts";
-import type { CreatedUserResponse } from "../dtosInterfaces/response/createdUser.ts";
+import type { CreateUsuarioDTO } from "../dtosInterfaces/createUsuario.ts";
+import type { CreatedUserResponse } from "../dtosInterfaces/createdUser.ts";
 import { AuthorizationExceptionUseCase } from "../exceptions/authorization.ts";
 import { RoleNotFoundExceptionUseCase } from "../exceptions/roleNotFound.ts";
 import { UserAlredyExistsExceptionUseCase } from "../exceptions/userAlredyExists.ts";

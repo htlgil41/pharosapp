@@ -1,5 +1,5 @@
 import { FarmaciaNotAsigneUsuarioExceptionDomain } from "../../domain/exceptions/farmaciaNotAsigneUsuario.ts";
-import type { FarmaciasResponse } from "../dtosInterfaces/response/farmacias.ts";
+import type { FarmaciasResponse } from "../dtosInterfaces/farmacias.ts";
 import type { DataAccessToken } from "../ports/token.ts";
 import { UsuarioRepoUsesCases } from "../usuarioRepoUsesCases.ts";
 

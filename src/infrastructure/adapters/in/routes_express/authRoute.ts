@@ -77,12 +77,12 @@ export class AuthRoute {
                 CookiSetHeaders(
                     60,
                     'at',
-                    userForAuthToken.token_access
+                    ''
                 ),
                 CookiSetHeaders(
                     60,
                     'rt',
-                    userForAuthToken.token_refresh
+                    ''
                 ),
             ];
 
@@ -114,7 +114,7 @@ export class AuthRoute {
         
         try {
             
-            const { token_access, token_refresh } = await switchFarmaciaUseCase.execute(
+            const data = await switchFarmaciaUseCase.execute(
                 {
                     id: 0,
                     farmacia: '',
@@ -123,10 +123,19 @@ export class AuthRoute {
                     role: '',
                     username: '',
                 },
+                {
+                    id: 0,
+                    farmacia: {
+                        id_farmacia: 1,
+                        farmacia: '',
+                    },
+                    username: '',
+                    date: new Date(),
+                },
                 body.id_farmacia
             );
 
-            res.setHeader('Set-Cookie', [token_access, token_refresh])
+            res.setHeader('Set-Cookie', [])
             res.json("oberva las cookies!!!");
         } catch (error) {
             res.json(error);
@@ -155,15 +164,7 @@ export class AuthRoute {
         }
         try {
             
-            const { token_access, token_refresh } = await refreshTokenUseCase.execute(
-                {
-                    id: 0,
-                    farmacia: '',
-                    id_farmacia: 1,
-                    id_role: 1,
-                    role: '',
-                    username: '',
-                },
+            const data = await refreshTokenUseCase.execute(
                 {
                     id: 1,
                     farmacia: {
@@ -182,12 +183,12 @@ export class AuthRoute {
                 CookiSetHeaders(
                     60,
                     'at',
-                    token_access
+                    ''
                 ),
                 CookiSetHeaders(
                     60,
                     'rt',
-                    token_refresh
+                    ''
                 ),
             ];
 
