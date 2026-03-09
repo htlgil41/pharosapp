@@ -22,10 +22,7 @@ export class UpdateFarmaciaUseCase {
         dataUsuario: DataAccessToken,
         dto: FarmaciaUpdateDTO,
     ): Promise<FarmaciaUpdateDTO>{
-
-        if (ServiceAuthorization.accessMulti(['coordinador'], dataUsuario.role))
-            throw new AuthorizationExceptionUseCase();
-        if (ServiceAuthorization.accessMulti(['coordinador', 'administrador'], dataUsuario.role))
+        if (!ServiceAuthorization.accessMulti(['coordinador', 'administrador'], dataUsuario.role))
             throw new AuthorizationExceptionUseCase();
         const farmacia = await this.repo.getFarmaciaById(dto.id);
         

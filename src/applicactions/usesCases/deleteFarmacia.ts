@@ -22,7 +22,7 @@ export class DeleteFarmaciaLikeUseCase {
         dataUsuario: DataAccessToken,
         id_farmacia: number,
     ): Promise<FarmaciaDTO>{
-        if (ServiceAuthorization.accessMulti(['coordinador'], dataUsuario.role))
+        if (!ServiceAuthorization.accessOnly('coordinador', dataUsuario.role))
             throw new AuthorizationExceptionUseCase();
         
         const farmacia = await this.repo.getFarmaciaById(id_farmacia);

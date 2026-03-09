@@ -10,7 +10,7 @@ export interface FarmaciasDTO {
     direccion: string | null;
 }
 
-export class getFarmciasAsignesUseCase {
+export class getFarmciasAsigneMyUserUseCase {
     constructor(
         private repo: UsuarioRepository
     ){}

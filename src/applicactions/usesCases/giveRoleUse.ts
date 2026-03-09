@@ -31,7 +31,7 @@ export class GiveRoleUseCase {
         dataUsuario: DataAccessToken,
         dto: UpRoleUsuarioDTO
     ): Promise<UpdRoleUsuarioDTO>{
-        if (ServiceAuthorization.accessOnly('coordinador', dataUsuario.role))
+        if (!ServiceAuthorization.accessOnly('coordinador', dataUsuario.role))
             throw new AuthorizationExceptionUseCase();
 
         const [

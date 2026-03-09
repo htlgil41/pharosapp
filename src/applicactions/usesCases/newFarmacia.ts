@@ -28,8 +28,7 @@ export class NewFarmaciaUseCase {
         dataUsuario: DataAccessToken,
         dto: NewFarmaciaDTO
     ): Promise<FarmciaResponseDTO>{
-
-        if (ServiceAuthorization.accessOnly('coordinador', dataUsuario.role))
+        if (!ServiceAuthorization.accessOnly('coordinador', dataUsuario.role))
             throw new AuthorizationExceptionUseCase();
             
         const farmacia = await this.repo.getFarmaciaByExact(dto.rif);
