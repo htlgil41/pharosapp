@@ -1,3 +1,4 @@
+import { FarmaciaNotAsigneUsuarioExceptionDomain } from "../exceptions/farmaciaNotAsigneUsuario.ts";
 import { InvalidIdExceptionDomain } from "../exceptions/invalidId.ts";
 import { PasswordNoHashExceptionDomain } from "../exceptions/passwordNoHash.ts";
 import { UserNotRoleExceptionDomain } from "../exceptions/userNotRole.ts";
@@ -44,6 +45,17 @@ export class UsuarioByFarmaciaEntity implements EntityPrimitive<UsuarioByFarmaci
     validateUsuarioWithRole() {
         if (this.usuairoFarmacia.usuario.id_role === null || this.usuairoFarmacia.usuario.role === null)
             throw new UserNotRoleExceptionDomain();
+    }
+
+    asigneFarmacia(id_farmacia: number) {
+        
+        const cantAsigne = this.usuairoFarmacia.farmacias_asigne.length;
+        if (cantAsigne) throw new FarmaciaNotAsigneUsuarioExceptionDomain(cantAsigne);
+
+        const farmciaauth = this.usuairoFarmacia.farmacias_asigne.find(f => f.id_farmacia === id_farmacia);
+        if (!farmciaauth) throw new FarmaciaNotAsigneUsuarioExceptionDomain(cantAsigne);
+
+        return farmciaauth;
     }
 
     toValue(): UsuarioByFarmacia {

@@ -9,12 +9,10 @@ export class RefreshTokenUseCase extends UsuarioRepoUsesCases {
         tokenRefresh: string,
         accessToken: string
     ): Promise<AuthLoginResponse> {
-        
         let payloadAccessToken: DataAccessToken | undefined;
         try {
             payloadAccessToken = await this.serviceJoseToken.validateAccessToken(accessToken);
         } catch (error) {}
-
 
         const payloadRefreshToken = await this.serviceJoseToken.validateRefreshToken(tokenRefresh);
         if (!payloadAccessToken){
@@ -67,10 +65,7 @@ export class RefreshTokenUseCase extends UsuarioRepoUsesCases {
             };
         }
 
-        const [
-            token_access,
-            token_refresh
-        ] = await Promise.all([
+        const [ token_access, token_refresh ] = await Promise.all([
             this.serviceJoseToken.firmTokenAccess(
                 {
                     id: payloadAccessToken.id,

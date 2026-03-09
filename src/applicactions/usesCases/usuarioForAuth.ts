@@ -1,5 +1,6 @@
 import type { AuthLoginDTO } from "../dtosInterfaces/param/authLogin.ts";
 import type { AuthLoginResponse } from "../dtosInterfaces/response/authLogin.ts";
+import { InvalidPasswordExceptionUseCase } from "../exceptions/invalidPassword.ts";
 import { UserNotFoundExceptionUseCase } from "../exceptions/userNotFound.ts";
 import { UsuarioRepoUsesCases } from "../usuarioRepoUsesCases.ts";
 
@@ -14,21 +15,16 @@ export class UsuarioForAuthUseCase extends UsuarioRepoUsesCases {
         void validateExisteUsuario.validateUsuarioWithRole();
         const {
             id: idUsuario,
-            farmacias_asigne,
             usuario: usuarioInfo
         } = validateExisteUsuario.toValue();
-        const farmciaauth = farmacias_asigne.find(f => f.id_farmacia === params.farmacia_auth.id_farmacia);
-        if (!farmciaauth) throw new Error()
-      
+
+        const farmciaauth = validateExisteUsuario.asigneFarmacia(params.farmacia_auth.id_farmacia);
         const validatePassHash = this.serviceHashData.validateHash(
             usuarioInfo.password,
             params.password
         );
-        if (!validatePassHash) new Error()
-        const [
-            token_access,
-            token_refresh
-        ] = await Promise.all([
+        if (!validatePassHash) new InvalidPasswordExceptionUseCase()
+        const [ token_access, token_refresh ] = await Promise.all([
             this.serviceJoseToken.firmTokenAccess(
                 {
                     id: idUsuario,
