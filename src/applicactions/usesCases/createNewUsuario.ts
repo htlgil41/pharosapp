@@ -1,12 +1,26 @@
 import { InfoUsuarioEntity } from "../../domain/entities/infoUsuario.ts";
 import type { UsuarioRepository } from "../../domain/repositories/usuarios.ts";
-import type { CreateUsuarioDTO } from "../dtosInterfaces/createUsuario.ts";
-import type { CreatedUserDTO } from "../dtosInterfaces/createdUser.ts";
 import { AuthorizationExceptionUseCase } from "../exceptions/authorization.ts";
 import { RoleNotFoundExceptionUseCase } from "../exceptions/roleNotFound.ts";
 import { UserAlredyExistsExceptionUseCase } from "../exceptions/userAlredyExists.ts";
 import type { DataAccessToken } from "../ports/token.ts";
 import { ServiceAuthorization } from "../services/authorization.ts";
+
+interface CreateUsuarioDTO {
+    ape: string;
+    contact: string | null;
+    id_role: number;
+    name: string;
+    password: string;
+    username: string;
+}
+
+interface CreatedUserDTO {
+    fullname: string;
+    username: string;
+    resum: string;
+    add: Date;
+}
 
 export class CreateNewUsuarioUseCase {
     constructor(

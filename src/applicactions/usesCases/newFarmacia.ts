@@ -1,9 +1,23 @@
 import type { FarmaciaRepository } from "../../domain/repositories/farmacia.ts";
-import type { FarmciaResponseDTO, NewFarmaciaDTO } from "../dtosInterfaces/farmacia.ts";
 import { AuthorizationExceptionUseCase } from "../exceptions/authorization.ts";
 import { DataAlredyExistsExceptionUseCase } from "../exceptions/dataAlredyExists.ts";
 import type { DataAccessToken } from "../ports/token.ts";
 import { ServiceAuthorization } from "../services/authorization.ts";
+
+interface NewFarmaciaDTO {
+    some_code: string;
+    name_farmacia: string;
+    rif: string;
+    direccion: string | null;
+}
+
+export interface FarmciaResponseDTO {
+    id: number;
+    some_code: string;
+    name_farmacia: string;
+    rif: string;
+    direccion: string | null;
+}
 
 export class NewFarmaciaUseCase {
     constructor(

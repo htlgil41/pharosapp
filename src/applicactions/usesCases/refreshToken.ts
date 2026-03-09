@@ -1,7 +1,18 @@
 import type { UsuarioRepository } from "../../domain/repositories/usuarios.ts";
-import type { UsuarioInfoDTO } from "../dtosInterfaces/datatoken.ts";
 import { TokenErrorExceptionUseCase } from "../exceptions/tokenError.ts";
 import type { DataRefreshToken } from "../ports/token.ts";
+
+interface UsuarioInfoDTO {
+  id: number;
+  id_role: number;
+  role: string;
+  username: string;
+  password: string;
+  farmacia: {
+    id_farmacia: number;
+    farmacia: string | null;
+  }
+}
 
 export class RefreshTokenUseCase {
     constructor(

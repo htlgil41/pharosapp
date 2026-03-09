@@ -1,7 +1,18 @@
 import { FarmaciaNotAsigneUsuarioExceptionDomain } from "../../domain/exceptions/farmaciaNotAsigneUsuario.ts";
 import type { UsuarioRepository } from "../../domain/repositories/usuarios.ts";
-import type { UsuarioInfoDTO } from "../dtosInterfaces/datatoken.ts";
 import type { DataAccessToken, DataRefreshToken } from "../ports/token.ts";
+
+export interface UsuarioInfoDTO {
+  id: number;
+  id_role: number;
+  role: string;
+  username: string;
+  password: string;
+  farmacia: {
+    id_farmacia: number;
+    farmacia: string | null;
+  }
+}
 
 export class SwitchMpUseCase {
     constructor(

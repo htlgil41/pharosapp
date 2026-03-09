@@ -1,9 +1,16 @@
 import { FarmaciaNotAsigneUsuarioExceptionDomain } from "../../domain/exceptions/farmaciaNotAsigneUsuario.ts";
 import type { UsuarioRepository } from "../../domain/repositories/usuarios.ts";
-import type { FarmaciasDTO } from "../dtosInterfaces/farmacias.ts";
 import { AuthorizationExceptionUseCase } from "../exceptions/authorization.ts";
 import type { DataAccessToken } from "../ports/token.ts";
 import { ServiceAuthorization } from "../services/authorization.ts";
+
+export interface FarmaciasDTO {
+    id: number;
+    name_farmacia: string;
+    rif: string;
+    some_code: string;
+    direccion: string | null;
+}
 
 export class getFarmciasAsignesUseCase {
     constructor(

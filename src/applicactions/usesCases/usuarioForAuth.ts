@@ -1,7 +1,26 @@
 import type { UsuarioRepository } from "../../domain/repositories/usuarios.ts";
-import type { AuthLoginDTO } from "../dtosInterfaces/authLogin.ts";
-import type { UsuarioInfoDTO } from "../dtosInterfaces/datatoken.ts";
 import { UserNotFoundExceptionUseCase } from "../exceptions/userNotFound.ts";
+
+export interface AuthLoginDTO {
+    username: string;
+    password: string;
+    farmacia_auth: {
+        id_farmacia: number;
+        farmacia: string;
+    }
+}
+
+export interface UsuarioInfoDTO {
+  id: number;
+  id_role: number;
+  role: string;
+  username: string;
+  password: string;
+  farmacia: {
+    id_farmacia: number;
+    farmacia: string | null;
+  }
+}
 
 export class UsuarioForAuthUseCase {
     constructor(
