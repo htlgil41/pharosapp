@@ -23,7 +23,21 @@ export class FarmaciaEntity implements EntityPrimitive<Farmacia>{
         if (id <= 0) throw new InvalidIdExceptionDomain();
         this.farmacia.id = id;
     }
-    
+
+    updateFarmacia(
+        some_code: string,
+        name_farmcia: string,
+        rif: string,
+        direccion: string | null,
+    ){
+        this.farmacia = {
+            ...this.farmacia,
+            some_code,
+            name_farmcia,
+            direccion,
+            rif
+        }
+    }
 
     toValue(): Farmacia {
         return this.farmacia;
