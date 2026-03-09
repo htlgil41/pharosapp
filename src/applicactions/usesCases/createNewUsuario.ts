@@ -16,7 +16,14 @@ export class CreateNewUsuarioUseCase extends UsuarioRepoUsesCases {
         if (!ServiceAuthorization.accessOnly('coordinador', dataToken.role))
             throw new AuthorizationExceptionUseCase();
 
-        const role = await this.repo.getRoleById(params.id_role);
+        const [
+            role,
+            validateUsuarioExist
+        ] = await Promise.all([
+            this.repo.getRoleById(params.id_role),
+            await this.repo.getUsuarioByUsername(params.username),
+        ]);
+        
         if (role === null) return [
             null,
             new ErrorResponseException(
@@ -25,8 +32,6 @@ export class CreateNewUsuarioUseCase extends UsuarioRepoUsesCases {
                 ''
             )
         ];
-
-        const validateUsuarioExist = await this.repo.getUsuarioByUsername(params.username);
         if (validateUsuarioExist) return [
             null,
             new ErrorResponseException(
