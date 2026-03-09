@@ -1,6 +1,6 @@
 import joi from 'joi';
 import { NameApeJoi, NumbrePositive, ParamEmptyString, ParamNotEmptyString, PassWordJoi, UsernameJoi } from './validates.ts';
-import type { AuthLoginIUnterface, NewUserInterface } from './interfaces/newuser.ts';
+import type { AuthLoginIUnterface, NewUserInterface, SwitchMpLoginInterface } from './interfaces/newuser.ts';
 
 
 export const AutLobinValidateJoi = joi.object<AuthLoginIUnterface>({
@@ -19,6 +19,11 @@ export const AutLobinValidateJoi = joi.object<AuthLoginIUnterface>({
     }).required()
 })
 .required();
+
+export const SwitchMpLoginJoi = joi.object<SwitchMpLoginInterface>({
+    id_farmacia: NumbrePositive
+    .required()
+}).required();
 
 export const NewUserValidateJoi = joi.object<NewUserInterface>({
     id_role: NumbrePositive

@@ -2,10 +2,11 @@ import type { Request, Response } from 'express';
 import { UsuarioRepositoryPrismaPg } from '../../out/persistence/prisma_pg/repositories/usuario.ts';
 import { ConnectionPharosApp } from '../../out/persistence/prisma_pg/connection.ts';
 import { CreateNewUsuarioUseCase } from '../../../../applicactions/usesCases/createNewUsuario.ts';
-import type { AuthLoginIUnterface, NewUserInterface } from '../jois/interfaces/newuser.ts';
+import type { AuthLoginIUnterface, NewUserInterface, SwitchMpLoginInterface } from '../jois/interfaces/newuser.ts';
 import { UsuarioForAuthUseCase } from '../../../../applicactions/usesCases/usuarioForAuth.ts';
 import { CookieParse, CookiSetHeaders } from '../../../shareds/cookie.ts';
 import { RefreshTokenUseCase } from '../../../../applicactions/usesCases/refreshToken.ts';
+import { SwitchMpUseCase } from '../../../../applicactions/usesCases/switchMp.ts';
 
 export class AuthRoute {
 
@@ -81,6 +82,39 @@ export class AuthRoute {
             res.setHeader('Set-Cookie', [ac_cookies, rt_cookie])
             res.json("oberva las cookies!!!");
             return
+        } catch (error) {
+            res.json(error);
+        }
+    }
+
+    async changeFarmacia(req: Request, res: Response){
+        const switchFarmaciaUseCase = new SwitchMpUseCase(
+            new UsuarioRepositoryPrismaPg(ConnectionPharosApp)
+        );
+        const body = req.body as SwitchMpLoginInterface;
+
+        const tokensCookies = CookieParse(
+            req.headers.cookie ?? ''
+        );
+        if (!tokensCookies['at']) {
+            res.json({
+                error: {
+                    error: 'No se econtro la identificaion',
+                    fix: 'No se ha encontrado los datos para continuar. Ingrese nuevamente'
+                }
+            });
+            return;
+        }
+        
+        try {
+            
+            const { token_access, token_refresh } = await switchFarmaciaUseCase.execute(
+                body.id_farmacia,
+                tokensCookies['at'],
+            );
+
+            res.setHeader('Set-Cookie', [token_access, token_refresh])
+            res.json("oberva las cookies!!!");
         } catch (error) {
             res.json(error);
         }

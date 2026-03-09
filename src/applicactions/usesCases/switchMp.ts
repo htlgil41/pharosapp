@@ -14,7 +14,7 @@ export class SwitchMpUseCase extends UsuarioRepoUsesCases {
             id_farmacia
         );
 
-        if (farmciasAsigneEntity === null) throw new FarmaciaNotAsigneUsuarioExceptionDomain(0);
+        if (farmciasAsigneEntity === null) throw new FarmaciaNotAsigneUsuarioExceptionDomain(1);
         const farmaciaAsigne = farmciasAsigneEntity.toValue();
         const [ token_access, token_refresh ] = await Promise.all([
             this.serviceJoseToken.firmTokenAccess(

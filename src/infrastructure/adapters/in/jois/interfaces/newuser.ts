@@ -15,3 +15,7 @@ export interface NewUserInterface {
     pass: string;
     contact: string | undefined;
 }
+
+export interface SwitchMpLoginInterface {
+    id_farmacia: number;
+}

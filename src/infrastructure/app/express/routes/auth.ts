@@ -10,6 +10,10 @@ export const AuthRouter = Router({ caseSensitive: true, strict: true })
         middlewareAuhtValidate.validateLoginMiddleware,
         authRouteIn.login
     )
+    .put('/login',
+        middlewareAuhtValidate.validateFarmaciaFotSwithcMiddleware,
+        authRouteIn.changeFarmacia,
+    )
     .post('/refresh',
         authRouteIn.refresh,
     )
