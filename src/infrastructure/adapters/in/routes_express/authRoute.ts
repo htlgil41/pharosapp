@@ -64,7 +64,7 @@ export class AuthRoute {
         );
         const body = req.body as AuthLoginIUnterface;
         try {
-            const data = await authLoginUseCase.execute({
+            const dataUsuario = await authLoginUseCase.execute({
                 username: body.username,
                 password: body.password,
                 farmacia_auth: body.farmacia_auth,
@@ -72,11 +72,23 @@ export class AuthRoute {
             
             const [ at, rt] = await Promise.all([
                 tokenMamanget.generateAccessToken(
-                    data.ac,
+                    {
+                        id: dataUsuario.id,
+                        username: dataUsuario.username,
+                        id_farmacia: dataUsuario.farmacia.id_farmacia,
+                        farmacia: dataUsuario.farmacia.farmacia,
+                        id_role: dataUsuario.id_role,
+                        role: dataUsuario.role, 
+                    },
                     8
                 ),
                 tokenMamanget.generateRefresToken(
-                    data.rt,
+                    {
+                        id: dataUsuario.id,
+                        username: dataUsuario.username,
+                        farmacia: dataUsuario.farmacia,
+                        date: new Date(),
+                    },
                     10080 * 4
                 )
             ]);
@@ -129,7 +141,7 @@ export class AuthRoute {
         try {
             const dataPayloadAcToken = await tokenMamanget.validateAccessToken(cookieAt);
             const dataPayloadRtToken = await tokenMamanget.validateRefreshToken(cookieRt);
-            const data = await switchFarmaciaUseCase.execute(
+            const dataUsuario = await switchFarmaciaUseCase.execute(
                 dataPayloadAcToken,
                 dataPayloadRtToken,
                 body.id_farmacia
@@ -137,11 +149,23 @@ export class AuthRoute {
 
             const [ at, rt ] = await Promise.all([
                 tokenMamanget.generateAccessToken(
-                    data.ac,
+                    {
+                        id: dataUsuario.id,
+                        username: dataUsuario.username,
+                        id_farmacia: dataUsuario.farmacia.id_farmacia,
+                        farmacia: dataUsuario.farmacia.farmacia,
+                        id_role: dataUsuario.id_role,
+                        role: dataUsuario.role, 
+                    },
                     8
                 ),
                 tokenMamanget.generateRefresToken(
-                    data.rt,
+                    {
+                        id: dataUsuario.id,
+                        username: dataUsuario.username,
+                        farmacia: dataUsuario.farmacia,
+                        date: new Date(),
+                    },
                     10080 * 4
                 )
             ]);
@@ -174,14 +198,26 @@ export class AuthRoute {
         try {
             
             const dataPayloadRtToken = await tokenMamanget.validateRefreshToken(cookieRt);
-            const data = await refreshTokenUseCase.execute(dataPayloadRtToken);
+            const dataUsuario = await refreshTokenUseCase.execute(dataPayloadRtToken);
             const [ at, rt ] = await Promise.all([
                 tokenMamanget.generateAccessToken(
-                    data.ac,
+                     {
+                        id: dataUsuario.id,
+                        username: dataUsuario.username,
+                        id_farmacia: dataUsuario.farmacia.id_farmacia,
+                        farmacia: dataUsuario.farmacia.farmacia,
+                        id_role: dataUsuario.id_role,
+                        role: dataUsuario.role, 
+                    },
                     8
                 ),
                 tokenMamanget.generateRefresToken(
-                    data.rt,
+                    {
+                        id: dataUsuario.id,
+                        username: dataUsuario.username,
+                        farmacia: dataUsuario.farmacia,
+                        date: new Date(),
+                    },
                     10080 * 4
                 )
             ]);

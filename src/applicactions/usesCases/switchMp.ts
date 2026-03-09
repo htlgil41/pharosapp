@@ -1,6 +1,6 @@
 import { FarmaciaNotAsigneUsuarioExceptionDomain } from "../../domain/exceptions/farmaciaNotAsigneUsuario.ts";
 import type { UsuarioRepository } from "../../domain/repositories/usuarios.ts";
-import type { DataSessionDTO } from "../dtosInterfaces/datatoken.ts";
+import type { UsuarioInfoDTO } from "../dtosInterfaces/datatoken.ts";
 import type { DataAccessToken, DataRefreshToken } from "../ports/token.ts";
 
 export class SwitchMpUseCase {
@@ -12,7 +12,7 @@ export class SwitchMpUseCase {
         dataUsuario: DataAccessToken,
         dataSession: DataRefreshToken,
         id_farmacia: number,
-    ): Promise<DataSessionDTO> {
+    ): Promise<UsuarioInfoDTO> {
         const farmciasAsigneEntity = await this.repo.getFarmciaAsgineByUsuario(
             dataUsuario.id,
             id_farmacia
@@ -34,8 +34,12 @@ export class SwitchMpUseCase {
         };
 
         return {
-            ac: dataUsuario,
-            rt: dataSession,            
+            id: dataUsuario.id,
+            id_role: dataUsuario.id_role,
+            role: dataUsuario.role,
+            farmacia: dataSession.farmacia,
+            username: dataUsuario.username,
+            password: '',
         };
     }
 }

@@ -1,5 +1,5 @@
 import type { UsuarioRepository } from "../../domain/repositories/usuarios.ts";
-import type { DataSessionDTO } from "../dtosInterfaces/datatoken.ts";
+import type { UsuarioInfoDTO } from "../dtosInterfaces/datatoken.ts";
 import { TokenErrorExceptionUseCase } from "../exceptions/tokenError.ts";
 import type { DataRefreshToken } from "../ports/token.ts";
 
@@ -8,7 +8,7 @@ export class RefreshTokenUseCase {
         private repo: UsuarioRepository
     ){}
 
-    async execute(dataSession: DataRefreshToken): Promise<DataSessionDTO> {
+    async execute(dataSession: DataRefreshToken): Promise<UsuarioInfoDTO> {
         const inforUserForCreateToken = await this.repo.getUsuarioByUsername(dataSession.username);
         if (inforUserForCreateToken === null)
             throw new TokenErrorExceptionUseCase(
@@ -23,15 +23,12 @@ export class RefreshTokenUseCase {
         } = inforUserForCreateToken.toValue();
 
         return {
-            ac: {
-                id: idUsuario,
-                id_role: usuarioInfo.id_role!,
-                role: usuarioInfo.role!,
-                farmacia: dataSession.farmacia.farmacia,
-                id_farmacia: dataSession.farmacia.id_farmacia,
-                username: usuarioInfo.username
-            },
-            rt: dataSession,
+            id: idUsuario,
+            id_role: usuarioInfo.id_role!,
+            role: usuarioInfo.role!,
+            farmacia: dataSession.farmacia,
+            username: usuarioInfo.username,
+            password: usuarioInfo.password,
         };
     }
 }

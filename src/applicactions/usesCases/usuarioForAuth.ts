@@ -1,6 +1,6 @@
 import type { UsuarioRepository } from "../../domain/repositories/usuarios.ts";
 import type { AuthLoginDTO } from "../dtosInterfaces/authLogin.ts";
-import type { DataSessionDTO } from "../dtosInterfaces/datatoken.ts";
+import type { UsuarioInfoDTO } from "../dtosInterfaces/datatoken.ts";
 import { UserNotFoundExceptionUseCase } from "../exceptions/userNotFound.ts";
 
 export class UsuarioForAuthUseCase {
@@ -8,7 +8,7 @@ export class UsuarioForAuthUseCase {
         private repo: UsuarioRepository
     ){}
 
-    async execute(params: AuthLoginDTO): Promise<DataSessionDTO>{
+    async execute(params: AuthLoginDTO): Promise<UsuarioInfoDTO>{
         const validateExisteUsuario = await this.repo.getUsuarioByUsername(
             params.username
         );
@@ -18,23 +18,15 @@ export class UsuarioForAuthUseCase {
         const { id: idUsuario, usuario: usuarioInfo } = validateExisteUsuario.toValue();
         const farmaciauth = validateExisteUsuario.asigneFarmacia(params.farmacia_auth.id_farmacia);
         return {
-            ac: {
-                id: idUsuario,
-                id_role: usuarioInfo.id_role!,
-                role: usuarioInfo.role!,
-                farmacia: farmaciauth.name_farmacia,
+            id: idUsuario,
+            id_role: usuarioInfo.id_role!,
+            role: usuarioInfo.role!,
+            farmacia: {
                 id_farmacia: farmaciauth.id_farmacia,
-                username: usuarioInfo.username
+                farmacia: farmaciauth.name_farmacia,
             },
-            rt: {
-                id: idUsuario,
-                farmacia: {
-                    id_farmacia: farmaciauth.id_farmacia,
-                    farmacia: farmaciauth.name_farmacia,
-                },
-                username: usuarioInfo.username,
-                date: new Date(),
-            }
+            username: usuarioInfo.username,
+            password: usuarioInfo.password,
         }
     }
 }
