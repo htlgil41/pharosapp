@@ -22,6 +22,14 @@ export interface UsuarioRepository {
         id_farmacia: number
     ): Promise<FarmaciaEntity | null>;
 
+    getAsigneFarmciaUsuario(
+        id_farmacia: number,
+        id_usuario: number
+    ): Promise<FarmaciaEntity | null>;
+    asigneFarmacia(
+        usuario: InfoUsuarioEntity,
+        farmacia: FarmaciaEntity,
+    ): Promise<FarmaciaEntity>;
     upRoleUsuario(
         role: RoleUserEntity,
         upUser: InfoUsuarioEntity

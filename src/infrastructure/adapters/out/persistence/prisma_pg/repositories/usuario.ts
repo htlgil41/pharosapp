@@ -238,6 +238,59 @@ export class UsuarioRepositoryPrismaPg implements UsuarioRepository {
         }
     }
 
+    async getAsigneFarmciaUsuario(id_farmacia: number, id_usuario: number): Promise<FarmaciaEntity | null> {
+        try {
+            
+            const asigne = await this.conn.usuario_by_farmacia.findFirst({
+                where: {
+                    id_farmacia,
+                    id_usuario
+                },
+                select: {
+                    farmacias: {
+                        select: {
+                            id: true,
+                            name_farmacia: true,
+                            direccion: true,
+                            some_code: true,
+                            rif: true,
+                        },
+                    },
+                },
+            });
+
+            if (asigne === null) return null;
+            return FarmaciaEntity.build({
+                id: asigne.farmacias.id,
+                name_farmcia: asigne.farmacias.name_farmacia,
+                rif: asigne.farmacias.rif,
+                direccion: asigne.farmacias.direccion,
+                some_code: asigne.farmacias.some_code,
+            });
+        } catch (error) {
+            throw ErrorPrismaExceptions(error);
+        }
+    }
+    
+    async asigneFarmacia(usuario: InfoUsuarioEntity, farmacia: FarmaciaEntity): Promise<FarmaciaEntity> {
+        const usuarioPrimitive = usuario.toValue();
+        const farmaciaPriimtive = farmacia.toValue();
+        try {
+            await this.conn.usuario_by_farmacia.create({
+                data: {
+                    name_farmacia: farmaciaPriimtive.name_farmcia,
+                    id_farmacia: farmaciaPriimtive.id,
+                    id_usuario: usuarioPrimitive.id,
+                },
+                select: {}
+            });
+
+            return farmacia;
+        } catch (error) {
+            throw ErrorPrismaExceptions(error);
+        }
+    }
+
     async upRoleUsuario(role: RoleUserEntity, upUser: InfoUsuarioEntity): Promise<InfoUsuarioEntity> {
         const rolePrimitive = role.toValue();
         const userUpdat = upUser.toValue();
