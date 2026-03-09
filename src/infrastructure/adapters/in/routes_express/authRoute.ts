@@ -121,10 +121,7 @@ export class AuthRoute {
         }
     }
 
-    async refresh(
-        req: Request,
-        res: Response
-    ) {
+    async refresh(req: Request, res: Response) {
 
         const refreshTokenUseCase = new RefreshTokenUseCase(
             new UsuarioRepositoryPrismaPg(ConnectionPharosApp)

@@ -109,7 +109,7 @@ export class TokenManajerJOSE implements TokenJWTJOSEPort<
       if (!tokenRealAfterCrypte) throw new Error('Error al codificar el token');
       const validateToken = await jose.jwtVerify(
         tokenRealAfterCrypte,
-        this.pemAccess,
+        this.pemRefresh,
         { algorithms: ['RS256'] }
       );
 
