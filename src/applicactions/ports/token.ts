@@ -16,25 +16,3 @@ export interface DataRefreshToken {
     farmacia: string | null;
   }
 }
-
-export interface TokenJWTJOSEPort<DAT, DRT>{
-    generateAccessToken(
-        data: DAT,
-        expirateMinute: number
-    ): Promise<string>;
-    generateRefresToken(
-        data: DRT,
-        expirateMinute: number
-    ): Promise<string>
-    criptedToken(
-        token: string,
-        expirateMinute: number
-    ): Promise<string>;
-
-    validateAccessToken(
-        jwt: string
-    ): Promise<DAT>;
-    validateRefreshToken(
-        jwt: string
-    ): Promise<DRT>;
-}

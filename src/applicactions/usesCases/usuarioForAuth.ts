@@ -18,35 +18,9 @@ export class UsuarioForAuthUseCase extends UsuarioRepoUsesCases {
         } = validateExisteUsuario.toValue();
         
         const farmciaauth = validateExisteUsuario.asigneFarmacia(params.farmacia_auth.id_farmacia);
-        const [ token_access, token_refresh ] = await Promise.all([
-            this.serviceJoseToken.firmTokenAccess(
-                {
-                    id: idUsuario,
-                    id_role: usuarioInfo.id_role!,
-                    role: usuarioInfo.role!,
-                    id_farmacia: farmciaauth.id_farmacia!,
-                    farmacia: farmciaauth.name_farmacia,
-                    username: usuarioInfo.username,
-                },
-                8
-            ),
-            this.serviceJoseToken.firmTokenRefresh(
-                {   
-                    id: idUsuario,
-                    username: usuarioInfo.username,
-                    farmacia: {
-                        id_farmacia: farmciaauth.id_farmacia,
-                        farmacia: farmciaauth.name_farmacia,
-                    },
-                    date: new Date()
-                },
-                43800
-            )
-        ]);
-        
         return {
-            token_access,
-            token_refresh,
+            token_access: '',
+            token_refresh: '',
         };
     }
 }

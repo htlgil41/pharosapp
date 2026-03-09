@@ -1,5 +1,4 @@
 import * as jose from 'jose';
-import type { DataAccessToken, DataRefreshToken, TokenJWTJOSEPort } from '../../applicactions/ports/token.ts';
 import { KEYACCESSTOKEN, PEMACCESSTOKEN, KEYREFRESHTOKEN, PEMREFRESHTOKEN, SECRETCRYPTETOKEN } from './const.ts';
 import { TokenExpireExceptionDomain } from '../../domain/exceptions/tokenExpired.ts';
 import { FirmInvalidTokenExceptionDomain } from '../../domain/exceptions/firmInvalidToken.ts';
@@ -9,7 +8,7 @@ import { AlgInvalidTokenExceptionDomain } from '../../domain/exceptions/algNoVal
 import { FormatedTokenInvalidTokenExceptionDomain } from '../../domain/exceptions/formatedToken.ts';
 import { ProTokenExceptionDomain } from '../../domain/exceptions/secretInvalid.ts';
 
-export class TokenManajerJOSE implements TokenJWTJOSEPort<
+export class TokenManajerJOSE<
   DataAccessToken,
   DataRefreshToken
 >{

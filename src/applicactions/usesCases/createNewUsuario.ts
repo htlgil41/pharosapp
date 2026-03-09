@@ -4,17 +4,18 @@ import type { CreatedUserResponse } from "../dtosInterfaces/response/createdUser
 import { AuthorizationExceptionUseCase } from "../exceptions/authorization.ts";
 import { RoleNotFoundExceptionUseCase } from "../exceptions/roleNotFound.ts";
 import { UserAlredyExistsExceptionUseCase } from "../exceptions/userAlredyExists.ts";
+import type { DataAccessToken } from "../ports/token.ts";
 import { ServiceAuthorization } from "../services/authorization.ts";
 import { UsuarioRepoUsesCases } from "../usuarioRepoUsesCases.ts";
 
 export class CreateNewUsuarioUseCase extends UsuarioRepoUsesCases {
 
     async execute(
+        dataUsuario: DataAccessToken,
         params: CreateUsuarioDTO,
-        at: string,
     ): Promise<CreatedUserResponse> {
-        const dataToken = await this.serviceJoseToken.validateAccessToken(at);
-        if (!ServiceAuthorization.accessOnly('coordinador', dataToken.role))
+
+        if (!ServiceAuthorization.accessOnly('coordinador', dataUsuario.role))
             throw new AuthorizationExceptionUseCase();
 
         const [

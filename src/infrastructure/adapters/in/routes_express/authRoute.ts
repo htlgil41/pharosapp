@@ -31,6 +31,14 @@ export class AuthRoute {
         try {
             const createdUser = await createUsuarioUseCase.execute(
                 {
+                    id: 0,
+                    farmacia: '',
+                    id_farmacia: 1,
+                    id_role: 1,
+                    role: '',
+                    username: '',
+                },
+                {
                     id_role: body.id_role ?? null,
                     name: body.name_user,
                     ape: body.ape,
@@ -38,7 +46,6 @@ export class AuthRoute {
                     password: body.pass,
                     username: body.username
                 },
-                tokenAccessCookie['at']
             );
 
             res.json({
@@ -92,7 +99,6 @@ export class AuthRoute {
             new UsuarioRepositoryPrismaPg(ConnectionPharosApp)
         );
         const body = req.body as SwitchMpLoginInterface;
-
         const tokensCookies = CookieParse(
             req.headers.cookie ?? ''
         );
@@ -109,8 +115,15 @@ export class AuthRoute {
         try {
             
             const { token_access, token_refresh } = await switchFarmaciaUseCase.execute(
-                body.id_farmacia,
-                tokensCookies['at'],
+                {
+                    id: 0,
+                    farmacia: '',
+                    id_farmacia: 1,
+                    id_role: 1,
+                    role: '',
+                    username: '',
+                },
+                body.id_farmacia
             );
 
             res.setHeader('Set-Cookie', [token_access, token_refresh])
@@ -143,7 +156,23 @@ export class AuthRoute {
         try {
             
             const { token_access, token_refresh } = await refreshTokenUseCase.execute(
-                tokensCookies['rt'],tokensCookies['at']
+                {
+                    id: 0,
+                    farmacia: '',
+                    id_farmacia: 1,
+                    id_role: 1,
+                    role: '',
+                    username: '',
+                },
+                {
+                    id: 1,
+                    farmacia: {
+                        id_farmacia: 4,
+                        farmacia: '',
+                    },
+                    username: '',
+                    date: new Date(),
+                }
             );
 
             const [
