@@ -1,7 +1,6 @@
 import bcrypt from 'bcrypt';
-import type { HashDataPort } from '../../applicactions/ports/hashData.ts';
 
-export class BcryptJHash implements HashDataPort{
+export class BcryptJHash {
 
     hashData(data: string): string {
         return bcrypt.hashSync(

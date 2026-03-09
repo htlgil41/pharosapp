@@ -27,8 +27,6 @@ export class CreateNewUsuarioUseCase extends UsuarioRepoUsesCases {
         
         if (role === null) throw new RoleNotFoundExceptionUseCase();
         if (validateUsuarioExist) throw new UserAlredyExistsExceptionUseCase();
-
-        const passwordHash = this.serviceHashData.hashData(params.password);
         const rolePrimitive = role.toValue();
         const createUsuario = await this.repo.createUsuario(
             InfoUsuarioEntity.build({
@@ -38,7 +36,7 @@ export class CreateNewUsuarioUseCase extends UsuarioRepoUsesCases {
                 role: rolePrimitive.role,
                 id_role: rolePrimitive.id,
                 name: params.name,
-                password: passwordHash,
+                password: params.password,
                 username: params.username
             }),
             role
