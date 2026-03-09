@@ -13,6 +13,9 @@ export interface UsuarioRepository {
     getUsuarioByUsername(
         username: string
     ): Promise<UsuarioByFarmaciaEntity | null>;
+    getUsuarioInfoById(
+        id_usuario: number
+    ): Promise<InfoUsuarioEntity | null>;
     getUsuarioInfoByUsername(
         username: string
     ): Promise<InfoUsuarioEntity | null>;

@@ -132,6 +132,45 @@ export class UsuarioRepositoryPrismaPg implements UsuarioRepository {
         }
     }
 
+    async getUsuarioInfoById(id_usuario: number): Promise<InfoUsuarioEntity | null> {
+        try {
+            
+            const user = await this.conn.usuario.findUnique({
+                where: {
+                    id: id_usuario,
+                },
+                select: {
+                    id: true,
+                    name_user: true,
+                    ape: true,
+                    username: true,
+                    pass: true,
+                    contact: true,
+                    usuario_role: {
+                        select: {
+                            id: true,
+                            rolee: true,
+                        },
+                    },
+                },
+            });
+
+            if (user === null) return null;
+            return InfoUsuarioEntity.build({
+                id: user.id,
+                name: user.name_user,
+                ape: user.ape,
+                contact: user.contact,
+                id_role: user.usuario_role?.id ?? null,
+                role: user.usuario_role?.rolee ?? null,
+                password: user.pass,
+                username: user.username,
+            });
+        } catch (error) {
+            throw ErrorPrismaExceptions(error);
+        }
+    }
+
     async getUsuarioInfoByUsername(username: string): Promise<InfoUsuarioEntity | null> {
         try {
             
