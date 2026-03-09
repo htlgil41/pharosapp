@@ -18,9 +18,6 @@ export class InfoUsuarioEntity implements EntityPrimitive<InfoUser>{
             )
         ) throw new InvalidIdExceptionDomain();
 
-        if (this.infoUsuario.id_role === null || this.infoUsuario.role === null)
-            throw new UserNotRoleExceptionDomain();
-
         if (
             !/^\$2[ayb]\$[0-9]{2}\$[./A-Za-z0-9]{53}$/.test(
                 this.infoUsuario.password
@@ -37,6 +34,11 @@ export class InfoUsuarioEntity implements EntityPrimitive<InfoUser>{
 
         if (id <= 0) return;
         this.infoUsuario.id = id;
+    }
+
+    validateUsuarioWithRole() {
+        if (this.infoUsuario.id_role === null || this.infoUsuario.role === null)
+            throw new UserNotRoleExceptionDomain();
     }
 
     toValue(): InfoUser {

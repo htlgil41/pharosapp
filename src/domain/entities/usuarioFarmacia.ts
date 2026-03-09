@@ -17,9 +17,7 @@ export class UsuarioByFarmaciaEntity implements EntityPrimitive<UsuarioByFarmaci
                 this.usuairoFarmacia.usuario.id_role <= 0
             )
         ) throw new InvalidIdExceptionDomain();
-        if (this.usuairoFarmacia.usuario.id_role === null || this.usuairoFarmacia.usuario.role === null)
-            throw new UserNotRoleExceptionDomain();
-
+        
         if (this.usuairoFarmacia.farmacias_asigne.length > 0){
             for (let val of this.usuairoFarmacia.farmacias_asigne){
                 if ( val.id_farmacia <= 0) throw new InvalidIdExceptionDomain();
@@ -41,6 +39,11 @@ export class UsuarioByFarmaciaEntity implements EntityPrimitive<UsuarioByFarmaci
 
         if (id <= 0) return;
         this.usuairoFarmacia.id = id;
+    }
+
+    validateUsuarioWithRole() {
+        if (this.usuairoFarmacia.usuario.id_role === null || this.usuairoFarmacia.usuario.role === null)
+            throw new UserNotRoleExceptionDomain();
     }
 
     toValue(): UsuarioByFarmacia {
