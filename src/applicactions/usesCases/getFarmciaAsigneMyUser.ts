@@ -17,7 +17,6 @@ export class getFarmciasAsignesUseCase {
 
     async execute(dataUsuario: DataAccessToken): Promise<FarmaciasDTO[]> {
         const farmciasAsigneEntity = await this.repo.getFarmciasAsgineByUsuario(dataUsuario.id);
-        
         const countFarmacia = farmciasAsigneEntity.length;
         if (countFarmacia === 0) throw new FarmaciaNotAsigneUsuarioExceptionDomain(countFarmacia);
 

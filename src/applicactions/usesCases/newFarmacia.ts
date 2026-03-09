@@ -32,14 +32,15 @@ export class NewFarmaciaUseCase {
         if (ServiceAuthorization.accessOnly('coordinador', dataUsuario.role))
             throw new AuthorizationExceptionUseCase();
             
-        const validateFarmaciaExists = await this.repo.getFarmaciaByExact(dto.rif);
-        if (validateFarmaciaExists === null) throw new DataAlredyExistsExceptionUseCase(
+        const farmacia = await this.repo.getFarmaciaByExact(dto.rif);
+        if (farmacia === null) throw new DataAlredyExistsExceptionUseCase(
             'La farmacia ya se encuentra registrada',
             'Se encontro una farmacia con informacion muy similar verifica que ya esta no este registrada',
             ''
         );
 
-        const farmaciaPrimitive = validateFarmaciaExists.toValue();
+        const createdFarmacia = await this.repo.createFarmacia(farmacia);
+        const farmaciaPrimitive = createdFarmacia.toValue();
         return {
             id: farmaciaPrimitive.id,
             some_code: farmaciaPrimitive.some_code,

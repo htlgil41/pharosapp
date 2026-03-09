@@ -25,7 +25,6 @@ export class getFarmciasAsignesUseCase {
             throw new AuthorizationExceptionUseCase();
 
         const farmciasAsigneEntity = await this.repo.getFarmciasAsgineByUsuario(id_usuario);
-        
         const countFarmacia = farmciasAsigneEntity.length;
         if (countFarmacia === 0) throw new FarmaciaNotAsigneUsuarioExceptionDomain(countFarmacia);
 

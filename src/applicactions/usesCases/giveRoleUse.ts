@@ -31,7 +31,6 @@ export class GiveRoleUseCase {
         dataUsuario: DataAccessToken,
         dto: UpRoleUsuarioDTO
     ): Promise<UpdRoleUsuarioDTO>{
-        
         if (ServiceAuthorization.accessOnly('coordinador', dataUsuario.role))
             throw new AuthorizationExceptionUseCase();
 
@@ -43,7 +42,7 @@ export class GiveRoleUseCase {
             this.repo.getUsuarioInfoByUsername(dto.username),
         ]);
 
-         if (roleEntity === null) throw new DataNotFoundExceptionUseCase(
+        if (roleEntity === null) throw new DataNotFoundExceptionUseCase(
             'El role que desea cambiar no se encuentras',
             'No puede ingresar el role porque no existe',
             ''
@@ -58,7 +57,6 @@ export class GiveRoleUseCase {
             roleEntity,
             usuarioForUpdate
         );
-
         const updateRoleByUsuario = updated.toValue();
         return {
             username: updateRoleByUsuario.username,

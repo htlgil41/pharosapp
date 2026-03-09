@@ -32,7 +32,6 @@ export class RefreshTokenUseCase {
             id: idUsuario,
             usuario: usuarioInfo
         } = inforUserForCreateToken.toValue();
-
         return {
             id: idUsuario,
             id_role: usuarioInfo.id_role!,

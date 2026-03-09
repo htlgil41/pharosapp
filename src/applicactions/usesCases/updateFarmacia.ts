@@ -41,6 +41,7 @@ export class UpdateFarmaciaUseCase {
           dto.rif,
           dto.direccion  
         );
-        return farmacia.toValue();
+        const updatedFarmacia = await this.repo.updateFarmacia(farmacia);
+        return updatedFarmacia.toValue();
     }
 }

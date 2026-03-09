@@ -21,7 +21,6 @@ export class GetFarmaciasLikeUseCase {
         dataUsuario: DataAccessToken,
         search: string,
     ): Promise<FarmaciaDTO[]>{
-
         if (ServiceAuthorization.accessMulti(['coordinador', 'administrador'], dataUsuario.role))
             throw new AuthorizationExceptionUseCase();
         const farmacias = await this.repo.getFarmaciaBy(search);

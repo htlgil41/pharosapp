@@ -22,7 +22,6 @@ export class DeleteFarmaciaLikeUseCase {
         dataUsuario: DataAccessToken,
         id_farmacia: number,
     ): Promise<FarmaciaDTO>{
-
         if (ServiceAuthorization.accessMulti(['coordinador'], dataUsuario.role))
             throw new AuthorizationExceptionUseCase();
         
@@ -32,7 +31,7 @@ export class DeleteFarmaciaLikeUseCase {
             'Puede que la farmacia ya no este en los registros',
             ''
         );
-
+        await this.repo.deleteFarmacia(farmacia);
         return farmacia.toValue();
     }
 }

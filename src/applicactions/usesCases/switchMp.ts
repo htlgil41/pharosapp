@@ -43,7 +43,6 @@ export class SwitchMpUseCase {
                 farmacia: farmaciaAsigne.name_farmcia,
             },
         };
-
         return {
             id: dataUsuario.id,
             id_role: dataUsuario.id_role,
