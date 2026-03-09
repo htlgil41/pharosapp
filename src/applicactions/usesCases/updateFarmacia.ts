@@ -4,15 +4,15 @@ import { DataNotFoundExceptionUseCase } from "../exceptions/dataNotFound.ts";
 import type { DataAccessToken } from "../ports/token.ts";
 import { ServiceAuthorization } from "../services/authorization.ts";
 
-interface FarmaciaDTO {
+interface FarmaciaUpdateDTO {
     id: number;
-    some_code: string;
-    name_farmcia: string;
-    rif: string;
-    direccion: string | null;   
+    some_code: string,
+    name_farmcia: string,
+    rif: string,
+    direccion: string | null,
 }
 
-export class DeleteFarmaciaLikeUseCase {
+export class UpdateFarmaciaUseCase {
 
     constructor(
         private repo: FarmaciaRepository
@@ -20,19 +20,27 @@ export class DeleteFarmaciaLikeUseCase {
 
     async execute(
         dataUsuario: DataAccessToken,
-        id_farmacia: number,
-    ): Promise<FarmaciaDTO>{
+        dto: FarmaciaUpdateDTO,
+    ): Promise<FarmaciaUpdateDTO>{
 
         if (ServiceAuthorization.accessMulti(['coordinador'], dataUsuario.role))
             throw new AuthorizationExceptionUseCase();
+        if (ServiceAuthorization.accessMulti(['coordinador', 'administrador'], dataUsuario.role))
+            throw new AuthorizationExceptionUseCase();
+        const farmacia = await this.repo.getFarmaciaById(dto.id);
         
-        const farmacia = await this.repo.getFarmaciaById(id_farmacia);
         if (farmacia === null) throw new DataNotFoundExceptionUseCase(
-            'No se ha encontrado la farmcia',
-            'Puede que la farmacia ya no este en los registros',
+            'No se ha podido encontrar la farmacia',
+            'No se puede actualizar un registro que no existe, quieres registrar estos datos?',
             ''
         );
 
+        farmacia.updateFarmacia(
+          dto.some_code,
+          dto.name_farmcia,
+          dto.rif,
+          dto.direccion  
+        );
         return farmacia.toValue();
     }
 }
