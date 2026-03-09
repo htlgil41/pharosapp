@@ -62,7 +62,7 @@ export class FarmaciaRepositoryPrismaPg implements FarmaciaRepository {
         }
     }
     
-    async getFarmacia(search: string): Promise<FarmaciaEntity[]> {
+    async getFarmaciaBy(search: string): Promise<FarmaciaEntity[]> {
         try {
             const farmacia = await this.conn.farmacias.findMany({
                 where: {
@@ -104,6 +104,47 @@ export class FarmaciaRepositoryPrismaPg implements FarmaciaRepository {
                 name_farmcia: f.name_farmacia,
                 rif: f.rif,
             }));
+        } catch (error) {
+            throw ErrorPrismaExceptions(error);
+        }
+    }
+
+    async getFarmaciaByExact(search: string): Promise<FarmaciaEntity | null> {
+        try {
+            const farmacia = await this.conn.farmacias.findFirst({
+                where: {
+                    OR: [
+                        {
+                            some_code: {
+                                equals: search,
+                                mode: 'insensitive'
+                            }
+                        },
+                        {
+                            rif: {
+                                equals: search,
+                                mode: 'insensitive'
+                            }
+                        },
+                    ],
+                },
+                select: {
+                    id: true,
+                    some_code: true,
+                    direccion: true,
+                    name_farmacia: true,
+                    rif: true,
+                }
+            });
+
+            if (farmacia === null) return null;
+            return FarmaciaEntity.build({
+                id: farmacia.id,
+                some_code: farmacia.some_code,
+                direccion: farmacia.direccion,
+                name_farmcia: farmacia.name_farmacia,
+                rif: farmacia.rif,
+            });
         } catch (error) {
             throw ErrorPrismaExceptions(error);
         }
