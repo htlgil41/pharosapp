@@ -1,8 +1,8 @@
 import { InfoUsuarioEntity } from "../../domain/entities/infoUsuario.ts";
 import type { UsuarioRepository } from "../../domain/repositories/usuarios.ts";
 import { AuthorizationExceptionUseCase } from "../exceptions/authorization.ts";
+import { DataAlredyExistsExceptionUseCase } from "../exceptions/dataAlredyExists.ts";
 import { RoleNotFoundExceptionUseCase } from "../exceptions/roleNotFound.ts";
-import { UserAlredyExistsExceptionUseCase } from "../exceptions/userAlredyExists.ts";
 import type { DataAccessToken } from "../ports/token.ts";
 import { ServiceAuthorization } from "../services/authorization.ts";
 
@@ -44,7 +44,11 @@ export class CreateNewUsuarioUseCase {
         ]);
         
         if (role === null) throw new RoleNotFoundExceptionUseCase();
-        if (validateUsuarioExist) throw new UserAlredyExistsExceptionUseCase();
+        if (validateUsuarioExist) throw new DataAlredyExistsExceptionUseCase(
+            'Ya existe un usuario con informacion similar',
+            'Intenta iniciar con estas mismas credenciales',
+            ''
+        );
         const rolePrimitive = role.toValue();
         const createUsuario = await this.repo.createUsuario(
             InfoUsuarioEntity.build({

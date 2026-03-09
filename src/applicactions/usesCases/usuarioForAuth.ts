@@ -1,5 +1,5 @@
 import type { UsuarioRepository } from "../../domain/repositories/usuarios.ts";
-import { UserNotFoundExceptionUseCase } from "../exceptions/userNotFound.ts";
+import { DataNotFoundExceptionUseCase } from "../exceptions/dataNotFound.ts";
 
 export interface AuthLoginDTO {
     username: string;
@@ -31,7 +31,11 @@ export class UsuarioForAuthUseCase {
         const validateExisteUsuario = await this.repo.getUsuarioByUsername(
             params.username
         );
-        if (validateExisteUsuario === null) throw new UserNotFoundExceptionUseCase();
+        if (validateExisteUsuario === null) throw new DataNotFoundExceptionUseCase(
+            'No existe el usuario',
+            'Puedes crear un usuario con estos mismos datos, vamos!!',
+            ''
+        );
 
         void validateExisteUsuario.validateUsuarioWithRole();
         const { id: idUsuario, usuario: usuarioInfo } = validateExisteUsuario.toValue();
