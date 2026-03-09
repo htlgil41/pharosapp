@@ -126,7 +126,6 @@ export class AuthRoute {
             return;
         }        
         try {
-            
             const dataPayloadAcToken = await tokenMamanget.validateAccessToken(cookieAt);
             const dataPayloadRtToken = await tokenMamanget.validateRefreshToken(cookieRt);
             const data = await switchFarmaciaUseCase.execute(

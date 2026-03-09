@@ -29,7 +29,7 @@ export class TokenManajerJOSE{
         .setIssuedAt()
         .setExpirationTime(`${expirateMinute}${expirateMinute <= 1 ? 'minute' : 'minutes'}`)
         .sign(this.keyAccess!);
-      return token;
+      return await this.criptedToken(token, expirateMinute);
     } catch (error) {
       throw this.ErrorHandlerToken(error); 
     }
@@ -45,13 +45,13 @@ export class TokenManajerJOSE{
         .setIssuedAt()
         .setExpirationTime(`${expirateMinute}${expirateMinute <= 1 ? 'minute' : 'minutes'}`)
         .sign(this.keyRefresh!);
-      return token;
+      return await this.criptedToken(token, expirateMinute);
     } catch (error) {
       throw this.ErrorHandlerToken(error);
     }
   }
 
-  async criptedToken(
+  private async criptedToken(
     token: string,
     expirateMinute: number
   ): Promise<string> {
