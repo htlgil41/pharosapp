@@ -172,6 +172,11 @@ CREATE TABLE IF NOT EXISTS usuario_role (
 	id SERIAL PRIMARY KEY,
 	rolee VARCHAR (255) NOT NULL
 );
+INSERT INTO usuario_role (id, rolee)
+	VALUES 
+		(1, 'coordinador'),
+		(2, 'administrador'),
+		(3, 'soportista');
 
 CREATE TABLE IF NOT EXISTS usuario (
     id SERIAL PRIMARY KEY,
