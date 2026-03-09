@@ -1,5 +1,5 @@
 import type { AuthLoginResponse } from "../dtosInterfaces/response/authLogin.ts";
-import { ErrorResponseException } from "../exceptions/responseError.ts";
+import { TokenErrorExceptionUseCase } from "../exceptions/tokenError.ts";
 import type { DataAccessToken } from "../ports/token.ts";
 import { UsuarioRepoUsesCases } from "../usuarioRepoUsesCases.ts";
 
@@ -12,7 +12,6 @@ export class RefreshTokenUseCase extends UsuarioRepoUsesCases {
         
         let payloadAccessToken: DataAccessToken | undefined;
         try {
-            
             payloadAccessToken = await this.serviceJoseToken.validateAccessToken(accessToken);
         } catch (error) {}
 
@@ -22,7 +21,7 @@ export class RefreshTokenUseCase extends UsuarioRepoUsesCases {
 
             const inforUserForCreateToken = await this.repo.getUsuarioByUsername(payloadRefreshToken.username);
             if (inforUserForCreateToken === null)
-                throw new ErrorResponseException(
+                throw new TokenErrorExceptionUseCase(
                     'No se ha encontrado la informacion para renovar su token',
                     'Esto es un problema inesperado ya que no se identifico la informacion del token',
                     ''
@@ -33,13 +32,6 @@ export class RefreshTokenUseCase extends UsuarioRepoUsesCases {
                 id: idUsuario,
                 usuario: usuarioInfo
             } = inforUserForCreateToken.toValue();
-
-            if (usuarioInfo.id_role === null || usuarioInfo.role === null)
-                throw new ErrorResponseException(
-                    'No tienes un rol asinado comunicalo a tu coordinador si consideras que es un error',
-                    'No tienes permisos por lo que es imposible darte acceso',
-                    ''
-                );
             const [
                 token_access,
                 token_refresh
@@ -47,8 +39,8 @@ export class RefreshTokenUseCase extends UsuarioRepoUsesCases {
                 this.serviceJoseToken.firmTokenAccess(
                     {
                         id: idUsuario,
-                        id_role: usuarioInfo.id_role,
-                        role: usuarioInfo.role,
+                        id_role: usuarioInfo.id_role!,
+                        role: usuarioInfo.role!,
                         id_farmacia: payloadRefreshToken.farmacia.id_farmacia,
                         farmacia: payloadRefreshToken.farmacia.farmacia,
                         username: usuarioInfo.username,

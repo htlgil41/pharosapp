@@ -2,7 +2,8 @@ import { InfoUsuarioEntity } from "../../domain/entities/infoUsuario.ts";
 import type { CreateUsuarioDTO } from "../dtosInterfaces/param/createUsuario.ts";
 import type { CreatedUserResponse } from "../dtosInterfaces/response/createdUser.ts";
 import { AuthorizationExceptionUseCase } from "../exceptions/authorization.ts";
-import { ErrorResponseException } from "../exceptions/responseError.ts";
+import { RoleNotFoundExceptionUseCase } from "../exceptions/roleNotFound.ts";
+import { UserAlredyExistsExceptionUseCase } from "../exceptions/userAlredyExists.ts";
 import { ServiceAuthorization } from "../services/authorization.ts";
 import { UsuarioRepoUsesCases } from "../usuarioRepoUsesCases.ts";
 
@@ -11,7 +12,7 @@ export class CreateNewUsuarioUseCase extends UsuarioRepoUsesCases {
     async execute(
         params: CreateUsuarioDTO,
         at: string,
-    ): Promise<[CreatedUserResponse | null, ErrorResponseException | null]> {
+    ): Promise<CreatedUserResponse> {
         const dataToken = await this.serviceJoseToken.validateAccessToken(at);
         if (!ServiceAuthorization.accessOnly('coordinador', dataToken.role))
             throw new AuthorizationExceptionUseCase();
@@ -24,22 +25,8 @@ export class CreateNewUsuarioUseCase extends UsuarioRepoUsesCases {
             await this.repo.getUsuarioByUsername(params.username),
         ]);
         
-        if (role === null) return [
-            null,
-            new ErrorResponseException(
-                'No existe el role',
-                'El usuario no puede pertenecer al rolo deseado ya que no especifica ninguna regla',
-                ''
-            )
-        ];
-        if (validateUsuarioExist) return [
-            null,
-            new ErrorResponseException(
-                'El usuario ya se encuentra registrado',
-                'Tu estas dentro ve e inicia!',
-                ''
-            )
-        ];
+        if (role === null) throw new RoleNotFoundExceptionUseCase();
+        if (validateUsuarioExist) throw new UserAlredyExistsExceptionUseCase();
 
         const passwordHash = this.serviceHashData.hashData(params.password);
         const rolePrimitive = role.toValue();
@@ -57,16 +44,13 @@ export class CreateNewUsuarioUseCase extends UsuarioRepoUsesCases {
             role
         );
         const userPrimitive = createUsuario.toValue();
-        return [
-            {
-                fullname: `${userPrimitive.name} ${userPrimitive.ape}`,
-                resum: userPrimitive.contact !== null 
-                    ? `Usuario contactado por ${userPrimitive.contact}` 
-                    : 'El usuario no posee una referencia de contacto',
-                username: userPrimitive.username,
-                add: new Date(),
-            },
-            null
-        ];
+        return  {
+            fullname: `${userPrimitive.name} ${userPrimitive.ape}`,
+            resum: userPrimitive.contact !== null 
+                ? `Usuario contactado por ${userPrimitive.contact}` 
+                : 'El usuario no posee una referencia de contacto',
+            username: userPrimitive.username,
+            add: new Date(),
+        };
     }  
 }

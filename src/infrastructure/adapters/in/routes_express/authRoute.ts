@@ -28,10 +28,7 @@ export class AuthRoute {
         }
 
         try {
-            const [
-                createdUser,
-                error
-            ] = await createUsuarioUseCase.execute(
+            const createdUser = await createUsuarioUseCase.execute(
                 {
                     id_role: body.id_role ?? null,
                     name: body.name_user,
@@ -43,22 +40,6 @@ export class AuthRoute {
                 tokenAccessCookie['at']
             );
 
-            if (error !== null){
-                res.json({
-                    error: error,
-                });
-                return;
-            }
-            if (createdUser === null) {
-                res.json({
-                    error: {
-                        error: 'No se ha podido construir la informcaion correctamente',
-                        fix: 'Error muy inesperado',
-                    },
-                });
-                return;
-            }
-            
             res.json({
                 data: createdUser,
                 op: new Date(),
@@ -75,27 +56,11 @@ export class AuthRoute {
         );
         const body = req.body as AuthLoginIUnterface;
         try {
-            const [userForAuthToken, error] = await authLoginUseCase.execute({
+            const userForAuthToken = await authLoginUseCase.execute({
                 username: body.username,
                 password: body.password,
                 farmacia_auth: body.farmacia_auth,
             });
-
-            if (error !== null) {
-                res.json({
-                    error: error
-                });
-                return;
-            }
-            if (userForAuthToken === null) {
-                res.json({
-                    error: {
-                        error: 'No se ha podido construir la informcaion correctamente',
-                        fix: 'Error muy inesperado',
-                    },
-                });
-                return
-            }
 
             const [
                 ac_cookies,

@@ -1,25 +1,15 @@
 import type { AuthLoginDTO } from "../dtosInterfaces/param/authLogin.ts";
 import type { AuthLoginResponse } from "../dtosInterfaces/response/authLogin.ts";
-import { ErrorResponseException } from "../exceptions/responseError.ts";
+import { UserNotFoundExceptionUseCase } from "../exceptions/userNotFound.ts";
 import { UsuarioRepoUsesCases } from "../usuarioRepoUsesCases.ts";
 
 export class UsuarioForAuthUseCase extends UsuarioRepoUsesCases {
 
-    async execute(params: AuthLoginDTO): Promise<[
-        AuthLoginResponse | null, 
-        ErrorResponseException | null
-    ]>{
+    async execute(params: AuthLoginDTO): Promise<AuthLoginResponse>{
         const validateExisteUsuario = await this.repo.getUsuarioByUsername(
             params.username
         );
-        if (validateExisteUsuario === null) return [
-            null,
-            new ErrorResponseException(
-                'No existe el usuario',
-                'Puedes crear un usuario con estos mismos datos, vamos!!',
-                ''
-            )
-        ];
+        if (validateExisteUsuario === null) throw new UserNotFoundExceptionUseCase();
 
         void validateExisteUsuario.validateUsuarioWithRole();
         const {
@@ -28,27 +18,13 @@ export class UsuarioForAuthUseCase extends UsuarioRepoUsesCases {
             usuario: usuarioInfo
         } = validateExisteUsuario.toValue();
         const farmciaauth = farmacias_asigne.find(f => f.id_farmacia === params.farmacia_auth.id_farmacia);
-        if (!farmciaauth) return [
-            null,
-            new ErrorResponseException(
-                'Farmacia no asignada',
-                'No tienes una farmacia asignada pide a tus superiores que lo hagan pronto',
-                ''
-            )
-        ];
+        if (!farmciaauth) throw new Error()
       
         const validatePassHash = this.serviceHashData.validateHash(
             usuarioInfo.password,
             params.password
         );
-        if (!validatePassHash) return [
-            null,
-            new ErrorResponseException(
-                'Username o Password incorrectos',
-                'Verifica tus datos para poder ingresar',
-                ''
-            )
-        ]
+        if (!validatePassHash) new Error()
         const [
             token_access,
             token_refresh
@@ -58,7 +34,7 @@ export class UsuarioForAuthUseCase extends UsuarioRepoUsesCases {
                     id: idUsuario,
                     id_role: usuarioInfo.id_role!,
                     role: usuarioInfo.role!,
-                    id_farmacia: farmciaauth.id_farmacia,
+                    id_farmacia: farmciaauth.id_farmacia!,
                     farmacia: farmciaauth.name_farmacia,
                     username: usuarioInfo.username,
                 },
@@ -77,12 +53,10 @@ export class UsuarioForAuthUseCase extends UsuarioRepoUsesCases {
                 43800
             )
         ]);
-        return [
-            {
-                token_access,
-                token_refresh,
-            },
-            null
-        ];
+        
+        return {
+            token_access,
+            token_refresh,
+        };
     }
 }
