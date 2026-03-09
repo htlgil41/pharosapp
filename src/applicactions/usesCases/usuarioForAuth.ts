@@ -68,6 +68,10 @@ export class UsuarioForAuthUseCase extends UsuarioRepoUsesCases {
                 {   
                     id: idUsuario,
                     username: usuarioInfo.username,
+                    farmacia: {
+                        id_farmacia: farmciaauth.id_farmacia,
+                        farmacia: farmciaauth.name_farmacia,
+                    },
                     date: new Date()
                 },
                 43800

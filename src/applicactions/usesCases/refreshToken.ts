@@ -30,7 +30,6 @@ export class RefreshTokenUseCase extends UsuarioRepoUsesCases {
 
             const {
                 id: idUsuario,
-                farmacias_asigne: farmaciaUsuario,
                 usuario: usuarioInfo
             } = inforUserForCreateToken.toValue();
 
@@ -43,8 +42,8 @@ export class RefreshTokenUseCase extends UsuarioRepoUsesCases {
                         id: idUsuario,
                         id_role: usuarioInfo.id_role,
                         role: usuarioInfo.role,
-                        id_farmacia: 0,
-                        farmacia: '',
+                        id_farmacia: payloadRefreshToken.farmacia.id_farmacia,
+                        farmacia: payloadRefreshToken.farmacia.farmacia,
                         username: usuarioInfo.username,
                     },
                     8
@@ -53,6 +52,10 @@ export class RefreshTokenUseCase extends UsuarioRepoUsesCases {
                     {   
                         id: idUsuario,
                         username: usuarioInfo.username,
+                        farmacia: {
+                            id_farmacia: payloadRefreshToken.farmacia.id_farmacia,
+                            farmacia: payloadRefreshToken.farmacia.farmacia,
+                        },
                         date: new Date()
                     },
                     43800
@@ -74,8 +77,8 @@ export class RefreshTokenUseCase extends UsuarioRepoUsesCases {
                     id: payloadAccessToken.id,
                     id_role: payloadAccessToken.id_role,
                     role: payloadAccessToken.role,
-                    id_farmacia: payloadAccessToken.id_farmacia,
-                    farmacia: payloadAccessToken.farmacia,
+                    id_farmacia: payloadRefreshToken.farmacia.id_farmacia,
+                    farmacia: payloadRefreshToken.farmacia.farmacia,
                     username: payloadAccessToken.username,
                 },
                 8
@@ -84,6 +87,10 @@ export class RefreshTokenUseCase extends UsuarioRepoUsesCases {
                 {   
                     id: payloadAccessToken.id,
                     username: payloadAccessToken.username,
+                    farmacia: {
+                        id_farmacia: payloadRefreshToken.farmacia.id_farmacia,
+                        farmacia: payloadRefreshToken.farmacia.farmacia,
+                    },
                     date: new Date()
                 },
                 43800

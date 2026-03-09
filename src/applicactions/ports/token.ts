@@ -11,6 +11,10 @@ export interface DataRefreshToken {
   id: number;
   username: string;
   date: Date;
+  farmacia: {
+    id_farmacia: number;
+    farmacia: string | null;
+  }
 }
 
 export interface TokenJWTJOSEPort<DAT, DRT>{
