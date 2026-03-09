@@ -1,4 +1,4 @@
-export interface FarmaciasResponse {
+export interface FarmaciasDTO {
     id: number;
     name_farmacia: string;
     rif: string;

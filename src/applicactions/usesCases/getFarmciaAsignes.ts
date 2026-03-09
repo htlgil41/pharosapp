@@ -1,5 +1,5 @@
 import { FarmaciaNotAsigneUsuarioExceptionDomain } from "../../domain/exceptions/farmaciaNotAsigneUsuario.ts";
-import type { FarmaciasResponse } from "../dtosInterfaces/farmacias.ts";
+import type { FarmaciasDTO } from "../dtosInterfaces/farmacias.ts";
 import { AuthorizationExceptionUseCase } from "../exceptions/authorization.ts";
 import type { DataAccessToken } from "../ports/token.ts";
 import { ServiceAuthorization } from "../services/authorization.ts";
@@ -10,7 +10,7 @@ export class getFarmciasAsignesUseCase extends UsuarioRepoUsesCases {
     async execute(
         dataUsuario: DataAccessToken,
         id_usuario: number
-    ): Promise<FarmaciasResponse[]> {
+    ): Promise<FarmaciasDTO[]> {
         if (!ServiceAuthorization.accessMulti(['coordinador', 'administrador'], dataUsuario.role))
             throw new AuthorizationExceptionUseCase();
 

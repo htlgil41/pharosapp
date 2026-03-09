@@ -1,11 +1,11 @@
 import { FarmaciaNotAsigneUsuarioExceptionDomain } from "../../domain/exceptions/farmaciaNotAsigneUsuario.ts";
-import type { FarmaciasResponse } from "../dtosInterfaces/farmacias.ts";
+import type { FarmaciasDTO } from "../dtosInterfaces/farmacias.ts";
 import type { DataAccessToken } from "../ports/token.ts";
 import { UsuarioRepoUsesCases } from "../usuarioRepoUsesCases.ts";
 
 export class getFarmciasAsignesUseCase extends UsuarioRepoUsesCases {
 
-    async execute(dataUsuario: DataAccessToken): Promise<FarmaciasResponse[]> {
+    async execute(dataUsuario: DataAccessToken): Promise<FarmaciasDTO[]> {
         const farmciasAsigneEntity = await this.repo.getFarmciasAsgineByUsuario(dataUsuario.id);
         
         const countFarmacia = farmciasAsigneEntity.length;

@@ -1,4 +1,4 @@
-export interface CreatedUserResponse {
+export interface CreatedUserDTO {
     fullname: string;
     username: string;
     resum: string;
