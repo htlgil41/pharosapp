@@ -6,7 +6,7 @@ export interface FarmaciaRepository {
     creteCajaFarmacia(
         farmacia: FarmaciaEntity,
         caja: CajaFarmaciaEntity
-    ): Promise<CajaFarmaciaEntity>
+    ): Promise<CajaFarmaciaEntity>;
 
     getAllFarmacia(): Promise<FarmaciaEntity[]>;
     getFarmaciaById(id_farmacia: number): Promise<FarmaciaEntity | null>;
@@ -17,13 +17,13 @@ export interface FarmaciaRepository {
         id_farmacia: number,
         nmCaja: number
     ): Promise<CajaFarmaciaEntity | null>;
-    getCajaByFarmacia(farmacia: FarmaciaEntity): Promise<CajaFarmaciaEntity[]>
+    getCajaByFarmacia(farmacia: FarmaciaEntity): Promise<CajaFarmaciaEntity[]>;
     getCajaByArea(
         id_farmacia: number,
         area: string
-    ): Promise<CajaFarmaciaEntity[]>
+    ): Promise<CajaFarmaciaEntity[]>;
 
     updateFarmacia(farmacia: FarmaciaEntity): Promise<FarmaciaEntity>;
     deleteFarmacia(farmacia: FarmaciaEntity): Promise<FarmaciaEntity>;
-    deleteCaja(caja: CajaFarmaciaEntity): Promise<CajaFarmaciaEntity>
+    deleteCaja(caja: CajaFarmaciaEntity): Promise<CajaFarmaciaEntity>;
 }
