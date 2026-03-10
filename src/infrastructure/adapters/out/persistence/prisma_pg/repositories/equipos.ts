@@ -5,6 +5,9 @@ import type { EquiposRepository } from "../../../../../../domain/repositories/eq
 import { ErrorPrismaExceptions } from "../exceptions/errosManager.ts";
 import { ImpresoraEntity } from "../../../../../../domain/entities/impresora.ts";
 import { PuntoVentaEntity } from "../../../../../../domain/entities/puntoVenta.ts";
+import type { RegisterEquipoPcFarmaciaAggregate } from "../../../../../../domain/aggregates/registerEquipoPc.ts";
+import type { RegisterEquipoImpresoraFarmaciaAggregate } from "../../../../../../domain/aggregates/registerEquipoImpresora.ts";
+import type { RegisterPuntoVentaFarmaciaAggregate } from "../../../../../../domain/aggregates/registerEquipoPuntoVenta.ts";
 
 export class EquipoRepositoryPrismaPg implements EquiposRepository {
 
@@ -12,76 +15,119 @@ export class EquipoRepositoryPrismaPg implements EquiposRepository {
         private conn: PrismaClient
     ){}
     
-    async createEquipoPC(farmacia: FarmaciaEntity, pc: PcEntity): Promise<PcEntity> {
-        const farmaciaPrimitive = farmacia.toValue();
-        const pcPrimitive = pc.toValue();
+    async createEquipoPC(aggregate: RegisterEquipoPcFarmaciaAggregate): Promise<PcEntity> {
+        const equipo = aggregate.getEquipo();
+        const inventarioPrimitive = aggregate.getInventario().toValue();
+
+        const equipoPrimitive = equipo.toValue();
         try {
-            const createdPc = await this.conn.equipo_pc.create({
-                data: {
-                    name_farmacia: farmaciaPrimitive.name_farmcia,
-                    id_farmacia: farmaciaPrimitive.id,
-                    ip: pcPrimitive.ip,
-                    anydesk: pcPrimitive.anydesk,
-                    sa_anydesk: pcPrimitive.sa_anydesk,
-                    so: pcPrimitive.so,
-                    ram: pcPrimitive.ram,
-                    disk: pcPrimitive.disk,
-                    rom_size: pcPrimitive.rom_size,
-                },
-                select: {
-                    id: true,
-                },    
-            });
-            pc.setId(createdPc.id);
-            return pc;
+            const [ createdPc, _ ] = await this.conn.$transaction([
+                this.conn.equipo_pc.create({
+                    data: {
+                        name_farmacia: equipoPrimitive.name_farmacia,
+                        id_farmacia: equipoPrimitive.id_farmacia,
+                        ip: equipoPrimitive.ip,
+                        anydesk: equipoPrimitive.anydesk,
+                        sa_anydesk: equipoPrimitive.sa_anydesk,
+                        so: equipoPrimitive.so,
+                        ram: equipoPrimitive.ram,
+                        disk: equipoPrimitive.disk,
+                        rom_size: equipoPrimitive.rom_size,
+                    },
+                    select: {
+                        id: true,
+                    },    
+                }),
+                this.conn.inventario_general.create({
+                    data: {
+                        name_farmacia: inventarioPrimitive.name_farmacia,
+                        id_farmacia: inventarioPrimitive.id_farmacia,
+                        hardware: inventarioPrimitive.hardware,
+                        nota: inventarioPrimitive.nota,
+                        cantidad: inventarioPrimitive.cantidad,
+                    },
+                    select: {},
+                }),
+            ]);
+
+            equipo.setId(createdPc.id);
+            return equipo;
         } catch (error) {
             throw ErrorPrismaExceptions(error);
         }
     }
 
-    async createEquipoImpresora(farmacia: FarmaciaEntity, impresora: ImpresoraEntity): Promise<ImpresoraEntity> {
-        const farmaciaPrimitive = farmacia.toValue();
-        const impresoraPrimitive = impresora.toValue();
+    async createEquipoImpresora(aggregate: RegisterEquipoImpresoraFarmaciaAggregate): Promise<ImpresoraEntity> {
+        const equipo = aggregate.getEquipo();
+        const inventarioPrimitive = aggregate.getInventario().toValue();
+
+        const equipoPrimitive = equipo.toValue();
         try {
-            const impresoraCreated = await this.conn.equipo_impresora.create({
-                data: {
-                    name_farmacia: farmaciaPrimitive.name_farmcia,
-                    id_farmacia: farmaciaPrimitive.id,
-                    modelo_print: impresoraPrimitive.modelo_print,
-                    marca: impresoraPrimitive.marca,
-                    area: impresoraPrimitive.area,
-                    count_toners: impresoraPrimitive.count_toners,
-                },
-                select: {
-                    id: true,
-                },
-            });
-            impresora.setId(impresoraCreated.id);
-            return impresora;
+            const [ impresoraCreated, _ ] = await this.conn.$transaction([
+                this.conn.equipo_impresora.create({
+                    data: {
+                        name_farmacia: equipoPrimitive.name_farmacia,
+                        id_farmacia: equipoPrimitive.id,
+                        modelo_print: equipoPrimitive.modelo_print,
+                        marca: equipoPrimitive.marca,
+                        area: equipoPrimitive.area,
+                        count_toners: equipoPrimitive.count_toners,
+                    },
+                    select: {
+                        id: true,
+                    },
+                }),
+                this.conn.inventario_general.create({
+                    data: {
+                        name_farmacia: inventarioPrimitive.name_farmacia,
+                        id_farmacia: inventarioPrimitive.id_farmacia,
+                        hardware: inventarioPrimitive.hardware,
+                        nota: inventarioPrimitive.nota,
+                        cantidad: inventarioPrimitive.cantidad,
+                    },
+                    select: {},
+                }),
+            ]);
+            equipo.setId(impresoraCreated.id);
+            return equipo;
         } catch (error) {
             throw ErrorPrismaExceptions(error);
         }
     }
 
-    async createPuntoVenta(farmacia: FarmaciaEntity, punto: PuntoVentaEntity): Promise<PuntoVentaEntity> {
-        const farmaciaPrimitive = farmacia.toValue();
-        const puntoPrimitive = punto.toValue();
+    async createPuntoVenta(aggregate: RegisterPuntoVentaFarmaciaAggregate): Promise<PuntoVentaEntity> {
+        const equipo = aggregate.getEquipo();
+        const inventarioPrimitive = aggregate.getInventario().toValue();
+
+        const equipoPrimitive = equipo.toValue();
         try {
-            const createPunto = await this.conn.punto_venta.create({
-                data: {
-                    name_farmacia: farmaciaPrimitive.name_farmcia,
-                    id_farmacia: farmaciaPrimitive.id,
-                    modelo: puntoPrimitive.modelo,
-                    banco: puntoPrimitive.banco,
-                    serial_code: puntoPrimitive.serial_code,
-                    tag: puntoPrimitive.tag,
-                },
-                select: {
-                    id: true,
-                },
-            });
-            punto.setId(createPunto.id);
-            return punto;
+            const [ impresoraCreated, _ ] = await this.conn.$transaction([
+                this.conn.punto_venta.create({
+                    data: {
+                        name_farmacia: equipoPrimitive.name_farmacia,
+                        id_farmacia: equipoPrimitive.id,
+                        modelo: equipoPrimitive.modelo,
+                        serial_code: equipoPrimitive.serial_code,
+                        banco: equipoPrimitive.banco,
+                        tag: equipoPrimitive.tag,
+                    },
+                    select: {
+                        id: true,
+                    },
+                }),
+                this.conn.inventario_general.create({
+                    data: {
+                        name_farmacia: inventarioPrimitive.name_farmacia,
+                        id_farmacia: inventarioPrimitive.id_farmacia,
+                        hardware: inventarioPrimitive.hardware,
+                        nota: inventarioPrimitive.nota,
+                        cantidad: inventarioPrimitive.cantidad,
+                    },
+                    select: {},
+                }),
+            ]);
+            equipo.setId(impresoraCreated.id);
+            return equipo;
         } catch (error) {
             throw ErrorPrismaExceptions(error);
         }

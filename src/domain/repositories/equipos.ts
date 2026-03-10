@@ -1,21 +1,14 @@
-import type { FarmaciaEntity } from "../entities/farmacia.ts";
+import type { RegisterEquipoImpresoraFarmaciaAggregate } from "../aggregates/registerEquipoImpresora.ts";
+import type { RegisterEquipoPcFarmaciaAggregate } from "../aggregates/registerEquipoPc.ts";
+import type { RegisterPuntoVentaFarmaciaAggregate } from "../aggregates/registerEquipoPuntoVenta.ts";
 import type { ImpresoraEntity } from "../entities/impresora.ts";
 import type { PcEntity } from "../entities/pc.ts";
 import type { PuntoVentaEntity } from "../entities/puntoVenta.ts";
 
 export interface EquiposRepository {
-    createEquipoPC(
-        farmacia: FarmaciaEntity,
-        pc: PcEntity
-    ): Promise<PcEntity>;
-    createEquipoImpresora(
-        farmacia: FarmaciaEntity,
-        impresora: ImpresoraEntity,
-    ): Promise<ImpresoraEntity>;
-    createPuntoVenta(
-        farmacia: FarmaciaEntity,
-        punto: PuntoVentaEntity,
-    ): Promise<PuntoVentaEntity>;
+    createEquipoPC(aggregate: RegisterEquipoPcFarmaciaAggregate): Promise<PcEntity>;
+    createEquipoImpresora(aggregate: RegisterEquipoImpresoraFarmaciaAggregate): Promise<ImpresoraEntity>;
+    createPuntoVenta(aggregate: RegisterPuntoVentaFarmaciaAggregate): Promise<PuntoVentaEntity>;
 
     getEqipoPcByFarmaciaPage(
         page: number,
