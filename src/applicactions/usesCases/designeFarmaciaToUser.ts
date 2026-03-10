@@ -11,7 +11,7 @@ interface UserFarmaciaAsigneDTO {
     farmacia: string;
 }
 
-export class AsigneFarmciaToUserUseCase {
+export class DesigneFarmciaToUserUseCase {
     constructor(
         private repoUser: UsuarioRepository,
         private repoFarmacia: FarmaciaRepository
@@ -53,7 +53,7 @@ export class AsigneFarmciaToUserUseCase {
             '',
         );
 
-        await this.repoUser.asigneFarmacia(
+        await this.repoUser.deleteAsineFarmacia(
             user,
             farmacia
         );
