@@ -16,4 +16,17 @@ export interface EquiposRepository {
         farmacia: FarmaciaEntity,
         punto: PuntoVentaEntity,
     ): Promise<PuntoVentaEntity>;
+
+    getEqipoPcByFarmaciaPage(
+        page: number,
+        id_farmacia: number,
+    ): Promise<PcEntity[]>;
+    getEqipoImpresoraByFarmaciaPage(
+        page: number,
+        id_farmacia: number,
+    ): Promise<ImpresoraEntity[]>;
+    getPuntosByFarmaciaPage(
+        page: number,
+        id_farmacia: number,
+    ): Promise<PuntoVentaEntity[]>;
 }
