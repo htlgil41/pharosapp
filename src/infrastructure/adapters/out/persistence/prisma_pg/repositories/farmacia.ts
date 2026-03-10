@@ -341,5 +341,21 @@ export class FarmaciaRepositoryPrismaPg implements FarmaciaRepository {
         } catch (error) {
             throw ErrorPrismaExceptions(error);
         }
-    }    
+    }
+
+    async deleteCaja(caja: CajaFarmaciaEntity): Promise<CajaFarmaciaEntity> {
+        const cajaPrimitive = caja.toValue();
+        try {
+            await this.conn.caja_farmacia.delete({
+                where: {
+                    id: cajaPrimitive.id,
+                    nm_caja: cajaPrimitive.nm_caja
+                },
+                select: {},
+            });
+            return caja;
+        } catch (error) {
+            throw ErrorPrismaExceptions(error);
+        }
+    }
 }

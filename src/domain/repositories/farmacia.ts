@@ -25,4 +25,5 @@ export interface FarmaciaRepository {
 
     updateFarmacia(farmacia: FarmaciaEntity): Promise<FarmaciaEntity>;
     deleteFarmacia(farmacia: FarmaciaEntity): Promise<FarmaciaEntity>;
+    deleteCaja(caja: CajaFarmaciaEntity): Promise<CajaFarmaciaEntity>
 }
