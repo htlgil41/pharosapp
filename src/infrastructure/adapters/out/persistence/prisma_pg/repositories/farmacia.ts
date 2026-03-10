@@ -1,3 +1,4 @@
+import { CajaFarmaciaEntity } from "../../../../../../domain/entities/cajaFarmacia.ts";
 import { FarmaciaEntity } from "../../../../../../domain/entities/farmacia.ts";
 import type { FarmaciaRepository } from "../../../../../../domain/repositories/farmacia.ts";
 import { ErrorPrismaExceptions } from "../exceptions/errosManager.ts";
@@ -28,6 +29,29 @@ export class FarmaciaRepositoryPrismaPg implements FarmaciaRepository {
 
             farmacia.setId(createFarmacia.id);
             return farmacia;
+        } catch (error) {
+            throw ErrorPrismaExceptions(error);
+        }
+    }
+
+    async creteCajaFarmacia(
+        farmacia: FarmaciaEntity,
+        caja: CajaFarmaciaEntity
+    ): Promise<CajaFarmaciaEntity> {
+        const farmaciaPrimitive = farmacia.toValue();
+        const cajaPrimitive = caja.toValue();
+        try {
+            await this.conn.caja_farmacia.create({
+                data: {
+                    id: farmaciaPrimitive.id,
+                    id_farmacia: farmaciaPrimitive.id,
+                    name_farmacia: farmaciaPrimitive.name_farmcia,
+                    nm_caja: cajaPrimitive.nm_caja,
+                    area: cajaPrimitive.area,
+                },
+                select: {}
+            });
+            return caja;
         } catch (error) {
             throw ErrorPrismaExceptions(error);
         }
@@ -145,6 +169,112 @@ export class FarmaciaRepositoryPrismaPg implements FarmaciaRepository {
                 name_farmcia: farmacia.name_farmacia,
                 rif: farmacia.rif,
             });
+        } catch (error) {
+            throw ErrorPrismaExceptions(error);
+        }
+    }
+
+    async getCajaById(id_caja: number): Promise<CajaFarmaciaEntity | null> {
+        try {
+            const caja = await this.conn.caja_farmacia.findUnique({
+                where: {
+                    id: id_caja,
+                },
+                select: {
+                    id: true,
+                    id_farmacia: true,
+                    name_farmacia: true,
+                    nm_caja: true,
+                    area: true,
+                }
+            });
+            if (caja === null) return null;
+            return CajaFarmaciaEntity.build({
+                id: caja.id,
+                area: caja.area, 
+                name_farmacia: caja.name_farmacia,
+                id_farmacia: caja.id_farmacia,
+                nm_caja: caja.nm_caja,
+            });
+        } catch (error) {
+            throw ErrorPrismaExceptions(error);
+        }
+    }
+
+    async getCajaByNm(
+        id_farmacia: number,
+        nmCaja: number
+    ): Promise<CajaFarmaciaEntity | null> {
+        try {
+            const caja = await this.conn.caja_farmacia.findFirst({
+                where: {
+                    id_farmacia: id_farmacia,
+                    nm_caja: nmCaja,
+                },
+                select: {
+                    id: true,
+                    id_farmacia: true,
+                    name_farmacia: true,
+                    nm_caja: true,
+                    area: true,
+                }
+            });
+            if (caja === null) return null;
+            return CajaFarmaciaEntity.build({
+                id: caja.id,
+                area: caja.area, 
+                name_farmacia: caja.name_farmacia,
+                id_farmacia: caja.id_farmacia,
+                nm_caja: caja.nm_caja,
+            });
+        } catch (error) {
+            throw ErrorPrismaExceptions(error);
+        }
+    }
+
+    async getCajaByFarmacia(farmacia: FarmaciaEntity): Promise<CajaFarmaciaEntity[]> {
+        const { id: id_farmacia } = farmacia.toValue();
+        try {
+            const cajas = await this.conn.caja_farmacia.findMany({
+                where: {
+                    id_farmacia
+                },
+            });
+            if (cajas.length === 0) return [];
+            return cajas.map(c => CajaFarmaciaEntity.build({
+                id: c.id,
+                area: c.area, 
+                name_farmacia: c.name_farmacia,
+                id_farmacia: c.id_farmacia,
+                nm_caja: c.nm_caja,
+            }));
+        } catch (error) {
+            throw ErrorPrismaExceptions(error);
+        }
+    }
+
+    async getCajaByArea(
+        id_farmacia: number, 
+        area: string
+    ): Promise<CajaFarmaciaEntity[]> {
+        try {
+            const cajas = await this.conn.caja_farmacia.findMany({
+                where: {
+                    id_farmacia,
+                    area: {
+                        contains: area,
+                        mode: 'insensitive',
+                    },
+                },
+            });
+            if (cajas.length === 0) return [];
+            return cajas.map(c => CajaFarmaciaEntity.build({
+                id: c.id,
+                area: c.area, 
+                name_farmacia: c.name_farmacia,
+                id_farmacia: c.id_farmacia,
+                nm_caja: c.nm_caja,
+            }));
         } catch (error) {
             throw ErrorPrismaExceptions(error);
         }
