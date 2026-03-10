@@ -56,6 +56,32 @@ export class FarmaciaRepositoryPrismaPg implements FarmaciaRepository {
             throw ErrorPrismaExceptions(error);
         }
     }
+
+    async getAllFarmacia(): Promise<FarmaciaEntity[]> {
+        try {
+            
+            const farmacias = await this.conn.farmacias.findMany({
+                select :{
+                    id: true,
+                    some_code: true,
+                    direccion: true,
+                    name_farmacia: true,
+                    rif: true,
+                }
+            });
+
+            if (farmacias.length === 0) return [];
+            return farmacias.map(f => FarmaciaEntity.build({
+                id: f.id,
+                some_code: f.some_code,
+                direccion: f.direccion,
+                name_farmcia: f.name_farmacia,
+                rif: f.rif,
+            }));
+        } catch (error) {
+            throw ErrorPrismaExceptions(error);
+        }
+    }
     
     async getFarmaciaById(id_farmacia: number): Promise<FarmaciaEntity | null> {
         try {

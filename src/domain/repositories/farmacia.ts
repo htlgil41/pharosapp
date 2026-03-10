@@ -8,6 +8,7 @@ export interface FarmaciaRepository {
         caja: CajaFarmaciaEntity
     ): Promise<CajaFarmaciaEntity>
 
+    getAllFarmacia(): Promise<FarmaciaEntity[]>;
     getFarmaciaById(id_farmacia: number): Promise<FarmaciaEntity | null>;
     getFarmaciaBy(search: string): Promise<FarmaciaEntity[]>;
     getFarmaciaByExact(search: string): Promise<FarmaciaEntity | null>;
