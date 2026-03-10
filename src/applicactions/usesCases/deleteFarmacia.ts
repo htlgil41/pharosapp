@@ -13,7 +13,6 @@ interface FarmaciaDTO {
 }
 
 export class DeleteFarmaciaLikeUseCase {
-
     constructor(
         private repo: FarmaciaRepository
     ){}
