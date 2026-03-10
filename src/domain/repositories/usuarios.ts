@@ -37,4 +37,9 @@ export interface UsuarioRepository {
         role: RoleUserEntity,
         upUser: InfoUsuarioEntity
     ): Promise<InfoUsuarioEntity>;
+
+    deleteAsineFarmacia(
+        usuario: InfoUsuarioEntity,
+        farmacia: FarmaciaEntity,
+    ): Promise<FarmaciaEntity>;
 }

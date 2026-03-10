@@ -353,4 +353,21 @@ export class UsuarioRepositoryPrismaPg implements UsuarioRepository {
             throw ErrorPrismaExceptions(error);
         }
     }
+
+    async deleteAsineFarmacia(usuario: InfoUsuarioEntity, farmacia: FarmaciaEntity): Promise<FarmaciaEntity> {
+        const usuarioPrimitive = usuario.toValue();
+        const farmaciaPriimtive = farmacia.toValue();
+        try {
+            await this.conn.usuario_by_farmacia.deleteMany({
+                where: {
+                    id_farmacia: farmaciaPriimtive.id,
+                    id_usuario: usuarioPrimitive.id,
+                }
+            });
+
+            return farmacia;
+        } catch (error) {
+            throw ErrorPrismaExceptions(error);
+        }
+    }
 }
