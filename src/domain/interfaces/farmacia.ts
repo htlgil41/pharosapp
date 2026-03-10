@@ -8,7 +8,7 @@ export interface Farmacia {
 
 export interface CajaFarmacia {
     id: number;
-    name_farmacia: string;
+    name_farmacia: string | null;
     id_farmacia: number;
     nm_caja: number;
     area: string;
