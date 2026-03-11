@@ -9,6 +9,9 @@ import type { RegisterEquipoPcFarmaciaAggregate } from "../../../../../../domain
 import type { RegisterEquipoImpresoraFarmaciaAggregate } from "../../../../../../domain/aggregates/registerEquipoImpresora.ts";
 import type { RegisterPuntoVentaFarmaciaAggregate } from "../../../../../../domain/aggregates/registerEquipoPuntoVenta.ts";
 import type { EquipoPC } from "../../../../../../domain/interfaces/equipos.ts";
+import type { DeleteEquipoPcAggregate } from "../../../../../../domain/aggregates/deleteEquipoPc.ts";
+import type { DeleteEquipoImpresoraAggregate } from "../../../../../../domain/aggregates/deleteEquipoImpresora.ts";
+import type { DeleteEquipoPuntoVentaAggregate } from "../../../../../../domain/aggregates/deleteEquipoPuntoVenta.ts";
 
 export class EquipoRepositoryPrismaPg implements EquiposRepository {
 
@@ -239,15 +242,108 @@ export class EquipoRepositoryPrismaPg implements EquiposRepository {
         }
     }
 
-    async deleteEquipoPc(): Promise<EquipoPC> {
-        throw new Error();
+    async deleteEquipoPc(aggregate: DeleteEquipoPcAggregate): Promise<PcEntity> {
+        const equipo = aggregate.getEquipo();
+        const inventario = aggregate.getInventario().toValue();
+
+        const equipoPrimitive = equipo.toValue();
+        try {
+            
+            const [ equipoDeleted, _ ] = await this.conn.$transaction([
+                this.conn.equipo_pc.delete({
+                    where: {
+                        id: equipoPrimitive.id,
+                    },
+                    select: {
+                        id: true,
+                    }
+                }),
+                this.conn.inventario_general.create({
+                    data: {
+                        name_farmacia: inventario.name_farmacia,
+                        id_farmacia: inventario.id_farmacia,
+                        hardware: inventario.hardware,
+                        nota: inventario.nota,
+                        cantidad: inventario.cantidad,
+                    },
+                    select: {}
+                })
+            ]);
+
+            equipo.setId(equipoDeleted.id);
+            return equipo;
+        } catch (error) {
+            throw ErrorPrismaExceptions(error);
+        }
     }
 
-    async deleteEquipoImpresora(): Promise<ImpresoraEntity> {
-        throw new Error();
+    async deleteEquipoImpresora(aggregate: DeleteEquipoImpresoraAggregate): Promise<ImpresoraEntity> {
+        const equipo = aggregate.getEquipo();
+        const inventario = aggregate.getInventario().toValue();
+
+        const equipoPrimitive = equipo.toValue();
+        try {
+            
+            const [ equipoDeleted, _ ] = await this.conn.$transaction([
+                this.conn.equipo_impresora.delete({
+                    where: {
+                        id: equipoPrimitive.id,
+                    },
+                    select: {
+                        id: true,
+                    }
+                }),
+                this.conn.inventario_general.create({
+                    data: {
+                        name_farmacia: inventario.name_farmacia,
+                        id_farmacia: inventario.id_farmacia,
+                        hardware: inventario.hardware,
+                        nota: inventario.nota,
+                        cantidad: inventario.cantidad,
+                    },
+                    select: {}
+                })
+            ]);
+
+            equipo.setId(equipoDeleted.id);
+            return equipo;
+        } catch (error) {
+            throw ErrorPrismaExceptions(error);
+        }
     }
 
-    async deletePuntoVenta(): Promise<PuntoVentaEntity> {
-        throw new Error();
+    async deletePuntoVenta(aggregate: DeleteEquipoPuntoVentaAggregate): Promise<PuntoVentaEntity> {
+        const equipo = aggregate.getEquipo();
+        const inventario = aggregate.getInventario().toValue();
+
+        const equipoPrimitive = equipo.toValue();
+        try {
+            
+            const [ equipoDeleted, _ ] = await this.conn.$transaction([
+                this.conn.punto_venta.delete({
+                    where: {
+                        id: equipoPrimitive.id,
+                    },
+                    select: {
+                        id: true,
+                    }
+                }),
+                this.conn.inventario_general.create({
+                    data: {
+                        name_farmacia: inventario.name_farmacia,
+                        id_farmacia: inventario.id_farmacia,
+                        hardware: inventario.hardware,
+                        nota: inventario.nota,
+                        cantidad: inventario.cantidad,
+                    },
+                    select: {}
+                })
+            ]);
+
+            equipo.setId(equipoDeleted.id);
+            return equipo;
+        } catch (error) {
+            throw ErrorPrismaExceptions(error);
+        }
     }
 }
