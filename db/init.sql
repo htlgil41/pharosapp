@@ -70,17 +70,21 @@ CREATE TABLE IF NOT EXISTS cajas_asigne_equipo (
     id_farmacia INTEGER,
     resum_equipo TEXT DEFAULT NULL,
     id_equipo INTEGER NOT NULL,
+    nmcaja INTEGER NOT NULL,
+    id_caja INTEGER NOT NULL,
     observacion_asignacion TEXT DEFAULT NULL,
 
     CONSTRAINT fk_asigne_equipo_farmacia FOREIGN KEY (id_farmacia) 
         REFERENCES farmacias (id) ON DELETE SET NULL ON UPDATE CASCADE,
     CONSTRAINT fk_asigne_equipo_pc FOREIGN KEY (id_equipo) 
-        REFERENCES equipo_pc (id) ON DELETE CASCADE ON UPDATE CASCADE
+        REFERENCES equipo_pc (id) ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT fk_asigne_equipo_caja FOREIGN KEY (id_caja) 
+        REFERENCES caja_farmacia (id) ON DELETE CASCADE ON UPDATE CASCADE
 );
-
 CREATE INDEX ix_cajas_asigne_equipo_id_farmacia ON cajas_asigne_equipo (id_farmacia);
 CREATE INDEX ix_cajas_asigne_equipo_id_equipo ON cajas_asigne_equipo (id_equipo);
 CREATE UNIQUE INDEX ux_cajas_equipo_unico ON cajas_asigne_equipo (id_equipo);
+CREATE UNIQUE INDEX ux_cajas_equipo_caja ON cajas_asigne_equipo (id_caja);
 
 CREATE TABLE IF NOT EXISTS cajas_asigne_punto_venta (
     id SERIAL PRIMARY KEY,

@@ -9,25 +9,29 @@ datasource db {
 }
 
 model caja_farmacia {
-  id            Int       @id @default(autoincrement())
-  name_farmacia String?
-  id_farmacia   Int
-  nm_caja       Int
-  area          String    @db.VarChar(255)
-  farmacias     farmacias @relation(fields: [id_farmacia], references: [id], onDelete: Cascade, map: "fk_cajas_farmacia_id_farmacia")
+  id                  Int                  @id @default(autoincrement())
+  name_farmacia       String?
+  id_farmacia         Int
+  nm_caja             Int
+  area                String               @db.VarChar(255)
+  farmacias           farmacias            @relation(fields: [id_farmacia], references: [id], onDelete: Cascade, map: "fk_cajas_farmacia_id_farmacia")
+  cajas_asigne_equipo cajas_asigne_equipo?
 
   @@index([id_farmacia], map: "ix_caja_farmacia_id_farmacia")
 }
 
 model cajas_asigne_equipo {
-  id                     Int        @id @default(autoincrement())
+  id                     Int           @id @default(autoincrement())
   name_farmacia          String?
   id_farmacia            Int?
   resum_equipo           String?
-  id_equipo              Int        @unique(map: "ux_cajas_equipo_unico")
+  id_equipo              Int           @unique(map: "ux_cajas_equipo_unico")
+  nmcaja                 Int
+  id_caja                Int           @unique(map: "ux_cajas_equipo_caja")
   observacion_asignacion String?
-  farmacias              farmacias? @relation(fields: [id_farmacia], references: [id], map: "fk_asigne_equipo_farmacia")
-  equipo_pc              equipo_pc  @relation(fields: [id_equipo], references: [id], onDelete: Cascade, map: "fk_asigne_equipo_pc")
+  caja_farmacia          caja_farmacia @relation(fields: [id_caja], references: [id], onDelete: Cascade, map: "fk_asigne_equipo_caja")
+  farmacias              farmacias?    @relation(fields: [id_farmacia], references: [id], map: "fk_asigne_equipo_farmacia")
+  equipo_pc              equipo_pc     @relation(fields: [id_equipo], references: [id], onDelete: Cascade, map: "fk_asigne_equipo_pc")
 
   @@index([id_equipo], map: "ix_cajas_asigne_equipo_id_equipo")
   @@index([id_farmacia], map: "ix_cajas_asigne_equipo_id_farmacia")
