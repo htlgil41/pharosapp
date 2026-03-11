@@ -1,9 +1,9 @@
+import type { DataAccessToken } from "../ports/token.ts";
 import type { FarmaciaRepository } from "../../domain/repositories/farmacia.ts";
 import type { UsuarioRepository } from "../../domain/repositories/usuarios.ts";
 import { AuthorizationExceptionUseCase } from "../exceptions/authorization.ts";
 import { DataAlredyExistsExceptionUseCase } from "../exceptions/dataAlredyExists.ts";
 import { DataNotFoundExceptionUseCase } from "../exceptions/dataNotFound.ts";
-import type { DataAccessToken } from "../ports/token.ts";
 import { ServiceAuthorization } from "../services/authorization.ts";
 
 interface UserFarmaciaAsigneDTO {
@@ -11,7 +11,7 @@ interface UserFarmaciaAsigneDTO {
     farmacia: string;
 }
 
-export class AsigneFarmciaToUserUseCase {
+export class NewAsigneFarmciaToUserUseCase {
     constructor(
         private repoUser: UsuarioRepository,
         private repoFarmacia: FarmaciaRepository

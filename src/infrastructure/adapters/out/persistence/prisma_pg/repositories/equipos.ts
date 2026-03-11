@@ -341,13 +341,44 @@ export class EquipoRepositoryPrismaPg implements EquiposRepository {
         }
     }
 
+    async getPuntoFarmaciaBySerial(id_farmacia: number, serial: string): Promise<PuntoVentaEntity | null> {
+        try {
+            const punto = await this.conn.punto_venta.findFirst({
+                where: {
+                    id_farmacia: id_farmacia,
+                    serial_code: serial,
+                },
+                select: {
+                    id: true,
+                    name_farmacia: true,
+                    id_farmacia: true,
+                    banco: true,
+                    modelo: true,
+                    serial_code: true,
+                    tag: true, 
+                },
+            });
+            if (punto === null) return null;
+            return PuntoVentaEntity.build({
+                id: punto.id,
+                name_farmacia: punto.name_farmacia,
+                id_farmacia: punto.id_farmacia,
+                banco: punto.banco,
+                modelo: punto.modelo,
+                serial_code: punto.serial_code,
+                tag: punto.tag,
+            });
+        } catch (error) {
+            throw ErrorPrismaExceptions(error);
+        }
+    }
+
     async deleteEquipoPc(aggregate: DeleteEquipoPcAggregate): Promise<PcEntity> {
         const equipo = aggregate.getEquipo();
         const inventario = aggregate.getInventario().toValue();
 
         const equipoPrimitive = equipo.toValue();
         try {
-            
             const [ equipoDeleted, _ ] = await this.conn.$transaction([
                 this.conn.equipo_pc.delete({
                     where: {

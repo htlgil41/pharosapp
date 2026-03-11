@@ -28,6 +28,10 @@ export interface EquiposRepository {
         id_farmacia: number,
     ): Promise<PuntoVentaEntity[]>;
     getEquipoPuntoVentaById(id_equipo: number): Promise<PuntoVentaEntity | null>;
+    getPuntoFarmaciaBySerial(
+        id_farmacia: number,
+        serial: string
+    ): Promise<PuntoVentaEntity | null>;
 
     deleteEquipoPc(aggregate: DeleteEquipoPcAggregate): Promise<PcEntity>;
     deleteEquipoImpresora(aggregate: DeleteEquipoImpresoraAggregate): Promise<ImpresoraEntity>;
