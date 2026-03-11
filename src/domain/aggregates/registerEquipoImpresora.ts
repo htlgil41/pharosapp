@@ -21,6 +21,7 @@ export class RegisterEquipoImpresoraFarmaciaAggregate {
             hardware: `Impresora ${impresoraPrimitive.marca} modelo ${impresoraPrimitive.modelo_print}`,
             nota: `Nota de ingreso para ${farmarmaciaPrimitive.name_farmcia} - Impresora ${impresoraPrimitive.marca}/${impresoraPrimitive.modelo_print}`,
             cantidad: cantidadSameEquipo <= 0 ? 1 : cantidadSameEquipo,
+            fechaadd: '',
         });
     }
 

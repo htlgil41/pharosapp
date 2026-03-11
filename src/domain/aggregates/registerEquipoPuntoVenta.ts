@@ -22,6 +22,7 @@ export class RegisterPuntoVentaFarmaciaAggregate {
             hardware: `${puntoPrimitive.banco} punto de venta modelo ${puntoPrimitive.modelo} serial ${puntoPrimitive.serial_code}`,
             nota: `Nota de ingreso para ${farmarmaciaPrimitive.name_farmcia} - Punto de venta modelo ${puntoPrimitive.serial_code}/${puntoPrimitive.modelo} de ${puntoPrimitive.banco}`,
             cantidad: cantidadSameEquipo <= 0 ? 1 : cantidadSameEquipo,
+            fechaadd: '',
         });
     }
 

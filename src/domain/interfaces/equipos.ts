@@ -38,4 +38,5 @@ export interface InventarioGeneral {
     hardware: string;
     nota: string | null;
     cantidad: number;
+    fechaadd: string | Date;
 }

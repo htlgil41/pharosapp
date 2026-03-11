@@ -21,6 +21,7 @@ export class RegisterEquipoPcFarmaciaAggregate {
             hardware: `PC con ${pcPrimitive.ram} de RAM y ${pcPrimitive.rom_size} de memoria con disco ${pcPrimitive.disk}`,
             nota: `Nota de ingreso para ${farmarmaciaPrimitive.name_farmcia} - Eqiupo de escritorio o laptop`,
             cantidad: cantidadSameEquipo <= 0 ? 1 : cantidadSameEquipo,
+            fechaadd: ''
         });
     }
 
