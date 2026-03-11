@@ -4,6 +4,7 @@ import type { RegisterPuntoVentaFarmaciaAggregate } from "../aggregates/register
 import type { ImpresoraEntity } from "../entities/impresora.ts";
 import type { PcEntity } from "../entities/pc.ts";
 import type { PuntoVentaEntity } from "../entities/puntoVenta.ts";
+import type { EquipoPC } from "../interfaces/equipos.ts";
 
 export interface EquiposRepository {
     createEquipoPC(aggregate: RegisterEquipoPcFarmaciaAggregate): Promise<PcEntity>;
@@ -22,4 +23,8 @@ export interface EquiposRepository {
         page: number,
         id_farmacia: number,
     ): Promise<PuntoVentaEntity[]>;
+
+    deleteEquipoPc(): Promise<EquipoPC>;
+    deleteEquipoImpresora(): Promise<ImpresoraEntity>;
+    deletePuntoVenta(): Promise<PuntoVentaEntity>;
 }

@@ -8,6 +8,7 @@ import { PuntoVentaEntity } from "../../../../../../domain/entities/puntoVenta.t
 import type { RegisterEquipoPcFarmaciaAggregate } from "../../../../../../domain/aggregates/registerEquipoPc.ts";
 import type { RegisterEquipoImpresoraFarmaciaAggregate } from "../../../../../../domain/aggregates/registerEquipoImpresora.ts";
 import type { RegisterPuntoVentaFarmaciaAggregate } from "../../../../../../domain/aggregates/registerEquipoPuntoVenta.ts";
+import type { EquipoPC } from "../../../../../../domain/interfaces/equipos.ts";
 
 export class EquipoRepositoryPrismaPg implements EquiposRepository {
 
@@ -236,5 +237,17 @@ export class EquipoRepositoryPrismaPg implements EquiposRepository {
         } catch (error) {
             throw ErrorPrismaExceptions(error);
         }
+    }
+
+    async deleteEquipoPc(): Promise<EquipoPC> {
+        throw new Error();
+    }
+
+    async deleteEquipoImpresora(): Promise<ImpresoraEntity> {
+        throw new Error();
+    }
+
+    async deletePuntoVenta(): Promise<PuntoVentaEntity> {
+        throw new Error();
     }
 }
