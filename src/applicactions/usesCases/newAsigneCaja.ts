@@ -1,3 +1,6 @@
+import { CreateAsigneCajaFarmaciaAggregate } from "../../domain/aggregates/createAsigneCajaFarmacia.ts";
+import { CajaFarmaciaEntity } from "../../domain/entities/cajaFarmacia.ts";
+import type { PcEntity } from "../../domain/entities/pc.ts";
 import type { EquiposRepository } from "../../domain/repositories/equipos.ts";
 import type { FarmaciaRepository } from "../../domain/repositories/farmacia.ts";
 import { AuthorizationExceptionUseCase } from "../exceptions/authorization.ts";
@@ -7,9 +10,9 @@ import type { DataAccessToken } from "../ports/token.ts";
 import { ServiceAuthorization } from "../services/authorization.ts";
 
 interface CajaAsignerDTO {
-    id_farmacia: number;
     id_equipo: number;
     nmCaja: number;
+    area: string;
 }
 
 export class NewAsigneCajaUseCase {
@@ -21,18 +24,18 @@ export class NewAsigneCajaUseCase {
     async erxecute(
         dataUsuario: DataAccessToken,
         dto: CajaAsignerDTO
-    ): Promise<void> {
+    ): Promise<string> {
         if (!ServiceAuthorization.accessMulti(['coordinador', 'soportista'], dataUsuario.role))
             throw new AuthorizationExceptionUseCase();
 
         const [
             isAsigne,
-            farmacia,
             equipo,
+            caja
         ] = await Promise.all([
-            this.repoFarmacia.getAsigneCajaByNm(dto.id_farmacia, dto.nmCaja),
-            this.repoFarmacia.getFarmaciaById(dto.id_farmacia),
+            this.repoFarmacia.getAsigneCajaByNm(dataUsuario.id_farmacia, dto.nmCaja),
             this.repoEquipo.getEquipoPcById(dataUsuario.id_farmacia, dto.id_equipo),
+            this.repoFarmacia.getCajaByNm(dataUsuario.id_farmacia, dto.nmCaja),
         ]);
         if (isAsigne) {
             const asigne = isAsigne.toValue();
@@ -42,8 +45,8 @@ export class NewAsigneCajaUseCase {
                 ''
             );
         }
-        if (!farmacia) throw new DataNotFoundExceptionUseCase(
-            'No existe la farmacia en la cual deseas hacer la asignacion',
+        if (!caja) throw new  DataNotFoundExceptionUseCase(
+            'La caja que desas asignar no existe',
             'Valida la farmacia para poder realizar la operacion',
             ''
         );
@@ -53,6 +56,18 @@ export class NewAsigneCajaUseCase {
             ''
         );
 
-        // TODO
+        const equipoPrimitive = equipo.toValue();
+        const cajaPrimitive = caja.toValue();
+        const asigned = await this.repoFarmacia.createAsigneEquipoPc(new CreateAsigneCajaFarmaciaAggregate(
+            CajaFarmaciaEntity.build({
+                id: 1,
+                id_farmacia: dataUsuario.id_farmacia,
+                name_farmacia: dataUsuario.farmacia,
+                area: dto.area,
+                nm_caja: cajaPrimitive.nm_caja,
+            }),
+            equipo
+        ));
+        return `Caja #${cajaPrimitive.nm_caja} asignada`;
     }
 }
