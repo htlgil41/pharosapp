@@ -160,12 +160,14 @@ CREATE TABLE IF NOT EXISTS inventario_general (
     hardware TEXT NOT NULL,
     nota TEXT DEFAULT NULL,
     cantidad INTEGER DEFAULT 0,
+    fechaadd TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT fk_inventario_general_id_farmacia FOREIGN KEY (id_farmacia) 
         REFERENCES farmacias (id) ON DELETE SET NULL ON UPDATE CASCADE
 );
 CREATE INDEX ix_inventario_gen_id_farmacia ON inventario_general (id_farmacia);
 CREATE INDEX ix_inventario_gen_hardware ON inventario_general (hardware);
+CREATE INDEX ix_inventario_gen_fecha ON inventario_general (fechaadd);
 CREATE INDEX ix_inventario_farmacia_hardware ON inventario_general (id_farmacia, hardware);
 
 CREATE TABLE IF NOT EXISTS usuario_role (

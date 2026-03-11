@@ -136,9 +136,11 @@ model inventario_general {
   hardware      String
   nota          String?
   cantidad      Int?       @default(0)
+  fechaadd      DateTime   @default(now()) @db.Timestamp(6)
   farmacias     farmacias? @relation(fields: [id_farmacia], references: [id], map: "fk_inventario_general_id_farmacia")
 
   @@index([id_farmacia, hardware], map: "ix_inventario_farmacia_hardware")
+  @@index([fechaadd], map: "ix_inventario_gen_fecha")
   @@index([hardware], map: "ix_inventario_gen_hardware")
   @@index([id_farmacia], map: "ix_inventario_gen_id_farmacia")
 }
