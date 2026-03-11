@@ -1,7 +1,7 @@
 import type { CreateAsigneCajaFarmaciaAggregate } from "../../../../../../domain/aggregates/createAsigneCajaFarmacia.ts";
 import type { CreateAsignePuntoFarmaciaAggregate } from "../../../../../../domain/aggregates/createAsignePuntoFarmacia.ts";
-import type { CajaAsigneEquipoEntity } from "../../../../../../domain/entities/cajaAsigneEquipo.ts";
-import type { CajaAsignePuntoEntity } from "../../../../../../domain/entities/cajaAsignePunto.ts";
+import { CajaAsigneEquipoEntity } from "../../../../../../domain/entities/cajaAsigneEquipo.ts";
+import { CajaAsignePuntoEntity } from "../../../../../../domain/entities/cajaAsignePunto.ts";
 import { CajaFarmaciaEntity } from "../../../../../../domain/entities/cajaFarmacia.ts";
 import { FarmaciaEntity } from "../../../../../../domain/entities/farmacia.ts";
 import type { FarmaciaRepository } from "../../../../../../domain/repositories/farmacia.ts";
@@ -350,6 +350,40 @@ export class FarmaciaRepositoryPrismaPg implements FarmaciaRepository {
                 id_farmacia: c.id_farmacia,
                 nm_caja: c.nm_caja,
             }));
+        } catch (error) {
+            throw ErrorPrismaExceptions(error);
+        }
+    }
+
+    async getAsigneCajaByNm(id_farmacia: number, nm: number): Promise<CajaAsigneEquipoEntity |  null> {
+        try {
+            const asigne = await this.conn.cajas_asigne_equipo.findFirst({
+                where: {
+                    id_farmacia,
+                    nmcaja: nm,
+                },
+                select: {
+                    id: true,
+                    id_farmacia: true,
+                    name_farmacia: true,
+                    id_caja: true,
+                    nmcaja: true,
+                    id_equipo: true,
+                    resum_equipo: true,
+                    observacion_asignacion: true,
+                },
+            });
+            if (!asigne) return null;
+            return CajaAsigneEquipoEntity.build({
+                id: asigne.id,
+                id_farmacia: asigne.id_farmacia,
+                name_farmacia: asigne.name_farmacia,
+                id_caja: asigne.id_caja,
+                nmcaja: asigne.nmcaja,
+                id_equipo: asigne.id_equipo,
+                resum_equipo: asigne.resum_equipo,
+                observacion_asignacion: asigne.observacion_asignacion,
+            });
         } catch (error) {
             throw ErrorPrismaExceptions(error);
         }

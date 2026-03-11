@@ -28,6 +28,10 @@ export interface FarmaciaRepository {
         id_farmacia: number,
         area: string
     ): Promise<CajaFarmaciaEntity[]>;
+    getAsigneCajaByNm(
+        id_farmacia: number,
+        nmCaja: number
+    ): Promise<CajaAsigneEquipoEntity | null>;
     
     updateFarmacia(farmacia: FarmaciaEntity): Promise<FarmaciaEntity>;
     deleteFarmacia(farmacia: FarmaciaEntity): Promise<FarmaciaEntity>;
