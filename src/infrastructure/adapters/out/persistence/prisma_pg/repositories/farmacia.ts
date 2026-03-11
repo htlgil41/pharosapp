@@ -1,3 +1,6 @@
+import type { CreateAsigneCajaFarmaciaAggregate } from "../../../../../../domain/aggregates/createAsigneCajaFarmacia.ts";
+import type { CreateAsignePuntoFarmaciaAggregate } from "../../../../../../domain/aggregates/createAsignePuntoFarmacia.ts";
+import type { CajaAsigneEquipoEntity } from "../../../../../../domain/entities/cajaAsigneEquipo.ts";
 import { CajaFarmaciaEntity } from "../../../../../../domain/entities/cajaFarmacia.ts";
 import { FarmaciaEntity } from "../../../../../../domain/entities/farmacia.ts";
 import type { FarmaciaRepository } from "../../../../../../domain/repositories/farmacia.ts";
@@ -52,6 +55,49 @@ export class FarmaciaRepositoryPrismaPg implements FarmaciaRepository {
                 select: {}
             });
             return caja;
+        } catch (error) {
+            throw ErrorPrismaExceptions(error);
+        }
+    }
+
+    async createAsigneEquipoPc(aggregate: CreateAsigneCajaFarmaciaAggregate): Promise<CajaAsigneEquipoEntity> {
+        const asigne = aggregate.getAsigne();
+        const asignePrimitive = asigne.toValue();
+        try {
+            
+            const asigned = await this.conn.cajas_asigne_equipo.create({
+                data: {
+                    name_farmacia: asignePrimitive.name_farmacia,
+                    id_farmacia: asignePrimitive.id_farmacia,
+                    resum_equipo: asignePrimitive.resum_equipo,
+                    id_equipo: asignePrimitive.id_equipo,
+                    observacion_asignacion: asignePrimitive.observacion_asignacion,                    
+                },
+                select: { id: true },
+            });
+            asigne.setId(asigned.id);
+            return asigne;
+        } catch (error) {
+            throw ErrorPrismaExceptions(error);
+        }
+    }
+
+    async createAsignePuntoVenta(aggregate: CreateAsignePuntoFarmaciaAggregate): Promise<CajaAsigneEquipoEntity> {
+        const asigne = aggregate.getAsigne();
+        const asignePrimitive = asigne.toValue();
+        try {
+            
+            const asigned = await this.conn.cajas_asigne_punto_venta.create({
+                data: {
+                    name_farmacia: asignePrimitive.name_farmacia,
+                    id_farmacia: asignePrimitive.id_farmacia,
+                    id_punto_venta: asignePrimitive.id_equipo,
+                    observacion_pos: asignePrimitive.observacion_asignacion,  
+                },
+                select: { id: true },
+            });
+            asigne.setId(asigned.id);
+            return asigne;
         } catch (error) {
             throw ErrorPrismaExceptions(error);
         }
