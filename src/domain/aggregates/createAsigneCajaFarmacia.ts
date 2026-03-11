@@ -18,6 +18,8 @@ export class CreateAsigneCajaFarmaciaAggregate {
             id_equipo: equipoPrimitive.id,
             name_farmacia: equipoPrimitive.name_farmacia,
             id_farmacia: equipoPrimitive.id_farmacia,
+            id_caja: cajaPrimtive.id,
+            nmcaja: cajaPrimtive.nm_caja,
             resum_equipo: `
                 Sistema operativo ${equipoPrimitive.so} con ${equipoPrimitive.ram} de ram
                 y espacio de ${equipoPrimitive.rom_size}

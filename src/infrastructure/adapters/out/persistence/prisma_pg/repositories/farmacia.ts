@@ -1,6 +1,7 @@
 import type { CreateAsigneCajaFarmaciaAggregate } from "../../../../../../domain/aggregates/createAsigneCajaFarmacia.ts";
 import type { CreateAsignePuntoFarmaciaAggregate } from "../../../../../../domain/aggregates/createAsignePuntoFarmacia.ts";
 import type { CajaAsigneEquipoEntity } from "../../../../../../domain/entities/cajaAsigneEquipo.ts";
+import type { CajaAsignePuntoEntity } from "../../../../../../domain/entities/cajaAsignePunto.ts";
 import { CajaFarmaciaEntity } from "../../../../../../domain/entities/cajaFarmacia.ts";
 import { FarmaciaEntity } from "../../../../../../domain/entities/farmacia.ts";
 import type { FarmaciaRepository } from "../../../../../../domain/repositories/farmacia.ts";
@@ -71,6 +72,8 @@ export class FarmaciaRepositoryPrismaPg implements FarmaciaRepository {
                     id_farmacia: asignePrimitive.id_farmacia,
                     resum_equipo: asignePrimitive.resum_equipo,
                     id_equipo: asignePrimitive.id_equipo,
+                    id_caja: asignePrimitive.id_caja,
+                    nmcaja: asignePrimitive.nmcaja, 
                     observacion_asignacion: asignePrimitive.observacion_asignacion,                    
                 },
                 select: { id: true },
@@ -82,7 +85,7 @@ export class FarmaciaRepositoryPrismaPg implements FarmaciaRepository {
         }
     }
 
-    async createAsignePuntoVenta(aggregate: CreateAsignePuntoFarmaciaAggregate): Promise<CajaAsigneEquipoEntity> {
+    async createAsignePuntoVenta(aggregate: CreateAsignePuntoFarmaciaAggregate): Promise<CajaAsignePuntoEntity> {
         const asigne = aggregate.getAsigne();
         const asignePrimitive = asigne.toValue();
         try {
@@ -91,8 +94,8 @@ export class FarmaciaRepositoryPrismaPg implements FarmaciaRepository {
                 data: {
                     name_farmacia: asignePrimitive.name_farmacia,
                     id_farmacia: asignePrimitive.id_farmacia,
-                    id_punto_venta: asignePrimitive.id_equipo,
-                    observacion_pos: asignePrimitive.observacion_asignacion,  
+                    id_punto_venta: asignePrimitive.id_punto_venta,
+                    observacion_pos: asignePrimitive.observacion_pos,
                 },
                 select: { id: true },
             });

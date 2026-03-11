@@ -1,6 +1,7 @@
 import type { CreateAsigneCajaFarmaciaAggregate } from "../aggregates/createAsigneCajaFarmacia.ts";
 import type { CreateAsignePuntoFarmaciaAggregate } from "../aggregates/createAsignePuntoFarmacia.ts";
 import type { CajaAsigneEquipoEntity } from "../entities/cajaAsigneEquipo.ts";
+import type { CajaAsignePuntoEntity } from "../entities/cajaAsignePunto.ts";
 import type { CajaFarmaciaEntity } from "../entities/cajaFarmacia.ts";
 import type { FarmaciaEntity } from "../entities/farmacia.ts";
 
@@ -11,7 +12,7 @@ export interface FarmaciaRepository {
         caja: CajaFarmaciaEntity
     ): Promise<CajaFarmaciaEntity>;
     createAsigneEquipoPc(aggregate: CreateAsigneCajaFarmaciaAggregate): Promise<CajaAsigneEquipoEntity>;
-    createAsignePuntoVenta(aggreagte: CreateAsignePuntoFarmaciaAggregate): Promise<CajaAsigneEquipoEntity>;
+    createAsignePuntoVenta(aggreagte: CreateAsignePuntoFarmaciaAggregate): Promise<CajaAsignePuntoEntity>;
 
     getAllFarmacia(): Promise<FarmaciaEntity[]>;
     getFarmaciaById(id_farmacia: number): Promise<FarmaciaEntity | null>;

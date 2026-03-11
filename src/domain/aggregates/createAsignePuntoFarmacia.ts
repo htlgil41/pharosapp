@@ -1,29 +1,21 @@
-import { CajaAsigneEquipoEntity } from "../entities/cajaAsigneEquipo.ts";
-import type { CajaFarmaciaEntity } from "../entities/cajaFarmacia.ts";
+import { CajaAsignePuntoEntity } from "../entities/cajaAsignePunto.ts";
 import type { PuntoVentaEntity } from "../entities/puntoVenta.ts";
 
 export class CreateAsignePuntoFarmaciaAggregate {
 
-    private asigne: CajaAsigneEquipoEntity;
+    private asigne: CajaAsignePuntoEntity;
 
     constructor(
-        private caja: CajaFarmaciaEntity,
-        private equipo: PuntoVentaEntity,
+        private punto: PuntoVentaEntity,
     ){
-        const cajaPrimtive = caja.toValue();
-        const equipoPrimitive = equipo.toValue();
+        const puntoPrimitive = punto.toValue();
     
-        this.asigne = CajaAsigneEquipoEntity.build({
-            id: 1,
-            id_equipo: equipoPrimitive.id,
-            name_farmacia: equipoPrimitive.name_farmacia,
-            id_farmacia: equipoPrimitive.id_farmacia,
-            resum_equipo: `
-                Punto ${equipoPrimitive.banco} serial ${equipoPrimitive.serial_code}
-            `.trim(),
-            observacion_asignacion: `
-            Caja numero #${cajaPrimtive.nm_caja} asignada al area de ${cajaPrimtive.area}
-            `.trim(),
+        this.asigne = CajaAsignePuntoEntity.build({
+           id: 1,
+           id_farmacia: puntoPrimitive.id_farmacia,
+           name_farmacia: puntoPrimitive.name_farmacia,
+           id_punto_venta: puntoPrimitive.id,
+           observacion_pos: '',
         });
     }
 

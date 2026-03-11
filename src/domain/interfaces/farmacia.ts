@@ -20,6 +20,8 @@ export interface CajaAsigneEquipo {
     id_farmacia: number | null;
     resum_equipo: string | null;
     id_equipo: number;
+    nmcaja: number;
+    id_caja: number;
     observacion_asignacion: string | null;
 }
 
