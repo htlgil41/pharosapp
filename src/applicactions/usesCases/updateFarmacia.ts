@@ -5,7 +5,6 @@ import type { DataAccessToken } from "../ports/token.ts";
 import { ServiceAuthorization } from "../services/authorization.ts";
 
 interface FarmaciaUpdateDTO {
-    id: number;
     some_code: string,
     name_farmcia: string,
     rif: string,
@@ -24,7 +23,7 @@ export class UpdateFarmaciaUseCase {
     ): Promise<FarmaciaUpdateDTO>{
         if (!ServiceAuthorization.accessMulti(['coordinador', 'administrador'], dataUsuario.role))
             throw new AuthorizationExceptionUseCase();
-        const farmacia = await this.repo.getFarmaciaById(dto.id);
+        const farmacia = await this.repo.getFarmaciaById(dataUsuario.id_farmacia);
         
         if (farmacia === null) throw new DataNotFoundExceptionUseCase(
             'No se ha podido encontrar la farmacia',

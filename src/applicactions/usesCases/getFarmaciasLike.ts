@@ -12,7 +12,6 @@ interface FarmaciaDTO {
 }
 
 export class GetFarmaciasLikeUseCase {
-
     constructor(
         private repo: FarmaciaRepository
     ){}

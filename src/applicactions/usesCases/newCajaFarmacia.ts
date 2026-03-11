@@ -6,7 +6,6 @@ import type { DataAccessToken } from "../ports/token.ts";
 import { ServiceAuthorization } from "../services/authorization.ts";
 
 interface NewCajaDTO {
-    idFarmacia: number;
     nmCaja: number;
     area: string
 }
@@ -29,7 +28,7 @@ export class NewCajaFarmaciaUseCase {
         if (!ServiceAuthorization.accessMulti(['coordinador', 'soportista'], dataUsuario.role))
             throw new AuthorizationExceptionUseCase();
 
-        const farmacia = await this.repo.getFarmaciaById(dto.idFarmacia);
+        const farmacia = await this.repo.getFarmaciaById(dataUsuario.id_farmacia);
         if (!farmacia) throw new DataNotFoundExceptionUseCase(
             'No se encontro la farmacia',
             'La farmacia no existe por lo la caja no puede ser creada verifica la informacion e intenta nuevamente',

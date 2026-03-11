@@ -19,14 +19,13 @@ export class NewAsigneFarmciaToUserUseCase {
 
     async execute(
         dataUsuario: DataAccessToken,
-        id_farmcia: number,
         id_usuario: number
     ): Promise<UserFarmaciaAsigneDTO> {
 
         if (!ServiceAuthorization.accessOnly('coordinador', dataUsuario.role))
             throw new AuthorizationExceptionUseCase();
         const validateAsigneFarmacia = await this.repoUser.getAsigneFarmciaUsuario(
-            id_farmcia,
+            dataUsuario.id_farmacia,
             id_usuario
         );
         if (validateAsigneFarmacia) throw new DataAlredyExistsExceptionUseCase(
@@ -38,7 +37,7 @@ export class NewAsigneFarmciaToUserUseCase {
             farmacia,
             user
         ] = await Promise.all([
-            this.repoFarmacia.getFarmaciaById(id_farmcia),
+            this.repoFarmacia.getFarmaciaById(dataUsuario.id_farmacia),
             this.repoUser.getUsuarioInfoById(id_usuario),
         ]);
 

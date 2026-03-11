@@ -1,7 +1,4 @@
 import type { FarmaciaRepository } from "../../domain/repositories/farmacia.ts";
-import { AuthorizationExceptionUseCase } from "../exceptions/authorization.ts";
-import type { DataAccessToken } from "../ports/token.ts";
-import { ServiceAuthorization } from "../services/authorization.ts";
 
 interface FarmaciaDTO {
     id: number;
@@ -12,7 +9,6 @@ interface FarmaciaDTO {
 }
 
 export class GetAllFarmaciasUseCase {
-
     constructor(
         private repo: FarmaciaRepository
     ){}

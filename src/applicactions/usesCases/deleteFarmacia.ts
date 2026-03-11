@@ -19,12 +19,11 @@ export class DeleteFarmaciaLikeUseCase {
 
     async execute(
         dataUsuario: DataAccessToken,
-        id_farmacia: number,
     ): Promise<FarmaciaDTO>{
         if (!ServiceAuthorization.accessOnly('coordinador', dataUsuario.role))
             throw new AuthorizationExceptionUseCase();
         
-        const farmacia = await this.repo.getFarmaciaById(id_farmacia);
+        const farmacia = await this.repo.getFarmaciaById(dataUsuario.id_farmacia);
         if (farmacia === null) throw new DataNotFoundExceptionUseCase(
             'No se ha encontrado la farmcia',
             'Puede que la farmacia ya no este en los registros',

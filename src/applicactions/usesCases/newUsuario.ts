@@ -29,7 +29,7 @@ export class CreateNewUsuarioUseCase {
 
     async execute(
         dataUsuario: DataAccessToken,
-        params: CreateUsuarioDTO,
+        dto: CreateUsuarioDTO,
     ): Promise<CreatedUserDTO> {
 
         if (!ServiceAuthorization.accessOnly('coordinador', dataUsuario.role))
@@ -39,8 +39,8 @@ export class CreateNewUsuarioUseCase {
             role,
             validateUsuarioExist
         ] = await Promise.all([
-            this.repo.getRoleById(params.id_role),
-            await this.repo.getUsuarioByUsername(params.username),
+            this.repo.getRoleById(dto.id_role),
+            await this.repo.getUsuarioByUsername(dto.username),
         ]);
         
         if (role === null) throw new RoleNotFoundExceptionUseCase();
@@ -53,13 +53,13 @@ export class CreateNewUsuarioUseCase {
         const createUsuario = await this.repo.createUsuario(
             InfoUsuarioEntity.build({
                 id: 1,
-                ape: params.ape,
-                contact: params.contact,
+                ape: dto.ape,
+                contact: dto.contact,
                 role: rolePrimitive.role,
                 id_role: rolePrimitive.id,
-                name: params.name,
-                password: params.password,
-                username: params.username
+                name: dto.name,
+                password: dto.password,
+                username: dto.username
             }),
             role
         );
