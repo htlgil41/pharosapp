@@ -17,14 +17,17 @@ export interface EquiposRepository {
         page: number,
         id_farmacia: number,
     ): Promise<PcEntity[]>;
+    getEquipoPcById(id_equipo: number): Promise<PcEntity | null>;
     getEqipoImpresoraByFarmaciaPage(
         page: number,
         id_farmacia: number,
     ): Promise<ImpresoraEntity[]>;
+    getEquipoImpresoraById(id_equipo: number): Promise<ImpresoraEntity | null>;
     getPuntosByFarmaciaPage(
         page: number,
         id_farmacia: number,
     ): Promise<PuntoVentaEntity[]>;
+    getEquipoPuntoVentaById(id_equipo: number): Promise<PuntoVentaEntity | null>;
 
     deleteEquipoPc(aggregate: DeleteEquipoPcAggregate): Promise<PcEntity>;
     deleteEquipoImpresora(aggregate: DeleteEquipoImpresoraAggregate): Promise<ImpresoraEntity>;

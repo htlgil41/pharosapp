@@ -176,6 +176,43 @@ export class EquipoRepositoryPrismaPg implements EquiposRepository {
         }
     }
 
+    async getEquipoPcById(id_equipo: number): Promise<PcEntity | null> {
+        try {
+            const pc = await this.conn.equipo_pc.findUnique({
+                where: {
+                    id: id_equipo,
+                },
+                select: {
+                    id: true,
+                    name_farmacia: true,
+                    id_farmacia: true,
+                    ip: true,
+                    anydesk: true,
+                    sa_anydesk: true,
+                    so: true,
+                    ram: true,
+                    disk: true,
+                    rom_size: true,
+                },
+            });
+            if (pc === null) return null;
+            return PcEntity.build({
+                id: pc.id,
+                name_farmacia: pc.name_farmacia,
+                id_farmacia: pc.id_farmacia,
+                ip: pc.ip,
+                anydesk: pc.anydesk,
+                sa_anydesk: pc.sa_anydesk,
+                disk: pc.disk,
+                ram: pc.ram,
+                rom_size: pc.rom_size,
+                so: pc.so,
+            });
+        } catch (error) {
+            throw ErrorPrismaExceptions(error);
+        }
+    }
+
     async getEqipoImpresoraByFarmaciaPage(page: number, id_farmacia: number): Promise<ImpresoraEntity[]> {
         try {
             const impresoras = await this.conn.equipo_impresora.findMany({
@@ -209,6 +246,37 @@ export class EquipoRepositoryPrismaPg implements EquiposRepository {
         }
     }
 
+    async getEquipoImpresoraById(id_equipo: number): Promise<ImpresoraEntity | null> {
+        try {
+            const impresora = await this.conn.equipo_impresora.findUnique({
+                where: {
+                    id: id_equipo,
+                },
+                select: {
+                    id: true,
+                    name_farmacia: true,
+                    id_farmacia: true,
+                    area: true,
+                    marca: true,
+                    count_toners: true,
+                    modelo_print: true,
+                },
+            });
+            if (impresora === null) return null;
+            return ImpresoraEntity.build({
+                id: impresora.id,
+                name_farmacia: impresora.name_farmacia,
+                id_farmacia: impresora.id_farmacia,
+                area: impresora.area,
+                marca: impresora.marca,
+                count_toners: impresora.count_toners,
+                modelo_print: impresora.modelo_print,
+            });
+        } catch (error) {
+            throw ErrorPrismaExceptions(error);
+        }
+    }
+
     async getPuntosByFarmaciaPage(page: number, id_farmacia: number): Promise<PuntoVentaEntity[]> {
         try {
             const impresoras = await this.conn.punto_venta.findMany({
@@ -237,6 +305,37 @@ export class EquipoRepositoryPrismaPg implements EquiposRepository {
                 serial_code: p.serial_code,
                 tag: p.tag,
             }));
+        } catch (error) {
+            throw ErrorPrismaExceptions(error);
+        }
+    }
+
+    async getEquipoPuntoVentaById(id_equipo: number): Promise<PuntoVentaEntity | null> {
+        try {
+            const punto = await this.conn.punto_venta.findUnique({
+                where: {
+                    id: id_equipo,
+                },
+                select: {
+                    id: true,
+                    name_farmacia: true,
+                    id_farmacia: true,
+                    banco: true,
+                    modelo: true,
+                    serial_code: true,
+                    tag: true, 
+                },
+            });
+            if (punto === null) return null;
+            return PuntoVentaEntity.build({
+                id: punto.id,
+                name_farmacia: punto.name_farmacia,
+                id_farmacia: punto.id_farmacia,
+                banco: punto.banco,
+                modelo: punto.modelo,
+                serial_code: punto.serial_code,
+                tag: punto.tag,
+            });
         } catch (error) {
             throw ErrorPrismaExceptions(error);
         }
