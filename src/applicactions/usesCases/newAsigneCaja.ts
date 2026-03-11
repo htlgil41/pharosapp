@@ -32,7 +32,7 @@ export class NewAsigneCajaUseCase {
         ] = await Promise.all([
             this.repoFarmacia.getAsigneCajaByNm(dto.id_farmacia, dto.nmCaja),
             this.repoFarmacia.getFarmaciaById(dto.id_farmacia),
-            this.repoEquipo.getEquipoPcById(dto.id_equipo),
+            this.repoEquipo.getEquipoPcById(dataUsuario.id_farmacia, dto.id_equipo),
         ]);
         if (isAsigne) {
             const asigne = isAsigne.toValue();

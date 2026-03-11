@@ -1,5 +1,4 @@
 import type { PrismaClient } from "../models/client/client.ts";
-import type { FarmaciaEntity } from "../../../../../../domain/entities/farmacia.ts";
 import { PcEntity } from "../../../../../../domain/entities/pc.ts";
 import type { EquiposRepository } from "../../../../../../domain/repositories/equipos.ts";
 import { ErrorPrismaExceptions } from "../exceptions/errosManager.ts";
@@ -8,7 +7,6 @@ import { PuntoVentaEntity } from "../../../../../../domain/entities/puntoVenta.t
 import type { RegisterEquipoPcFarmaciaAggregate } from "../../../../../../domain/aggregates/registerEquipoPc.ts";
 import type { RegisterEquipoImpresoraFarmaciaAggregate } from "../../../../../../domain/aggregates/registerEquipoImpresora.ts";
 import type { RegisterPuntoVentaFarmaciaAggregate } from "../../../../../../domain/aggregates/registerEquipoPuntoVenta.ts";
-import type { EquipoPC } from "../../../../../../domain/interfaces/equipos.ts";
 import type { DeleteEquipoPcAggregate } from "../../../../../../domain/aggregates/deleteEquipoPc.ts";
 import type { DeleteEquipoImpresoraAggregate } from "../../../../../../domain/aggregates/deleteEquipoImpresora.ts";
 import type { DeleteEquipoPuntoVentaAggregate } from "../../../../../../domain/aggregates/deleteEquipoPuntoVenta.ts";
@@ -176,10 +174,14 @@ export class EquipoRepositoryPrismaPg implements EquiposRepository {
         }
     }
 
-    async getEquipoPcById(id_equipo: number): Promise<PcEntity | null> {
+    async getEquipoPcById(
+        id_farmacia: number,
+        id_equipo: number
+    ): Promise<PcEntity | null> {
         try {
             const pc = await this.conn.equipo_pc.findUnique({
                 where: {
+                    id_farmacia,
                     id: id_equipo,
                 },
                 select: {
@@ -246,10 +248,14 @@ export class EquipoRepositoryPrismaPg implements EquiposRepository {
         }
     }
 
-    async getEquipoImpresoraById(id_equipo: number): Promise<ImpresoraEntity | null> {
+    async getEquipoImpresoraById(
+        id_farmacia: number,
+        id_equipo: number
+    ): Promise<ImpresoraEntity | null> {
         try {
             const impresora = await this.conn.equipo_impresora.findUnique({
                 where: {
+                    id_farmacia,
                     id: id_equipo,
                 },
                 select: {
@@ -310,10 +316,14 @@ export class EquipoRepositoryPrismaPg implements EquiposRepository {
         }
     }
 
-    async getEquipoPuntoVentaById(id_equipo: number): Promise<PuntoVentaEntity | null> {
+    async getEquipoPuntoVentaById(
+        id_farmacia: number,
+        id_equipo: number
+    ): Promise<PuntoVentaEntity | null> {
         try {
             const punto = await this.conn.punto_venta.findUnique({
                 where: {
+                    id_farmacia,
                     id: id_equipo,
                 },
                 select: {

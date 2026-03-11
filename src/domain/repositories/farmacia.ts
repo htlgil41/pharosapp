@@ -18,7 +18,10 @@ export interface FarmaciaRepository {
     getFarmaciaById(id_farmacia: number): Promise<FarmaciaEntity | null>;
     getFarmaciaBy(search: string): Promise<FarmaciaEntity[]>;
     getFarmaciaByExact(search: string): Promise<FarmaciaEntity | null>;
-    getCajaById(id_caja: number): Promise<CajaFarmaciaEntity | null>;
+    getCajaById(
+        id_farmacia: number,
+        id_caja: number
+    ): Promise<CajaFarmaciaEntity | null>;
     getCajaByNm(
         id_farmacia: number,
         nmCaja: number

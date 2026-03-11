@@ -1,5 +1,4 @@
 import type { FarmaciaEntity } from "../entities/farmacia.ts";
-import type { ImpresoraEntity } from "../entities/impresora.ts";
 import { InventarioGeneralEntity } from "../entities/inventarioGeneral.ts";
 import type { PuntoVentaEntity } from "../entities/puntoVenta.ts";
 

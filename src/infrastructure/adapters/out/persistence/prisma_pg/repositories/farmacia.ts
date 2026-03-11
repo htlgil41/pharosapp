@@ -249,10 +249,14 @@ export class FarmaciaRepositoryPrismaPg implements FarmaciaRepository {
         }
     }
 
-    async getCajaById(id_caja: number): Promise<CajaFarmaciaEntity | null> {
+    async getCajaById(
+        id_farmacia: number,
+        id_caja: number
+    ): Promise<CajaFarmaciaEntity | null> {
         try {
             const caja = await this.conn.caja_farmacia.findUnique({
                 where: {
+                    id_farmacia,
                     id: id_caja,
                 },
                 select: {
