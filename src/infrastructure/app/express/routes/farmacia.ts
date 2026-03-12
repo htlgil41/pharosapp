@@ -25,4 +25,8 @@ export const FarmaciaRouter = Router({ caseSensitive: true, strict: true })
         middlewareFarmacia.validateParamUserById,
         validateTokenMiddleware.ValidateAccessTokenRequest,
         farmaciaRoute.getFarmaciaAsigneUsuario
+    )
+    .get('/cajas',
+        validateTokenMiddleware.ValidateAccessTokenRequest,
+        farmaciaRoute.getCajaByFarmacia
     );

@@ -7,6 +7,7 @@ import { GetAllFarmaciasUseCase } from '../../../../applicactions/usesCases/getA
 import { FarmaciaRepositoryPrismaPg } from '../../out/persistence/prisma_pg/repositories/farmacia.ts';
 import { GetFarmaciasLikeUseCase } from '../../../../applicactions/usesCases/getFarmaciasLike.ts';
 import { GetFarmciasAsignesUseCase } from '../../../../applicactions/usesCases/getFarmciaAsignes.ts';
+import { GetCajaByFarmaciaUseCase } from '../../../../applicactions/usesCases/getCajaByFarmacia.ts';
 
 export class FarmaciaRoute {
 
@@ -125,6 +126,34 @@ export class FarmaciaRoute {
                 }
             });
         } catch (error) {
+            res.json(error);
+        }
+    }
+
+    async getCajaByFarmacia(req: RequestWithDataAccessToken, res: Response){
+        if (!req.dataToken) {
+            
+            res.status(401).json({
+                error: {
+                    message: 'No se ha encontrado los datos del usuario.',
+                    fix: 'Ingrese nuevamente para poder realizar la busqueda.'
+                }
+            });
+            return;
+        }
+        const getCajasFarmaciaUseCase = new GetCajaByFarmaciaUseCase(
+            new FarmaciaRepositoryPrismaPg(ConnectionPharosApp)
+        );
+        try {
+            const cajas = await getCajasFarmaciaUseCase.execute(req.dataToken);
+            res.status(200).json({
+                data: {
+                    message: `${cajas.length} caja/s asignadas`,
+                    response: cajas
+                }
+            });
+        } catch (error) {
+            
             res.json(error);
         }
     }
