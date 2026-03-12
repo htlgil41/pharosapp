@@ -20,3 +20,10 @@ export const CreateCajaFarmaciaValidateJoi = joi.object<CreateCajaFarmacia>({
     nmCaja: NumberPositive
         .required()
 }).required();
+
+
+export const AsigneUsuarioFarmaciaValidateJoi = joi.object<UsuarioByIdParam>({
+    id: NumberPositive
+        .required(),
+})
+.required();

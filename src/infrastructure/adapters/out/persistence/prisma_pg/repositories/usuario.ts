@@ -30,9 +30,7 @@ export class UsuarioRepositoryPrismaPg implements UsuarioRepository {
                     pass: usuarioForCreate.password,
                     contact: usuarioForCreate.contact
                 },
-                select: {
-                    id: true,
-                }
+                select: { id: true }
             })
 
             usuario.setId(createdUsuario.id);
@@ -321,7 +319,6 @@ export class UsuarioRepositoryPrismaPg implements UsuarioRepository {
                     id_farmacia: farmaciaPriimtive.id,
                     id_usuario: usuarioPrimitive.id,
                 },
-                select: {}
             });
 
             return farmacia;

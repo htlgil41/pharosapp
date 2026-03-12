@@ -42,5 +42,6 @@ export const ErrorPrismaExceptions = (error: unknown) => {
                 return new UnknowErrorExceptionInfra();
         }
     }
+    console.log(error);
     return new UnknowErrorExceptionInfra();
 }

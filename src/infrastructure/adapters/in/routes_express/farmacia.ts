@@ -9,7 +9,8 @@ import { GetFarmaciasLikeUseCase } from '../../../../applicactions/usesCases/get
 import { GetFarmciasAsignesUseCase } from '../../../../applicactions/usesCases/getFarmciaAsignes.ts';
 import { GetCajaByFarmaciaUseCase } from '../../../../applicactions/usesCases/getCajaByFarmacia.ts';
 import { NewCajaFarmaciaUseCase } from '../../../../applicactions/usesCases/newCajaFarmacia.ts';
-import type { CreateCajaFarmacia } from '../jois/interfaces/farmacia.ts';
+import type { CreateCajaFarmacia, UsuarioByIdParam } from '../jois/interfaces/farmacia.ts';
+import { NewAsigneFarmciaToUserUseCase } from '../../../../applicactions/usesCases/newAsigneFarmaciaToUser.ts';
 
 export class FarmaciaRoute {
 
@@ -42,6 +43,40 @@ export class FarmaciaRoute {
             });
         } catch (error) {
             res.json(error);
+        }
+    }
+
+    async asigneUsuarioFarmacia(req: RequestWithDataAccessToken, res: Response) {
+        if (!req.dataToken) {
+            
+            res.status(401).json({
+                error: {
+                    message: 'No se ha encontrado los datos del usuario.',
+                    fix: 'Ingrese nuevamente para poder realizar la busqueda.'
+                }
+            });
+            return;
+        }
+        const body = req.body as UsuarioByIdParam;
+        const userAsigneFarmaciaUseCase = new NewAsigneFarmciaToUserUseCase(
+            new UsuarioRepositoryPrismaPg(ConnectionPharosApp),
+            new FarmaciaRepositoryPrismaPg(ConnectionPharosApp)
+        );
+        try {
+
+            const asigneUsario = await userAsigneFarmaciaUseCase.execute(
+                req.dataToken,
+                body.id,
+            );
+            
+            res.status(201).json({
+                data: {
+                    message: `Se ha asignado correctamente el usuario`,
+                    response: asigneUsario,
+                },
+            });
+        } catch (error) {
+            res.status(500).json(error);
         }
     }
 

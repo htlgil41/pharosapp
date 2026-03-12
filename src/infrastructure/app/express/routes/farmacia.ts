@@ -13,6 +13,11 @@ export const FarmaciaRouter = Router({ caseSensitive: true, strict: true })
         validateTokenMiddleware.ValidateAccessTokenRequest,
         farmaciaRoute.createCaja
     )
+    .post('/asigne',
+        middlewareFarmacia.validateAsigneFarmaciaUserById,
+        validateTokenMiddleware.ValidateAccessTokenRequest,
+        farmaciaRoute.asigneUsuarioFarmacia
+    )
     .get('/farmacias', 
         validateTokenMiddleware.ValidateAccessTokenRequest,
         farmaciaRoute.getFarmacias
