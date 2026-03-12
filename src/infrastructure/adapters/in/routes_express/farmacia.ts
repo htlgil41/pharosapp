@@ -6,6 +6,7 @@ import { GetFarmciasAsigneMyUserUseCase } from '../../../../applicactions/usesCa
 import { GetAllFarmaciasUseCase } from '../../../../applicactions/usesCases/getAllFarmacias.ts';
 import { FarmaciaRepositoryPrismaPg } from '../../out/persistence/prisma_pg/repositories/farmacia.ts';
 import { GetFarmaciasLikeUseCase } from '../../../../applicactions/usesCases/getFarmaciasLike.ts';
+import { GetFarmciasAsignesUseCase } from '../../../../applicactions/usesCases/getFarmciaAsignes.ts';
 
 export class FarmaciaRoute {
 
@@ -108,8 +109,21 @@ export class FarmaciaRoute {
             });
             return;
         }
+        const getFarmaciaUsuarioAsigneUseCase = new GetFarmciasAsignesUseCase(
+            new UsuarioRepositoryPrismaPg(ConnectionPharosApp)
+        );
+        const { id } = req.params;
         try {
-            res.json(200)
+            const farmacias = await getFarmaciaUsuarioAsigneUseCase.execute(
+                req.dataToken,
+                Number(id)
+            );
+            res.status(200).json({
+                data: {
+                    message: `${farmacias.length} farmacia/s asignadas`,
+                    response: farmacias
+                }
+            });
         } catch (error) {
             res.json(error);
         }
