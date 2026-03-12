@@ -7,11 +7,11 @@ export class ValidateAccessTokenMiddleware {
 
     private tokenMamanget = new TokenManajerJOSE();
 
-    async ValidateAccessTokenRequest (
+    ValidateAccessTokenRequest = async (
         req: RequestWithDataAccessToken,
         res: Response,
         next: NextFunction
-    ) {
+    ) => {
         try {
             const tokenAccessCookie = CookieParse(
                 req.headers.cookie ?? ''
@@ -26,19 +26,19 @@ export class ValidateAccessTokenMiddleware {
                 });
                 return;
             }
-            req.dataToken = await this.tokenMamanget.validateAccessToken(cookieAt);;
+            req.dataToken = await this.tokenMamanget.validateAccessToken(cookieAt);
             return next();
         } catch (error) {
-            
+            console.log(error)
             res.json(error);
         }
     }
 
-    async ValidateRefreshTokenRequest (
+    ValidateRefreshTokenRequest = async (
         req: RequestWithDataRefreshToken,
         res: Response,
         next: NextFunction
-    ) {
+    ) => {
         try {
             const tokenAccessCookie = CookieParse(
                 req.headers.cookie ?? ''

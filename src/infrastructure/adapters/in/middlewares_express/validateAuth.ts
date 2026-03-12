@@ -1,5 +1,5 @@
 import type { Request, Response, NextFunction } from 'express';
-import { AutLobinValidateJoi, NewUserValidateJoi, SwitchMpLoginJoi } from '../jois/objetcs.ts';
+import { AutLobinValidateJoi, NewUserValidateJoi, SwitchMpLoginJoi } from '../jois/objetcsAuth.ts';
 
 export class ValidateAuthRouteMiddleware {
 

@@ -8,15 +8,20 @@ export const NameApeJoi = joi.string()
 
 export const NumbrePositive = joi.number()
     .min(1)
-    .message("El valor debe ser positivo")
+    .message("El valor debe ser positivo");
+
+export const NumbrePositiveParam = joi.string()
+    .pattern(new RegExp('^[0-9]+$'))
+    .message("El valor debe ser positivo");
 
 export const ParamEmptyString = joi.string()
     .trim()
-    .optional()
+    .optional();
+
 export const ParamNotEmptyString = joi.string()
     .trim()
     .lowercase()
-    .required()
+    .required();
 
 export const UsernameJoi = joi.string()
     .trim()

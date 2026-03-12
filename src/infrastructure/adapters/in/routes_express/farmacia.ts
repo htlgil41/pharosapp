@@ -5,6 +5,7 @@ import type { RequestWithDataAccessToken } from '../interfaces/request.ts';
 import { GetFarmciasAsigneMyUserUseCase } from '../../../../applicactions/usesCases/getFarmciaAsigneMyUser.ts';
 import { GetAllFarmaciasUseCase } from '../../../../applicactions/usesCases/getAllFarmacias.ts';
 import { FarmaciaRepositoryPrismaPg } from '../../out/persistence/prisma_pg/repositories/farmacia.ts';
+import { GetFarmaciasLikeUseCase } from '../../../../applicactions/usesCases/getFarmaciasLike.ts';
 
 export class FarmaciaRoute {
 
@@ -12,7 +13,7 @@ export class FarmaciaRoute {
 
         if (!req.dataToken) {
             
-            res.status(4001).json({
+            res.status(401).json({
                 error: {
                     message: 'No se ha encontrado los datos del usuario.',
                     fix: 'Ingrese nuevamente para poder realizar la busqueda.'
@@ -41,7 +42,7 @@ export class FarmaciaRoute {
     async getFarmacias(req: RequestWithDataAccessToken, res: Response) {
         if (!req.dataToken) {
             
-            res.status(4001).json({
+            res.status(401).json({
                 error: {
                     message: 'No se ha encontrado los datos del usuario.',
                     fix: 'Ingrese nuevamente para poder realizar la busqueda.'
@@ -53,7 +54,6 @@ export class FarmaciaRoute {
             new FarmaciaRepositoryPrismaPg(ConnectionPharosApp)
         );
         try {
-
             const farmacias = await getFarmaciasUseCase.execute();
             res.status(200).json({
                 data: {
@@ -66,28 +66,10 @@ export class FarmaciaRoute {
         }
     }
 
-    async getFarmaciaById(req: RequestWithDataAccessToken, res: Response){
-        if (!req.dataToken) {
-            
-            res.status(4001).json({
-                error: {
-                    message: 'No se ha encontrado los datos del usuario.',
-                    fix: 'Ingrese nuevamente para poder realizar la busqueda.'
-                }
-            });
-            return;
-        }
-        try {
-            res.json(200)
-        } catch (error) {
-            res.json(error);
-        }
-    }
-
     async getFarmaciaLike(req: RequestWithDataAccessToken, res: Response){
         if (!req.dataToken) {
             
-            res.status(4001).json({
+            res.status(401).json({
                 error: {
                     message: 'No se ha encontrado los datos del usuario.',
                     fix: 'Ingrese nuevamente para poder realizar la busqueda.'
@@ -95,8 +77,21 @@ export class FarmaciaRoute {
             });
             return;
         }
+        const getFarmaciaLikeUseCase = new GetFarmaciasLikeUseCase(
+            new FarmaciaRepositoryPrismaPg(ConnectionPharosApp)
+        );
+        const { search } = req.params;
         try {
-            res.json(200)
+            const farmaciasLike = await getFarmaciaLikeUseCase.execute(
+                req.dataToken,
+                search as string
+            );
+            res.status(200).json({
+                data: {
+                    message: `Resultados de la busqueda [${search}].`,
+                    response: farmaciasLike
+                }
+            });
         } catch (error) {
             res.json(error);
         }
@@ -105,7 +100,7 @@ export class FarmaciaRoute {
     async getFarmaciaAsigneUsuario(req: RequestWithDataAccessToken, res: Response){
         if (!req.dataToken) {
             
-            res.status(4001).json({
+            res.status(401).json({
                 error: {
                     message: 'No se ha encontrado los datos del usuario.',
                     fix: 'Ingrese nuevamente para poder realizar la busqueda.'
