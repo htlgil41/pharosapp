@@ -6,11 +6,11 @@ export const NameApeJoi = joi.string()
     .min(3)
     .pattern(new RegExp('^[a-z]+$'))
 
-export const NumbrePositive = joi.number()
+export const NumberPositive = joi.number()
     .min(1)
     .message("El valor debe ser positivo");
 
-export const NumbrePositiveParam = joi.string()
+export const NumberPositiveParam = joi.string()
     .pattern(new RegExp('^[0-9]+$'))
     .message("El valor debe ser positivo");
 

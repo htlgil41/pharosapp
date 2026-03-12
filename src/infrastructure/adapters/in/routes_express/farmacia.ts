@@ -8,11 +8,12 @@ import { FarmaciaRepositoryPrismaPg } from '../../out/persistence/prisma_pg/repo
 import { GetFarmaciasLikeUseCase } from '../../../../applicactions/usesCases/getFarmaciasLike.ts';
 import { GetFarmciasAsignesUseCase } from '../../../../applicactions/usesCases/getFarmciaAsignes.ts';
 import { GetCajaByFarmaciaUseCase } from '../../../../applicactions/usesCases/getCajaByFarmacia.ts';
+import { NewCajaFarmaciaUseCase } from '../../../../applicactions/usesCases/newCajaFarmacia.ts';
+import type { CreateCajaFarmacia } from '../jois/interfaces/farmacia.ts';
 
 export class FarmaciaRoute {
 
-    async getFarmaciaMyAsigne(req: RequestWithDataAccessToken, res: Response){
-
+    async createCaja(req: RequestWithDataAccessToken, res: Response){
         if (!req.dataToken) {
             
             res.status(401).json({
@@ -23,7 +24,38 @@ export class FarmaciaRoute {
             });
             return;
         }
+        const createCajaFarmaciaUseCase = new NewCajaFarmaciaUseCase(
+            new FarmaciaRepositoryPrismaPg(ConnectionPharosApp)
+        );
+        const body = req.body as CreateCajaFarmacia;
+        try {
+            const cajaCreated = await createCajaFarmaciaUseCase.execute(
+                req.dataToken,
+                body,
+            );
 
+            res.status(201).json({
+                data: {
+                    message: `Se ha creado correctamente la caja `,
+                    response: cajaCreated,
+                },
+            });
+        } catch (error) {
+            res.json(error);
+        }
+    }
+
+    async getFarmaciaMyAsigne(req: RequestWithDataAccessToken, res: Response){
+        if (!req.dataToken) {
+            
+            res.status(401).json({
+                error: {
+                    message: 'No se ha encontrado los datos del usuario.',
+                    fix: 'Ingrese nuevamente para poder realizar la busqueda.'
+                }
+            });
+            return;
+        }
         const getFarmaciaAsigneUseCase = new GetFarmciasAsigneMyUserUseCase(
             new UsuarioRepositoryPrismaPg(ConnectionPharosApp)
         );

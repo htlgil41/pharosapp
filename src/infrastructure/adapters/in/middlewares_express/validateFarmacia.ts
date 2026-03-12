@@ -1,7 +1,22 @@
 import type { Request, Response, NextFunction } from 'express';
-import { FarmaciaLikeValidateJoi, UsuarioParamByIdValidateJoi } from '../jois/objectFarmacia.ts';
+import { CreateCajaFarmaciaValidateJoi, FarmaciaLikeValidateJoi, UsuarioParamByIdValidateJoi } from '../jois/objectFarmacia.ts';
 
 export class ValidateFarmaciaRouteMiddleware {
+
+    async  validateCreateCajaFarmacia (
+        req: Request,
+        res: Response,
+        next: NextFunction
+    ) {
+        try {
+            
+            await CreateCajaFarmaciaValidateJoi.validateAsync(req.body);
+            return next();
+        } catch (error) {
+            
+            res.status(401).json(error);
+        }
+    }
 
     async validateParamUserById (
         req: Request,
@@ -14,7 +29,7 @@ export class ValidateFarmaciaRouteMiddleware {
             return next();
         } catch (error) {
             
-            res.json(error);
+            res.status(401).json(error);
         }
     }
 
@@ -28,7 +43,7 @@ export class ValidateFarmaciaRouteMiddleware {
             return next();
         } catch (error) {
             
-            res.json(error);
+            res.status(401).json(error);
         }
     } 
 }

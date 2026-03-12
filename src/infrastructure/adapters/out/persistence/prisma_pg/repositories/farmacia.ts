@@ -47,13 +47,14 @@ export class FarmaciaRepositoryPrismaPg implements FarmaciaRepository {
         try {
             await this.conn.caja_farmacia.create({
                 data: {
-                    id: farmaciaPrimitive.id,
                     id_farmacia: farmaciaPrimitive.id,
                     name_farmacia: farmaciaPrimitive.name_farmcia,
                     nm_caja: cajaPrimitive.nm_caja,
                     area: cajaPrimitive.area,
                 },
-                select: {}
+                select: {
+                    id: true,
+                }
             });
             return caja;
         } catch (error) {

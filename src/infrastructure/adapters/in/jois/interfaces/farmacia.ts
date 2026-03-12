@@ -5,3 +5,8 @@ export interface UsuarioByIdParam {
 export interface SearchParamLikeOnly {
     search: string;
 }
+
+export interface CreateCajaFarmacia {
+    area: string;
+    nmCaja: number;
+}

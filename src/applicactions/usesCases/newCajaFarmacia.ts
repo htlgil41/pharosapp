@@ -1,6 +1,7 @@
 import { CajaFarmaciaEntity } from "../../domain/entities/cajaFarmacia.ts";
 import type { FarmaciaRepository } from "../../domain/repositories/farmacia.ts";
 import { AuthorizationExceptionUseCase } from "../exceptions/authorization.ts";
+import { DataAlredyExistsExceptionUseCase } from "../exceptions/dataAlredyExists.ts";
 import { DataNotFoundExceptionUseCase } from "../exceptions/dataNotFound.ts";
 import type { DataAccessToken } from "../ports/token.ts";
 import { ServiceAuthorization } from "../services/authorization.ts";
@@ -28,10 +29,21 @@ export class NewCajaFarmaciaUseCase {
         if (!ServiceAuthorization.accessMulti(['coordinador', 'soportista'], dataUsuario.role))
             throw new AuthorizationExceptionUseCase();
 
-        const farmacia = await this.repo.getFarmaciaById(dataUsuario.id_farmacia);
+        const [ farmacia, cajaAsigne ] = await Promise.all([
+            await this.repo.getFarmaciaById(dataUsuario.id_farmacia),
+            await this.repo.getCajaByNm(
+                dataUsuario.id_farmacia,
+                dto.nmCaja
+            ),
+        ]);
         if (!farmacia) throw new DataNotFoundExceptionUseCase(
             'No se encontro la farmacia',
             'La farmacia no existe por lo la caja no puede ser creada verifica la informacion e intenta nuevamente',
+            ''
+        );
+        if (cajaAsigne !== null) throw new DataAlredyExistsExceptionUseCase(
+            `La farmacia ya tiene el numero #${dto.nmCaja} asignada`,
+            'Intenta con otro numero para crear la caja',
             ''
         );
 
