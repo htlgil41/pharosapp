@@ -26,7 +26,7 @@ export interface FarmaciaRepository {
         id_farmacia: number,
         nmCaja: number
     ): Promise<CajaFarmaciaEntity | null>;
-    getCajaByFarmacia(farmacia: FarmaciaEntity): Promise<CajaFarmaciaEntity[]>;
+    getCajaByFarmacia(id_farmacia: number): Promise<CajaFarmaciaEntity[]>;
     getCajaByArea(
         id_farmacia: number,
         area: string

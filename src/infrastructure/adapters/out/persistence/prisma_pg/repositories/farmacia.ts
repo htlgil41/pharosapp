@@ -311,8 +311,7 @@ export class FarmaciaRepositoryPrismaPg implements FarmaciaRepository {
         }
     }
 
-    async getCajaByFarmacia(farmacia: FarmaciaEntity): Promise<CajaFarmaciaEntity[]> {
-        const { id: id_farmacia } = farmacia.toValue();
+    async getCajaByFarmacia(id_farmacia: number,): Promise<CajaFarmaciaEntity[]> {
         try {
             const cajas = await this.conn.caja_farmacia.findMany({
                 where: {
