@@ -1,7 +1,7 @@
 import type { EquiposRepository } from "../../domain/repositories/equipos.ts";
 import type { DataAccessToken } from "../ports/token.ts";
 
-interface ImpresorasDTO {
+interface PuntoDTO {
     id: number;
     name_farmacia: string | null;
     id_farmacia: number | null;
@@ -19,7 +19,7 @@ export class getPuntosByFarmaciaPage {
     async execute(
         dataUsuario: DataAccessToken,
         page: number
-    ): Promise<ImpresorasDTO[]>{
+    ): Promise<PuntoDTO[]>{
         const puntos = await this.repoEquipo.getPuntosByFarmaciaPage(
             page,
             dataUsuario.id_farmacia
