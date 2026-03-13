@@ -38,6 +38,10 @@ export interface UsuarioRepository {
         upUser: InfoUsuarioEntity
     ): Promise<InfoUsuarioEntity>;
 
+    updateAsigneRolUser(
+        role: RoleUserEntity,
+        usuario: InfoUsuarioEntity
+    ): Promise<InfoUsuarioEntity>;
     deleteAsineFarmacia(
         usuario: InfoUsuarioEntity,
         farmacia: FarmaciaEntity,

@@ -351,6 +351,29 @@ export class UsuarioRepositoryPrismaPg implements UsuarioRepository {
         }
     }
 
+    async updateAsigneRolUser(role: RoleUserEntity, usuario: InfoUsuarioEntity): Promise<InfoUsuarioEntity> {
+        const rolePrimitive = role.toValue();
+        const usuarioPrimitive = usuario.toValue();
+        try {
+            const asigne = await this.conn.usuario.update({
+                where: {
+                    id: usuarioPrimitive.id
+                },
+                data: { id_role: rolePrimitive.id},
+            });
+            usuario.updateInfoUsuario(
+                rolePrimitive.role,
+                rolePrimitive.id,
+                usuarioPrimitive.name,
+                usuarioPrimitive.ape ?? '',
+                usuarioPrimitive.contact,
+            );
+            return usuario;
+        } catch (error) {
+            throw ErrorPrismaExceptions(error);
+        }
+    }
+
     async deleteAsineFarmacia(usuario: InfoUsuarioEntity, farmacia: FarmaciaEntity): Promise<FarmaciaEntity> {
         const usuarioPrimitive = usuario.toValue();
         const farmaciaPriimtive = farmacia.toValue();
