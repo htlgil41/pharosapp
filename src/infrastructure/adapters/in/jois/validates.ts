@@ -1,5 +1,9 @@
 import joi from 'joi';
 
+export const ParamaRif = joi.string()
+    .trim()
+    .pattern(new RegExp('^(j|J)-?\\d{8,9}(?:[-]?\d)?$'))
+
 export const NameApeJoi = joi.string()
     .lowercase()
     .trim()

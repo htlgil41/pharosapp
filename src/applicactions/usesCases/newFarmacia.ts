@@ -1,3 +1,4 @@
+import { FarmaciaEntity } from "../../domain/entities/farmacia.ts";
 import type { FarmaciaRepository } from "../../domain/repositories/farmacia.ts";
 import { AuthorizationExceptionUseCase } from "../exceptions/authorization.ts";
 import { DataAlredyExistsExceptionUseCase } from "../exceptions/dataAlredyExists.ts";
@@ -32,13 +33,19 @@ export class NewFarmaciaUseCase {
             throw new AuthorizationExceptionUseCase();
             
         const farmacia = await this.repo.getFarmaciaByExact(dto.rif);
-        if (farmacia === null) throw new DataAlredyExistsExceptionUseCase(
+        if (farmacia) throw new DataAlredyExistsExceptionUseCase(
             'La farmacia ya se encuentra registrada',
             'Se encontro una farmacia con informacion muy similar verifica que ya esta no este registrada',
             ''
         );
 
-        const createdFarmacia = await this.repo.createFarmacia(farmacia);
+        const createdFarmacia = await this.repo.createFarmacia(FarmaciaEntity.build({
+            id: 1,
+            direccion: dto.direccion,
+            name_farmcia: dto.name_farmacia,
+            rif: dto.rif,
+            some_code: dto.some_code,
+        }));
         const farmaciaPrimitive = createdFarmacia.toValue();
         return {
             id: farmaciaPrimitive.id,

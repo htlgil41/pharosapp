@@ -1,6 +1,20 @@
 import joi from 'joi';
-import type { CreateCajaFarmacia, SearchParamLikeOnly, UsuarioByIdParam } from "./interfaces/farmacia.ts";
-import { NumberPositive, NumberPositiveParam, ParamNotEmptyString } from "./validates.ts";
+import type { CreateCajaFarmacia, CreateFarmacia, SearchParamLikeOnly, UsuarioByIdParam } from "./interfaces/farmacia.ts";
+import { NumberPositive, NumberPositiveParam, ParamaRif, ParamNotEmptyString } from "./validates.ts";
+
+export const CreateFarmaciaValidateJoi = joi.object<CreateFarmacia>({
+    name_farmacia: ParamNotEmptyString
+        .pattern(new RegExp('^[a-z\\s]+$'))
+        .required(),
+    direccion: ParamNotEmptyString
+        .pattern(new RegExp('^[a-z0-9.\\-_\\s]+$'))
+        .required(),
+    rif: ParamaRif
+        .required(),
+    some_code: ParamNotEmptyString
+        .pattern(new RegExp('^[0-9]{4}$'))
+        .required(),
+}).required();
 
 export const UsuarioParamByIdValidateJoi = joi.object<UsuarioByIdParam>({
     id: NumberPositiveParam
@@ -21,9 +35,9 @@ export const CreateCajaFarmaciaValidateJoi = joi.object<CreateCajaFarmacia>({
         .required()
 }).required();
 
-
 export const AsigneUsuarioFarmaciaValidateJoi = joi.object<UsuarioByIdParam>({
     id: NumberPositive
         .required(),
 })
 .required();
+

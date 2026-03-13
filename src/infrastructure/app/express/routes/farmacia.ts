@@ -8,6 +8,11 @@ const middlewareFarmacia = new ValidateFarmaciaRouteMiddleware();
 const farmaciaRoute = new FarmaciaRoute();
 
 export const FarmaciaRouter = Router({ caseSensitive: true, strict: true })
+    .post('/farmacia',
+        middlewareFarmacia.validateCreateFarmacia,
+        validateTokenMiddleware.ValidateAccessTokenRequest,
+        farmaciaRoute.createFarmacia
+    )
     .post('/caja',
         middlewareFarmacia.validateCreateCajaFarmacia,
         validateTokenMiddleware.ValidateAccessTokenRequest,

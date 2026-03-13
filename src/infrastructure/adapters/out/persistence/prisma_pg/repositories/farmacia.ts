@@ -15,7 +15,6 @@ export class FarmaciaRepositoryPrismaPg implements FarmaciaRepository {
     ){}
 
     async createFarmacia(farmacia: FarmaciaEntity): Promise<FarmaciaEntity> {
-        
         const farmaciaPrimitive = farmacia.toValue();
         try {
             

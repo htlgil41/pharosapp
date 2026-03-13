@@ -1,7 +1,21 @@
 import type { Request, Response, NextFunction } from 'express';
-import { AsigneUsuarioFarmaciaValidateJoi, CreateCajaFarmaciaValidateJoi, FarmaciaLikeValidateJoi, UsuarioParamByIdValidateJoi } from '../jois/objectFarmacia.ts';
+import { AsigneUsuarioFarmaciaValidateJoi, CreateCajaFarmaciaValidateJoi, CreateFarmaciaValidateJoi, FarmaciaLikeValidateJoi, UsuarioParamByIdValidateJoi } from '../jois/objectFarmacia.ts';
 
 export class ValidateFarmaciaRouteMiddleware {
+
+    async  validateCreateFarmacia (
+        req: Request,
+        res: Response,
+        next: NextFunction
+    ) {
+        try {
+            await CreateFarmaciaValidateJoi.validateAsync(req.body);
+            return next();
+        } catch (error) {
+            
+            res.status(401).json(error);
+        }
+    }
 
     async  validateCreateCajaFarmacia (
         req: Request,
@@ -9,7 +23,6 @@ export class ValidateFarmaciaRouteMiddleware {
         next: NextFunction
     ) {
         try {
-            
             await CreateCajaFarmaciaValidateJoi.validateAsync(req.body);
             return next();
         } catch (error) {
@@ -24,7 +37,6 @@ export class ValidateFarmaciaRouteMiddleware {
         next: NextFunction
     ) {
         try {
-            
             await UsuarioParamByIdValidateJoi.validateAsync(req.params);
             return next();
         } catch (error) {
@@ -38,8 +50,7 @@ export class ValidateFarmaciaRouteMiddleware {
         res: Response,
         next: NextFunction
     ) {
-        try {
-            
+        try {  
             await AsigneUsuarioFarmaciaValidateJoi.validateAsync(req.body);
             return next();
         } catch (error) {
