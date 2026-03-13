@@ -1,7 +1,9 @@
 import { Router } from 'express';
 import { AuthRoute } from '../../../adapters/in/routes_express/authRoute.ts';
 import { ValidateAuthRouteMiddleware } from '../../../adapters/in/middlewares_express/validateAuth.ts';
+import { ValidateAccessTokenMiddleware } from '../../../adapters/in/middlewares_express/token.ts';
 
+const validateTokenMiddleware = new ValidateAccessTokenMiddleware();
 const authRouteIn = new AuthRoute();
 const middlewareAuhtValidate = new ValidateAuthRouteMiddleware();
 
@@ -20,4 +22,8 @@ export const AuthRouter = Router({ caseSensitive: true, strict: true })
     .post('/usuario', 
         middlewareAuhtValidate.validateNewUserMiddleware,
         authRouteIn.newUsuario
+    )
+    .put('/role',
+        validateTokenMiddleware.ValidateAccessTokenRequest,
+        authRouteIn.upRoleUsuario,
     );

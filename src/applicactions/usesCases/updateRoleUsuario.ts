@@ -43,6 +43,9 @@ export class UpdateRoleUsuarioUseCase {
             'El usuario que intentas camabiar no se encontro, valida la informacion e intente nuevamente',
             ''
         );
+
+        const usuarioPrimitive = usuarioUpdateRole.toValue();
+        if (usuarioPrimitive.id_role === dto.id_role) return usuarioPrimitive;
         if (role === null) throw new DataAlredyExistsExceptionUseCase(
             'No se encontro el rol',
             'No se ha podido asignar el role del usuario ya que no existe',
@@ -52,6 +55,6 @@ export class UpdateRoleUsuarioUseCase {
             role,
             usuarioUpdateRole
         );
-        return upRoleUsuario.toValue();
+        return usuarioPrimitive;
     }
 }

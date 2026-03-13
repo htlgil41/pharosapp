@@ -9,6 +9,8 @@ import { RefreshTokenUseCase } from '../../../../applicactions/usesCases/refresh
 import { SwitchMpUseCase } from '../../../../applicactions/usesCases/switchMp.ts';
 import { TokenManajerJOSE } from '../../../shareds/josetoken.ts';
 import { BcryptJHash } from '../../../shareds/bcrypt.ts';
+import { UpdateRoleUsuarioUseCase } from '../../../../applicactions/usesCases/updateRoleUsuario.ts';
+import type { RequestWithDataAccessToken } from '../interfaces/request.ts';
 
 export class AuthRoute {
 
@@ -52,6 +54,39 @@ export class AuthRoute {
                 op: new Date(),
             });
             return
+        } catch (error) {
+            res.json(error);
+        }
+    }
+
+    async upRoleUsuario (req: RequestWithDataAccessToken, res: Response) {
+        if (!req.dataToken) {
+            
+            res.status(401).json({
+                error: {
+                    message: 'No se ha encontrado los datos del usuario.',
+                    fix: 'Ingrese nuevamente para poder realizar la busqueda.'
+                }
+            });
+            return;
+        }
+        const changeUpdateUserUseCase = new UpdateRoleUsuarioUseCase(
+            new UsuarioRepositoryPrismaPg(ConnectionPharosApp)
+        );
+        try {
+            const roleUsuario = await changeUpdateUserUseCase.execute(
+                req.dataToken,
+                {
+                    id_role: 1,
+                    id_usuario: 1,
+                }
+            );
+            res.status(201).json({
+                data: {
+                    message: `Usuario con nuevo token asignado`,
+                    response: roleUsuario,
+                },
+            });
         } catch (error) {
             res.json(error);
         }
