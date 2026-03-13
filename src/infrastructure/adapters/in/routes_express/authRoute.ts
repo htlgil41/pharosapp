@@ -2,7 +2,7 @@ import type { Request, Response } from 'express';
 import { UsuarioRepositoryPrismaPg } from '../../out/persistence/prisma_pg/repositories/usuario.ts';
 import { ConnectionPharosApp } from '../../out/persistence/prisma_pg/connection.ts';
 import { CreateNewUsuarioUseCase } from '../../../../applicactions/usesCases/newUsuario.ts';
-import type { AuthLoginIUnterface, NewUserInterface, SwitchMpLoginInterface } from '../jois/interfaces/newuser.ts';
+import type { AuthLoginIUnterface, NewUserInterface, SwitchMpLoginInterface, UpdateRoleUsuarioInterface } from '../jois/interfaces/user.ts';
 import { UsuarioForAuthUseCase } from '../../../../applicactions/usesCases/usuarioForAuth.ts';
 import { CookieParse, CookiSetHeaders } from '../../../shareds/cookie.ts';
 import { RefreshTokenUseCase } from '../../../../applicactions/usesCases/refreshToken.ts';
@@ -73,13 +73,11 @@ export class AuthRoute {
         const changeUpdateUserUseCase = new UpdateRoleUsuarioUseCase(
             new UsuarioRepositoryPrismaPg(ConnectionPharosApp)
         );
+        const body = req.body as UpdateRoleUsuarioInterface;
         try {
             const roleUsuario = await changeUpdateUserUseCase.execute(
                 req.dataToken,
-                {
-                    id_role: 1,
-                    id_usuario: 1,
-                }
+                body
             );
             res.status(201).json({
                 data: {

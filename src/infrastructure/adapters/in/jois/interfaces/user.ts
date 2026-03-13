@@ -19,3 +19,8 @@ export interface NewUserInterface {
 export interface SwitchMpLoginInterface {
     id_farmacia: number;
 }
+
+export interface UpdateRoleUsuarioInterface {
+    id_role: number;
+    id_usuario: number;
+}

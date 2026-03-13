@@ -24,6 +24,7 @@ export const AuthRouter = Router({ caseSensitive: true, strict: true })
         authRouteIn.newUsuario
     )
     .put('/role',
+        middlewareAuhtValidate.validateUpdateRoleUsuario,
         validateTokenMiddleware.ValidateAccessTokenRequest,
         authRouteIn.upRoleUsuario,
     );

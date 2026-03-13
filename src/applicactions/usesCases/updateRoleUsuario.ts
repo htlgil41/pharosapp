@@ -16,7 +16,6 @@ interface InfoUsuarioDTO {
     name: string;
     ape: string | null;
     username: string;
-    password: string;
     contact: string | null;
 }
 
@@ -55,6 +54,15 @@ export class UpdateRoleUsuarioUseCase {
             role,
             usuarioUpdateRole
         );
-        return usuarioPrimitive;
+        const updateRolePrimtive = upRoleUsuario.toValue();
+        return {
+            id: updateRolePrimtive.id,
+            role: updateRolePrimtive.role,
+            id_role: updateRolePrimtive.id_role,
+            name: updateRolePrimtive.name,
+            ape: updateRolePrimtive.ape,
+            username: updateRolePrimtive.username,
+            contact: updateRolePrimtive.contact,
+        };
     }
 }

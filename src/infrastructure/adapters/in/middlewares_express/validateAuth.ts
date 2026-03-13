@@ -1,5 +1,5 @@
 import type { Request, Response, NextFunction } from 'express';
-import { AutLobinValidateJoi, NewUserValidateJoi, SwitchMpLoginJoi } from '../jois/objetcsAuth.ts';
+import { AutLobinValidateJoi, NewUserValidateJoi, SwitchMpLoginJoi, UpdateRoleUsuarioValidateJoi } from '../jois/objetcsAuth.ts';
 
 export class ValidateAuthRouteMiddleware {
 
@@ -41,6 +41,21 @@ export class ValidateAuthRouteMiddleware {
         try {
             
             await SwitchMpLoginJoi.validateAsync(req.body);
+            return next();
+        } catch (error) {
+            
+            res.json(error);
+        }
+    }
+
+    async validateUpdateRoleUsuario (
+        req: Request,
+        res: Response,
+        next: NextFunction
+    ) {
+        try {
+            
+            await UpdateRoleUsuarioValidateJoi.validateAsync(req.body);
             return next();
         } catch (error) {
             

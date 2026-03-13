@@ -1,6 +1,6 @@
 import joi from 'joi';
 import { NameApeJoi, NumberPositive, ParamEmptyString, ParamNotEmptyString, PassWordJoi, UsernameJoi } from './validates.ts';
-import type { AuthLoginIUnterface, NewUserInterface, SwitchMpLoginInterface } from './interfaces/newuser.ts';
+import type { AuthLoginIUnterface, NewUserInterface, SwitchMpLoginInterface, UpdateRoleUsuarioInterface } from './interfaces/user.ts';
 
 
 export const AutLobinValidateJoi = joi.object<AuthLoginIUnterface>({
@@ -37,4 +37,11 @@ export const NewUserValidateJoi = joi.object<NewUserInterface>({
     pass: PassWordJoi
         .required(),
     contact: ParamEmptyString,
+}).required();
+
+export const UpdateRoleUsuarioValidateJoi = joi.object<UpdateRoleUsuarioInterface>({
+    id_role: NumberPositive
+        .required(),
+    id_usuario: NumberPositive
+        .required()
 }).required();
