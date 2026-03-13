@@ -23,7 +23,7 @@ export const FarmaciaRouter = Router({ caseSensitive: true, strict: true })
         validateTokenMiddleware.ValidateAccessTokenRequest,
         farmaciaRoute.asigneUsuarioFarmacia
     )
-    .get('/farmacias', 
+    .get('/farmacias',
         validateTokenMiddleware.ValidateAccessTokenRequest,
         farmaciaRoute.getFarmacias
     )
