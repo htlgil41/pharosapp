@@ -81,7 +81,7 @@ export class AuthRoute {
             );
             res.status(201).json({
                 data: {
-                    message: `Usuario con nuevo token asignado`,
+                    message: `Usuario con nuevo rol asignado`,
                     response: roleUsuario,
                 },
             });

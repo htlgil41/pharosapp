@@ -44,7 +44,15 @@ export class UpdateRoleUsuarioUseCase {
         );
 
         const usuarioPrimitive = usuarioUpdateRole.toValue();
-        if (usuarioPrimitive.id_role === dto.id_role) return usuarioPrimitive;
+        if (usuarioPrimitive.id_role === dto.id_role) return {
+            id: usuarioPrimitive.id,
+            role: usuarioPrimitive.role,
+            id_role: usuarioPrimitive.id_role,
+            name: usuarioPrimitive.name,
+            ape: usuarioPrimitive.ape,
+            username: usuarioPrimitive.username,
+            contact: usuarioPrimitive.contact,
+        };
         if (role === null) throw new DataAlredyExistsExceptionUseCase(
             'No se encontro el rol',
             'No se ha podido asignar el role del usuario ya que no existe',
