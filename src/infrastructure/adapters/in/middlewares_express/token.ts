@@ -29,7 +29,7 @@ export class ValidateAccessTokenMiddleware {
             req.dataToken = await this.tokenMamanget.validateAccessToken(cookieAt);
             return next();
         } catch (error) {
-            res.json(error);
+            res.status(401).json(error);
         }
     }
 
@@ -55,7 +55,7 @@ export class ValidateAccessTokenMiddleware {
             req.dataToken = await this.tokenMamanget.validateRefreshToken(cookieAt);;
             return next();
         } catch (error) {
-            res.json(error);
+            res.status(401).json(error);
         }
     }
 }
