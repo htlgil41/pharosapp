@@ -63,12 +63,7 @@ export class CreateNewUsuarioUseCase {
             }),
             role
         );
-
-        const createdNewUser = await this.repo.createUsuario(
-            createUsuario,
-            role,
-        );
-        const userPrimitive = createdNewUser.toValue();
+        const userPrimitive = createUsuario.toValue();
         return  {
             fullname: `${userPrimitive.name} ${userPrimitive.ape}`,
             resum: userPrimitive.contact !== null 

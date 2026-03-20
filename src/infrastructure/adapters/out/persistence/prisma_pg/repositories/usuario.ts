@@ -16,11 +16,9 @@ export class UsuarioRepositoryPrismaPg implements UsuarioRepository {
         usuario: InfoUsuarioEntity,
         role: RoleUserEntity,
     ): Promise<InfoUsuarioEntity> {
-        
         const rolePrimitive = role.toValue();
         const usuarioForCreate = usuario.toValue();
         try {
-            
             const createdUsuario = await this.conn.usuario.create({
                 data: {
                     id_role: rolePrimitive.id,
@@ -36,6 +34,7 @@ export class UsuarioRepositoryPrismaPg implements UsuarioRepository {
             usuario.setId(createdUsuario.id);
             return usuario;
         } catch (error) {
+            console.log(error)
             throw ErrorPrismaExceptions(error);
         }
     }

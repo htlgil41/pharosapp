@@ -37,7 +37,7 @@ export class AuthRoute {
         try {
 
             const dataPayloadToken = await tokenMamanget.validateAccessToken(cookieAt);
-            const createdUser = await createUsuarioUseCase.execute(
+            const created = await createUsuarioUseCase.execute(
                 dataPayloadToken,
                 {
                     id_role: body.id_role ?? null,
@@ -49,9 +49,11 @@ export class AuthRoute {
                 },
             );
 
-            res.json({
-                data: createdUser,
-                op: new Date(),
+             res.status(200).json({
+                data: {
+                    message: `Usuario creado`,
+                    response: created,
+                }
             });
             return
         } catch (error) {
