@@ -17,3 +17,7 @@ export interface CreateFarmacia {
     rif: string;
     some_code: string;
 }
+
+export interface DeleteCajaFarmacia {
+    numero_caja: number;
+}

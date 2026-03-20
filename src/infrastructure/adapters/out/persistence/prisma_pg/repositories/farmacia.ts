@@ -437,7 +437,7 @@ export class FarmaciaRepositoryPrismaPg implements FarmaciaRepository {
                     id: cajaPrimitive.id,
                     nm_caja: cajaPrimitive.nm_caja
                 },
-                select: {},
+                select: { id: true },
             });
             return caja;
         } catch (error) {

@@ -1,5 +1,5 @@
 import joi from 'joi';
-import type { CreateCajaFarmacia, CreateFarmacia, SearchParamLikeOnly, UsuarioByIdParam } from "./interfaces/farmacia.ts";
+import type { CreateCajaFarmacia, CreateFarmacia, DeleteCajaFarmacia, SearchParamLikeOnly, UsuarioByIdParam } from "./interfaces/farmacia.ts";
 import { NumberPositive, NumberPositiveParam, ParamaRif, ParamNotEmptyString } from "./validates.ts";
 
 export const CreateFarmaciaValidateJoi = joi.object<CreateFarmacia>({
@@ -41,3 +41,7 @@ export const AsigneUsuarioFarmaciaValidateJoi = joi.object<UsuarioByIdParam>({
 })
 .required();
 
+export const DeleteCajaFarmaciaValidateJoi = joi.object<DeleteCajaFarmacia>({
+    numero_caja: NumberPositive
+        .required()
+}).required();
