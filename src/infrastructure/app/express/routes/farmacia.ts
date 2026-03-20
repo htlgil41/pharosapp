@@ -45,6 +45,11 @@ export const FarmaciaRouter = Router({ caseSensitive: true, strict: true })
         validateTokenMiddleware.ValidateAccessTokenRequest,
         farmaciaRoute.getCajaByFarmacia
     )
+    .put('/farmacia',
+        middlewareFarmacia.validateUpdateFarmacia,
+        validateTokenMiddleware.ValidateAccessTokenRequest,
+        farmaciaRoute.updateCajaFarmacia,
+    )
     .delete('/caja',
         middlewareFarmacia.validateDeleteCajaFarmacia,
         validateTokenMiddleware.ValidateAccessTokenRequest,

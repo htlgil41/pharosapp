@@ -9,10 +9,11 @@ import { GetFarmaciasLikeUseCase } from '../../../../applicactions/usesCases/get
 import { GetFarmciasAsignesUseCase } from '../../../../applicactions/usesCases/getFarmciaAsignes.ts';
 import { GetCajaByFarmaciaUseCase } from '../../../../applicactions/usesCases/getCajaByFarmacia.ts';
 import { NewCajaFarmaciaUseCase } from '../../../../applicactions/usesCases/newCajaFarmacia.ts';
-import type { CreateCajaFarmacia, CreateFarmacia, DeleteCajaFarmacia, UsuarioByIdParam } from '../jois/interfaces/farmacia.ts';
+import type { CreateCajaFarmacia, CreateFarmacia, DeleteCajaFarmacia, UpdateFarmacia, UsuarioByIdParam } from '../jois/interfaces/farmacia.ts';
 import { NewAsigneFarmciaToUserUseCase } from '../../../../applicactions/usesCases/newAsigneFarmaciaToUser.ts';
 import { NewFarmaciaUseCase } from '../../../../applicactions/usesCases/newFarmacia.ts';
 import { DeleteCajaFarmaciaUseCase } from '../../../../applicactions/usesCases/deleteCajaFarmacia.ts';
+import { UpdateFarmaciaUseCase } from '../../../../applicactions/usesCases/updateFarmacia.ts';
 
 export class FarmaciaRoute {
 
@@ -250,6 +251,44 @@ export class FarmaciaRoute {
                 data: {
                     message: `${cajas.length} caja/s asignadas`,
                     response: cajas
+                }
+            });
+        } catch (error) {
+            
+            res.json(error);
+        }
+    }
+
+    async updateCajaFarmacia(req: RequestWithDataAccessToken, res: Response){
+        if (!req.dataToken) {
+            
+            res.status(401).json({
+                error: {
+                    message: 'No se ha encontrado los datos del usuario.',
+                    fix: 'Ingrese nuevamente para poder realizar la busqueda.'
+                }
+            });
+            return;
+        }
+        const body = req.body as UpdateFarmacia;
+        const updateFarmaciaUseCase = new UpdateFarmaciaUseCase(
+            new FarmaciaRepositoryPrismaPg(ConnectionPharosApp)
+        );
+        try {
+          const updated = await updateFarmaciaUseCase.execute(
+                req.dataToken,
+                {
+                    direccion: body.direccion,
+                    name_farmcia: body.name_farmcia,
+                    rif: body.rif,
+                    some_code: body.some_code
+                }
+            );
+            
+            res.status(200).json({
+                data: {
+                    message: `Farmacia actualizada`,
+                    response: updated
                 }
             });
         } catch (error) {

@@ -21,3 +21,10 @@ export interface CreateFarmacia {
 export interface DeleteCajaFarmacia {
     numero_caja: number;
 }
+
+export interface UpdateFarmacia {
+    direccion: string;
+    name_farmcia: string;
+    rif: string;
+    some_code: string;
+}
